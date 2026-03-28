@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Article, getSlug } from '@/lib/supabase'
+import { Article, getSlug, getTitle, getText } from '@/lib/supabase'
 import { ArrowUpRight } from 'lucide-react'
 
 function formatDate(iso: string) {
@@ -14,7 +14,8 @@ function formatDate(iso: string) {
 export default function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
   const [hovered, setHovered] = useState(false)
   const slug = getSlug(article)
-  const excerpt = article.text?.slice(0, 160).trim() + '…'
+  const title = getTitle(article)
+  const excerpt = getText(article)?.slice(0, 160).trim() + '…'
 
   if (featured) {
     return (
@@ -37,7 +38,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
             <div style={{ position: 'relative', height: 420, overflow: 'hidden' }}>
               <img
                 src={article.image_url}
-                alt={article.title}
+                alt={title}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -83,7 +84,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
               color: 'var(--text-primary)',
               marginBottom: 14,
             }}>
-              {article.title}
+              {title}
             </h2>
             <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
               {excerpt}
@@ -131,7 +132,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
           <div style={{ height: 200, overflow: 'hidden', flexShrink: 0 }}>
             <img
               src={article.image_url}
-              alt={article.title}
+              alt={title}
               style={{
                 width: '100%',
                 height: '100%',
@@ -155,7 +156,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
             color: 'var(--text-primary)',
             flex: 1,
           }}>
-            {article.title}
+            {title}
           </h3>
           <div style={{
             display: 'flex',

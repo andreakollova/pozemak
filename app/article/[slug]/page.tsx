@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { supabase, Article } from '@/lib/supabase'
+import { supabase, Article, getTitle, getText } from '@/lib/supabase'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 
 function formatDate(iso: string) {
@@ -59,7 +59,8 @@ export default function ArticlePage() {
     )
   }
 
-  const paragraphs = article.text?.split('\n\n').filter(Boolean) || []
+  const paragraphs = getText(article)?.split('\n\n').filter(Boolean) || []
+  const title = getTitle(article)
 
   return (
     <main style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
@@ -95,7 +96,7 @@ export default function ArticlePage() {
         color: 'var(--text-primary)',
         marginBottom: 32,
       }}>
-        {article.title}
+        {title}
       </h1>
 
       {/* Hero image */}
@@ -103,7 +104,7 @@ export default function ArticlePage() {
         <div style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 40 }}>
           <img
             src={article.image_url}
-            alt={article.title}
+            alt={title}
             style={{ width: '100%', maxHeight: 460, objectFit: 'cover', display: 'block' }}
           />
         </div>

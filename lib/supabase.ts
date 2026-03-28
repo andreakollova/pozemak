@@ -5,9 +5,15 @@ export type Article = {
   url: string
   title: string
   text: string
+  title_sk: string | null
+  text_sk: string | null
   image_url: string
   scraped_at: string
 }
+
+// Helpers — vždy vráti slovenský text ak existuje, inak originál
+export const getTitle = (a: Article) => a.title_sk || a.title
+export const getText = (a: Article) => a.text_sk || a.text
 
 export function getSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
