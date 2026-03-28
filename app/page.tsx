@@ -1,65 +1,94 @@
-import Image from "next/image";
+'use client'
+
+export const dynamic = 'force-dynamic'
+
+import { useEffect, useState } from 'react'
+import { getArticles, Article } from '@/lib/supabase'
+import ArticleCard from '@/components/ArticleCard'
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+  const [articles, setArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getArticles(20).then(data => {
+      setArticles(data)
+      setLoading(false)
+    }).catch(() => setLoading(false))
+  }, [])
+
+  const featured = articles[0]
+  const rest = articles.slice(1)
+
+  if (loading) {
+    return (
+      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+          <div style={{
+            width: 48, height: 48,
+            border: '3px solid var(--border)',
+            borderTop: '3px solid var(--green)',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+          }} />
+          <p style={{ color: 'var(--text-secondary)', letterSpacing: 2, textTransform: 'uppercase', fontSize: 12 }}>
+            Načítavam správy…
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </main>
-    </div>
-  );
+    )
+  }
+
+  return (
+    <main style={{ maxWidth: 1400, margin: '0 auto', padding: '40px 24px 80px' }}>
+      {/* Header strip */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 48 }}>
+        <div style={{ width: 4, height: 32, background: 'var(--green)', borderRadius: 2 }} />
+        <h1 style={{ fontSize: 13, fontWeight: 800, letterSpacing: 4, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+          Najnovšie správy
+        </h1>
+      </div>
+
+      {/* Featured + 2 secondary */}
+      {featured && (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 24,
+          marginBottom: 24,
+        }}>
+          <div style={{ gridColumn: 'span 2' }}>
+            <ArticleCard article={featured} featured />
+          </div>
+          {rest.slice(0, 2).map(a => (
+            <ArticleCard key={a.id} article={a} />
+          ))}
+        </div>
+      )}
+
+      {/* Divider */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '48px 0 32px' }}>
+        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        <span style={{ fontSize: 11, color: 'var(--text-secondary)', letterSpacing: 3, textTransform: 'uppercase' }}>
+          Všetky správy
+        </span>
+        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+      </div>
+
+      {/* Rest grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+        {rest.slice(2).map(a => (
+          <ArticleCard key={a.id} article={a} />
+        ))}
+      </div>
+
+      {articles.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--text-secondary)' }}>
+          <p style={{ fontSize: 40, marginBottom: 16 }}>🏑</p>
+          <p>Zatiaľ žiadne správy.</p>
+        </div>
+      )}
+    </main>
+  )
 }
