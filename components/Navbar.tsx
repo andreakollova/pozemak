@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: 'Holandsko', href: '/', flag: '🇳🇱', active: true },
   { label: 'Nemecko',   href: '#', flag: '🇩🇪' },
   { label: 'Anglicko',  href: '#', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { label: 'EHF',       href: '#', flag: '🏒' },
+  { label: 'EHF',       href: '#', flag: '🏑' },
   { label: 'FIH',       href: '#', flag: '🌍' },
 ]
 

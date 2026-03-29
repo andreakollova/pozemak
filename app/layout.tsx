@@ -3,6 +3,7 @@
 import './globals.css'
 import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import AnnouncementBar from '@/components/AnnouncementBar'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(true)
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh' }}>
+        <AnnouncementBar />
         <Navbar dark={dark} onToggle={toggle} />
         {children}
       </body>
