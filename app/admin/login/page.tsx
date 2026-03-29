@@ -46,7 +46,7 @@ export default function LoginPage() {
             </label>
             <input
               value={username} onChange={e => setUsername(e.target.value)}
-              placeholder="admin"
+              placeholder=""
               style={{
                 width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
                 background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15, outline: 'none',

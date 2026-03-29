@@ -1,5 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
+export type Video = {
+  id: string
+  youtube_id: string
+  title: string
+  title_sk: string | null
+  thumbnail_url: string
+  youtube_url: string
+  category: 'dames' | 'heren'
+  published_at: string
+  scraped_at: string
+}
+
+export const getVideoTitle = (v: Video) => v.title_sk || v.title
+
 export type Article = {
   id: string
   url: string
@@ -37,6 +51,18 @@ export async function getArticles(limit = 20): Promise<Article[]> {
 
 export function getSlug(article: Article): string {
   return article.url.split('/').filter(Boolean).pop() || article.id
+}
+
+export async function getVideos(category?: 'dames' | 'heren', limit = 20): Promise<Video[]> {
+  let query = getSupabaseClient()
+    .from('videos')
+    .select('*')
+    .order('published_at', { ascending: false })
+    .limit(limit)
+  if (category) query = query.eq('category', category)
+  const { data, error } = await query
+  if (error) throw error
+  return data || []
 }
 
 export async function getArticleById(id: string): Promise<Article | null> {

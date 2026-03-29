@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Play } from 'lucide-react'
 
 export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   return (
@@ -38,9 +38,12 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
         {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <span style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 2, textTransform: 'uppercase' }}>
-            Field Hockey News
-          </span>
+          <Link href="/videos" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}
+            onMouseEnter={(e: any) => (e.currentTarget.style.color = 'var(--green)')}
+            onMouseLeave={(e: any) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+          >
+            <Play size={14} /> Videá
+          </Link>
           <button
             onClick={onToggle}
             style={{
