@@ -22,6 +22,8 @@
 }
 
 .light {
+  --green: #00a854;
+  --green-dim: #007a3c;
   --bg-dark: #f0f2f5;
   --border: rgba(0,0,0,0.09);
   --text-primary: #0d0d0d;
@@ -35,9 +37,9 @@
   --announcement-text: #1a4a2e;
   --card-shadow-hover: 0 12px 40px rgba(0,0,0,0.12);
   --dot-bg: rgba(0,0,0,0.06);
-  --tag-text: rgba(0,0,0,0.55);
-  --tag-bg: rgba(0,0,0,0.07);
-  --green-text: #007a40;
+  --tag-text: rgba(0,0,0,0.72);
+  --tag-bg: rgba(0,120,60,0.08);
+  --green-text: #006030;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
