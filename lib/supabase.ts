@@ -38,3 +38,13 @@ export async function getArticles(limit = 20): Promise<Article[]> {
 export function getSlug(article: Article): string {
   return article.url.split('/').filter(Boolean).pop() || article.id
 }
+
+export async function getArticleById(id: string): Promise<Article | null> {
+  const { data, error } = await getSupabaseClient()
+    .from('articles')
+    .select('*')
+    .eq('id', id)
+    .single()
+  if (error) return null
+  return data
+}
