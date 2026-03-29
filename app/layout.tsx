@@ -4,6 +4,7 @@ import './globals.css'
 import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
+import Footer from '@/components/Footer'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(true)
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar dark={dark} onToggle={toggle} />
         </div>
         {children}
+        <Footer />
       </body>
     </html>
   )
