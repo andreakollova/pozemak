@@ -119,10 +119,13 @@ function HeroCard({ article }: { article: Article }) {
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)' }} />
 
-        {/* Badge */}
-        <div style={{ position: 'absolute', top: 24, left: 24 }}>
+        {/* Badges */}
+        <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
           <span style={{ background: '#00FF87', color: '#000', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>
             Hlavná správa
+          </span>
+          <span style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+            🇳🇱 Holandsko
           </span>
         </div>
 
@@ -163,8 +166,9 @@ function SecondaryCard({ article }: { article: Article }) {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' }} />
         </div>
         <div style={{ padding: '16px 18px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-            <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#00FF87' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.08)', padding: '3px 7px', borderRadius: 4 }}>🇳🇱 Holandsko</span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#00FF87' }} />
             <span style={{ fontSize: 10, color: '#00FF87', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>
           <h3 className="title-hover" style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
@@ -191,7 +195,8 @@ function GridCard({ article }: { article: Article }) {
           }
         </div>
         <div style={{ padding: '13px 15px 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', background: 'rgba(255,255,255,0.07)', padding: '2px 6px', borderRadius: 4 }}>🇳🇱 NL</span>
             <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#00FF87' }} />
             <span style={{ fontSize: 9, color: '#00FF87', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>

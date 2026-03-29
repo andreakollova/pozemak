@@ -82,10 +82,15 @@ export default function ArticlePage() {
         <ArrowLeft size={14} /> Späť
       </button>
 
-      {/* Date */}
-      <p style={{ fontSize: 12, color: 'var(--green)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 16 }}>
-        {formatDate(article.scraped_at)}
-      </p>
+      {/* Tags + Date */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-primary)', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 10px', borderRadius: 6 }}>
+          🇳🇱 Holandsko
+        </span>
+        <span style={{ fontSize: 12, color: 'var(--green)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>
+          {formatDate(article.scraped_at)}
+        </span>
+      </div>
 
       {/* Title */}
       <h1 style={{
