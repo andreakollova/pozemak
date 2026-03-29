@@ -19,8 +19,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
   return (
     <nav style={{
-      position: 'sticky', top: 0, zIndex: 100,
-      background: 'rgba(8,8,8,0.94)',
+      background: 'var(--navbar-bg)',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
       borderBottom: '1px solid var(--border)',
@@ -57,7 +56,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       {/* Category nav */}
       <div style={{ borderTop: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          {NAV_ITEMS.map((item, i) => {
+          {NAV_ITEMS.map((item) => {
             const isActive = item.active && (pathname === '/' || pathname === item.href)
             return (
               <Link key={item.label} href={item.href}
@@ -72,10 +71,9 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                   whiteSpace: 'nowrap',
                   borderBottom: isActive ? '2px solid #00FF87' : '2px solid transparent',
                   transition: 'color 0.15s, border-color 0.15s',
-                  position: 'relative',
                 }}
                 onMouseEnter={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)' }
+                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'rgba(0,180,80,0.4)' }
                 }}
                 onMouseLeave={(e: any) => {
                   if (!isActive) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderBottomColor = 'transparent' }

@@ -157,7 +157,7 @@ function SecondaryCard({ article }: { article: Article }) {
 
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
-      <div className="card-hover img-zoom" style={{ borderRadius: 16, overflow: 'hidden', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+      <div className="card-hover img-zoom" style={{ borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)', cursor: 'pointer' }}>
         <div style={{ height: 190, overflow: 'hidden', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -187,7 +187,7 @@ function GridCard({ article }: { article: Article }) {
 
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
-      <div className="card-hover img-zoom" style={{ borderRadius: 14, overflow: 'hidden', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+      <div className="card-hover img-zoom" style={{ borderRadius: 14, overflow: 'hidden', background: 'var(--bg-card-2)', border: '1px solid var(--border)', cursor: 'pointer' }}>
         <div style={{ height: 165, overflow: 'hidden', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -247,7 +247,7 @@ function VideoCard({ video }: { video: Video }) {
       style={{ flexShrink: 0, width: 240, textDecoration: 'none' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.02)', transition: 'transform .25s, box-shadow .25s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 40px rgba(0,0,0,.5)' : 'none' }}>
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .25s, box-shadow .25s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? 'var(--card-shadow-hover)' : 'none' }}>
         <div style={{ position: 'relative', height: 135, overflow: 'hidden', background: '#0a0a0a' }}>
           <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .4s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
           <div style={{ position: 'absolute', inset: 0, background: hov ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}>

@@ -17,7 +17,7 @@ export default function AnnouncementBar() {
       getArticles(1).then(([a]) => { if (a) setArticle(a) })
 
     load()
-    const iv = setInterval(load, 5 * 60 * 1000) // refresh every 5 min
+    const iv = setInterval(load, 5 * 60 * 1000)
     return () => clearInterval(iv)
   }, [])
 
@@ -28,15 +28,13 @@ export default function AnnouncementBar() {
 
   return (
     <div style={{
-      background: 'linear-gradient(90deg, #003d1f 0%, #005a2c 40%, #003d1f 100%)',
-      borderBottom: '1px solid rgba(0,255,135,0.25)',
-      position: 'sticky', top: 0, zIndex: 101,
+      background: 'linear-gradient(90deg, var(--announcement-from) 0%, var(--announcement-to) 50%, var(--announcement-from) 100%)',
+      borderBottom: '1px solid var(--announcement-border)',
     }}>
       <div style={{
         maxWidth: 1200, margin: '0 auto', padding: '0 24px',
         height: 38, display: 'flex', alignItems: 'center', gap: 12,
       }}>
-        {/* Badge */}
         <span style={{
           flexShrink: 0,
           display: 'flex', alignItems: 'center', gap: 5,
@@ -47,30 +45,28 @@ export default function AnnouncementBar() {
           <Zap size={9} fill="#000" /> Nové
         </span>
 
-        {/* Divider */}
-        <div style={{ width: 1, height: 14, background: 'rgba(0,255,135,0.3)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 14, background: 'var(--announcement-border)', flexShrink: 0 }} />
 
-        {/* Title link */}
         <Link href={`/article/${slug}`} style={{
           flex: 1, overflow: 'hidden',
           textDecoration: 'none',
-          fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.85)',
+          fontSize: 12, fontWeight: 600,
+          color: 'var(--announcement-text)',
           whiteSpace: 'nowrap', textOverflow: 'ellipsis',
           letterSpacing: 0.3,
           transition: 'color .15s',
         }}
-          onMouseEnter={(e: any) => (e.currentTarget.style.color = '#00FF87')}
-          onMouseLeave={(e: any) => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+          onMouseEnter={(e: any) => (e.currentTarget.style.color = '#00aa55')}
+          onMouseLeave={(e: any) => (e.currentTarget.style.color = 'var(--announcement-text)')}
         >
           {title}
         </Link>
 
-        {/* Close */}
         <button
           onClick={() => { setVisible(false); sessionStorage.setItem('announcement-hidden', '1') }}
-          style={{ flexShrink: 0, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 4, display: 'flex', alignItems: 'center', transition: 'color .15s' }}
-          onMouseEnter={(e: any) => (e.currentTarget.style.color = '#fff')}
-          onMouseLeave={(e: any) => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
+          style={{ flexShrink: 0, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--announcement-text)', opacity: 0.4, padding: 4, display: 'flex', alignItems: 'center', transition: 'opacity .15s' }}
+          onMouseEnter={(e: any) => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={(e: any) => (e.currentTarget.style.opacity = '0.4')}
         >
           <X size={13} />
         </button>

@@ -27,8 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh' }}>
-        <AnnouncementBar />
-        <Navbar dark={dark} onToggle={toggle} />
+        {/* Single sticky wrapper so announcement bar + navbar scroll as one unit */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+          <AnnouncementBar />
+          <Navbar dark={dark} onToggle={toggle} />
+        </div>
         {children}
       </body>
     </html>

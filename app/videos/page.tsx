@@ -50,7 +50,7 @@ export default function VideosPage() {
             onClick={() => setCategory(tab.key)}
             style={{
               padding: '8px 18px', borderRadius: 20, border: 'none',
-              background: category === tab.key ? 'var(--green)' : 'rgba(255,255,255,0.06)',
+              background: category === tab.key ? 'var(--green)' : 'var(--bg-card)',
               color: category === tab.key ? '#000' : 'var(--text-secondary)',
               fontWeight: category === tab.key ? 800 : 500,
               fontSize: 13, cursor: 'pointer',
@@ -95,8 +95,9 @@ function VideoCard({ video }: { video: Video }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="glass" style={{
+      <div style={{
         borderRadius: 14, overflow: 'hidden',
+        background: 'var(--bg-card)', border: '1px solid var(--border)',
         transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
         transition: 'transform 0.2s',
         cursor: 'pointer',
