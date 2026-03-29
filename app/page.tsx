@@ -8,178 +8,198 @@ import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, get
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react'
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('sk-SK', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(iso).toLocaleDateString('sk-SK', { day: 'numeric', month: 'long' })
 }
 
 export default function Home() {
-  const [articles, setArticles] = useState<Article[]>([])
+  const [articles, setArticles]     = useState<Article[]>([])
   const [damesVideos, setDamesVideos] = useState<Video[]>([])
   const [herenVideos, setHerenVideos] = useState<Video[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]       = useState(true)
 
   useEffect(() => {
-    Promise.all([
-      getArticles(20),
-      getVideos('dames', 10),
-      getVideos('heren', 10),
-    ]).then(([arts, dames, heren]) => {
-      setArticles(arts)
-      setDamesVideos(dames)
-      setHerenVideos(heren)
-      setLoading(false)
-    }).catch(() => setLoading(false))
+    Promise.all([getArticles(20), getVideos('dames', 10), getVideos('heren', 10)])
+      .then(([arts, dames, heren]) => { setArticles(arts); setDamesVideos(dames); setHerenVideos(heren); setLoading(false) })
+      .catch(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 40, height: 40, border: '2px solid var(--border)', borderTop: '2px solid var(--green)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-        </div>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </main>
-    )
-  }
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
+      <div style={{ width: 36, height: 36, border: '2px solid var(--border)', borderTop: '2px solid var(--green)', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  )
 
-  const featured = articles[0]
-  const sideNews  = articles.slice(1, 4)
-  const gridNews  = articles.slice(4, 10)
+  const hero    = articles[0]
+  const side    = articles.slice(1, 4)
+  const grid    = articles.slice(4, 10)
 
   return (
-    <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px 100px' }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px 100px' }}>
       <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        a { color: inherit; }
-        .hero-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2px; }
-        .news-grid  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-        @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr; }
-          .news-grid  { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 560px) {
-          .news-grid { grid-template-columns: 1fr; }
-        }
-        .card-img { overflow: hidden; }
-        .card-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .story-card:hover .card-img img { transform: scale(1.04); }
-        .story-card:hover .card-title { color: var(--green) !important; }
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .h-grid { display:grid; grid-template-columns:1fr 300px; gap:1px; background:var(--border); border:1px solid var(--border); }
+        .n-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); }
+        .s-col  { display:flex; flex-direction:column; }
+        img { display:block; width:100%; height:100%; object-fit:cover; }
+        @media(max-width:860px){ .h-grid{grid-template-columns:1fr} .n-grid{grid-template-columns:repeat(2,1fr)} }
+        @media(max-width:520px){ .n-grid{grid-template-columns:1fr} }
       `}</style>
 
-      {/* ── Section header ── */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid var(--text-primary)', paddingBottom: 10, marginBottom: 2 }}>
-        <span style={{ fontSize: 12, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-primary)' }}>
-          Správy
-        </span>
-        <span style={{ fontSize: 11, color: 'var(--text-secondary)', letterSpacing: 1 }}>
-          {formatDate(new Date().toISOString())}
-        </span>
-      </div>
-
-      {/* ── Hero + side ── */}
-      {featured && (
-        <div className="hero-grid" style={{ marginBottom: 2 }}>
-          {/* Big featured */}
-          <Link href={`/article/${getSlug(featured)}`} style={{ textDecoration: 'none' }}>
-            <div className="story-card" style={{ background: 'var(--card-bg, rgba(255,255,255,0.02))', borderRight: '1px solid var(--border)', cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <div className="card-img" style={{ height: 420 }}>
-                {featured.image_url && <img src={featured.image_url} alt={getTitle(featured)} />}
-              </div>
-              <div style={{ padding: '20px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--green)' }}>
-                <span style={{ fontSize: 10, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 12, display: 'block' }}>
-                  Hlavná správa · {formatDate(featured.scraped_at)}
-                </span>
-                <h2 className="card-title" style={{ fontSize: 'clamp(20px, 2.2vw, 30px)', fontWeight: 900, lineHeight: 1.15, letterSpacing: '-0.5px', color: 'var(--text-primary)', marginBottom: 14, transition: 'color 0.2s' }}>
-                  {getTitle(featured)}
-                </h2>
-                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, flex: 1 }}>
-                  {(getText(featured) || '').slice(0, 220).trim()}…
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Side column */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {sideNews.map((a, i) => (
-              <Link key={a.id} href={`/article/${getSlug(a)}`} style={{ textDecoration: 'none', flex: 1 }}>
-                <div className="story-card" style={{ cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column', borderBottom: i < sideNews.length - 1 ? '1px solid var(--border)' : 'none', background: 'rgba(255,255,255,0.015)' }}>
-                  <div className="card-img" style={{ height: 160 }}>
-                    {a.image_url && <img src={a.image_url} alt={getTitle(a)} />}
-                  </div>
-                  <div style={{ padding: '14px 18px 16px', flex: 1, borderTop: '2px solid var(--border)' }}>
-                    <span style={{ fontSize: 9, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8, display: 'block' }}>
-                      {formatDate(a.scraped_at)}
-                    </span>
-                    <h3 className="card-title" style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {getTitle(a)}
-                    </h3>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── More articles ── */}
-      {gridNews.length > 0 && (
+      {/* ── HERO SECTION ── */}
+      {hero && (
         <>
-          <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: 8, marginTop: 32, marginBottom: 2 }}>
-            <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Ďalšie správy</span>
-          </div>
-          <div className="news-grid">
-            {gridNews.map((a) => (
-              <Link key={a.id} href={`/article/${getSlug(a)}`} style={{ textDecoration: 'none' }}>
-                <div className="story-card" style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.015)', borderRight: '1px solid var(--border)' }}>
-                  <div className="card-img" style={{ height: 180 }}>
-                    {a.image_url && <img src={a.image_url} alt={getTitle(a)} />}
-                  </div>
-                  <div style={{ padding: '14px 16px 18px', borderTop: '2px solid var(--border)' }}>
-                    <span style={{ fontSize: 9, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8, display: 'block' }}>
-                      {formatDate(a.scraped_at)}
-                    </span>
-                    <h3 className="card-title" style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {getTitle(a)}
-                    </h3>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          <SectionLabel label="Najnovšie správy" />
+          <div className="h-grid" style={{ marginBottom: 32 }}>
+
+            {/* Hero card */}
+            <HeroCard article={hero} />
+
+            {/* Side cards */}
+            <div className="s-col" style={{ background: 'var(--bg-dark)' }}>
+              {side.map((a, i) => (
+                <SideCard key={a.id} article={a} last={i === side.length - 1} />
+              ))}
+            </div>
           </div>
         </>
       )}
 
-      {/* ── Video carousels ── */}
-      {damesVideos.length > 0 && <VideoCarousel title="Hoofdklasse Dames" videos={damesVideos} />}
-      {herenVideos.length > 0 && <VideoCarousel title="Hoofdklasse Heren" videos={herenVideos} />}
-    </main>
+      {/* ── GRID ── */}
+      {grid.length > 0 && (
+        <>
+          <SectionLabel label="Ďalšie správy" />
+          <div className="n-grid" style={{ border: '1px solid var(--border)', marginBottom: 48 }}>
+            {grid.map(a => <GridCard key={a.id} article={a} />)}
+          </div>
+        </>
+      )}
+
+      {/* ── VIDEOS ── */}
+      {damesVideos.length > 0 && <VideoCarousel label="Hoofdklasse Dames" videos={damesVideos} />}
+      {herenVideos.length > 0 && <VideoCarousel label="Hoofdklasse Heren" videos={herenVideos} />}
+    </div>
+  )
+}
+
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+      <div style={{ width: 3, height: 16, background: 'var(--green)', borderRadius: 2, flexShrink: 0 }} />
+      <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+        {label}
+      </span>
+    </div>
+  )
+}
+
+/* ─── Hero card ──────────────────────────────────────────────────────────── */
+function HeroCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+  const text  = (getText(article) || '').slice(0, 200).trim() + '…'
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      {/* Image */}
+      <div style={{ height: 400, overflow: 'hidden', flexShrink: 0 }}>
+        {article.image_url
+          ? <img src={article.image_url} alt={title} style={{ transition: 'transform 0.5s', transform: hov ? 'scale(1.03)' : 'scale(1)' }} />
+          : <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.04)' }} />
+        }
+      </div>
+      {/* Content */}
+      <div style={{ padding: '20px 22px 24px', flex: 1, borderTop: '3px solid var(--green)' }}>
+        <span style={{ fontSize: 10, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' }}>
+          Hlavná správa · {formatDate(article.scraped_at)}
+        </span>
+        <h2 style={{ fontSize: 'clamp(18px, 2vw, 26px)', fontWeight: 900, lineHeight: 1.18, letterSpacing: '-0.5px', margin: '10px 0 12px', color: hov ? 'var(--green)' : 'var(--text-primary)', transition: 'color 0.2s' }}>
+          {title}
+        </h2>
+        <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{text}</p>
+      </div>
+    </Link>
+  )
+}
+
+/* ─── Side card ──────────────────────────────────────────────────────────── */
+function SideCard({ article, last }: { article: Article; last: boolean }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flex: 1, display: 'flex', flexDirection: 'column', borderBottom: last ? 'none' : '1px solid var(--border)' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ height: 130, overflow: 'hidden', flexShrink: 0 }}>
+        {article.image_url
+          ? <img src={article.image_url} alt={title} style={{ transition: 'transform 0.4s', transform: hov ? 'scale(1.05)' : 'scale(1)' }} />
+          : <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.04)' }} />
+        }
+      </div>
+      <div style={{ padding: '12px 16px 14px', flex: 1, borderTop: '2px solid var(--border)' }}>
+        <span style={{ fontSize: 9, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
+          {formatDate(article.scraped_at)}
+        </span>
+        <h3 style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--green)' : 'var(--text-primary)', transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {title}
+        </h3>
+      </div>
+    </Link>
+  )
+}
+
+/* ─── Grid card ──────────────────────────────────────────────────────────── */
+function GridCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', background: 'var(--bg-dark)', display: 'flex', flexDirection: 'column' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ height: 175, overflow: 'hidden', flexShrink: 0 }}>
+        {article.image_url
+          ? <img src={article.image_url} alt={title} style={{ transition: 'transform 0.4s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
+          : <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.04)' }} />
+        }
+      </div>
+      <div style={{ padding: '13px 15px 16px', flex: 1, borderTop: '2px solid var(--border)' }}>
+        <span style={{ fontSize: 9, color: 'var(--green)', fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', display: 'block', marginBottom: 7 }}>
+          {formatDate(article.scraped_at)}
+        </span>
+        <h3 style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.35, color: hov ? 'var(--green)' : 'var(--text-primary)', transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {title}
+        </h3>
+      </div>
+    </Link>
   )
 }
 
 /* ─── Video carousel ─────────────────────────────────────────────────────── */
-function VideoCarousel({ title, videos }: { title: string; videos: Video[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const scroll = (dir: 'left' | 'right') =>
-    scrollRef.current?.scrollBy({ left: dir === 'left' ? -280 : 280, behavior: 'smooth' })
+function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -270 : 270, behavior: 'smooth' })
 
   return (
-    <div style={{ marginTop: 48 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: 10, marginBottom: 16 }}>
-        <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
-          {title}
-        </span>
+    <div style={{ marginBottom: 48 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <SectionLabel label={label} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/videos" style={{ fontSize: 11, color: 'var(--green)', letterSpacing: 1, textDecoration: 'none', fontWeight: 700 }}>
-            Všetky →
-          </Link>
-          {(['left', 'right'] as const).map(dir => (
-            <button key={dir} onClick={() => scroll(dir)} style={{ width: 28, height: 28, borderRadius: 4, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {dir === 'left' ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
+          <Link href="/videos" style={{ fontSize: 11, fontWeight: 700, color: 'var(--green)', textDecoration: 'none', letterSpacing: 1 }}>Všetky →</Link>
+          {(['left','right'] as const).map(d => (
+            <button key={d} onClick={() => scroll(d)} style={{ width: 28, height: 28, border: '1px solid var(--border)', borderRadius: 4, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {d === 'left' ? <ChevronLeft size={13} /> : <ChevronRight size={13} />}
             </button>
           ))}
         </div>
       </div>
-      <div ref={scrollRef} style={{ display: 'flex', gap: 2, overflowX: 'auto', scrollbarWidth: 'none' }}>
+      <div ref={ref} style={{ display: 'flex', gap: 12, overflowX: 'auto', scrollbarWidth: 'none' }}>
         {videos.map(v => <VideoCard key={v.id} video={v} />)}
       </div>
     </div>
@@ -187,26 +207,24 @@ function VideoCarousel({ title, videos }: { title: string; videos: Video[] }) {
 }
 
 function VideoCard({ video }: { video: Video }) {
-  const [hovered, setHovered] = useState(false)
+  const [hov, setHov] = useState(false)
   return (
     <a href={video.youtube_url} target="_blank" rel="noopener noreferrer"
-      style={{ textDecoration: 'none', flexShrink: 0, width: 240 }}
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ flexShrink: 0, width: 240, textDecoration: 'none', border: '1px solid var(--border)', display: 'block', background: 'rgba(255,255,255,0.02)' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ background: 'rgba(255,255,255,0.015)', cursor: 'pointer' }}>
-        <div style={{ position: 'relative', width: '100%', height: 135, overflow: 'hidden', background: '#111' }}>
-          <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s', transform: hovered ? 'scale(1.05)' : 'scale(1)' }} />
-          <div style={{ position: 'absolute', inset: 0, background: hovered ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: hovered ? 'var(--green)' : 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
-              <Play size={14} fill={hovered ? '#000' : '#fff'} color={hovered ? '#000' : '#fff'} style={{ marginLeft: 2 }} />
-            </div>
+      <div style={{ position: 'relative', height: 135, overflow: 'hidden', background: '#111' }}>
+        <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ transition: 'transform 0.4s', transform: hov ? 'scale(1.05)' : 'scale(1)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: hov ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: hov ? 'var(--green)' : 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+            <Play size={14} fill={hov ? '#000' : '#fff'} color={hov ? '#000' : '#fff'} style={{ marginLeft: 2 }} />
           </div>
         </div>
-        <div style={{ padding: '10px 12px 13px', borderTop: '2px solid var(--border)' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: hovered ? 'var(--green)' : 'var(--text-primary)', lineHeight: 1.4, transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-            {getVideoTitle(video)}
-          </p>
-        </div>
+      </div>
+      <div style={{ padding: '10px 12px 13px', borderTop: '2px solid var(--border)' }}>
+        <p style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.4, color: hov ? 'var(--green)' : 'var(--text-primary)', transition: 'color 0.2s', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {getVideoTitle(video)}
+        </p>
       </div>
     </a>
   )
