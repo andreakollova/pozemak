@@ -136,39 +136,42 @@ function HeroCard({ article }: { article: Article }) {
           boxShadow: hovered ? '0 0 0 1.5px var(--green), 0 24px 60px rgba(0,255,135,0.1)' : '0 0 0 1.5px transparent',
         }}
       >
-        {/* Landscape image — fixed height */}
-        <div style={{ position: 'relative', width: '100%', height: 380, overflow: 'hidden', flexShrink: 0 }}>
+        {/* Full-height image with text overlay */}
+        <div style={{ position: 'relative', width: '100%', flex: 1, minHeight: 460, overflow: 'hidden' }}>
           {article.image_url
             ? <img
                 src={article.image_url}
                 alt={title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.55s', transform: hovered ? 'scale(1.04)' : 'scale(1)' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.55s', transform: hovered ? 'scale(1.04)' : 'scale(1)', position: 'absolute', inset: 0 }}
               />
             : <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.03)' }} />
           }
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.7) 0%, transparent 60%)' }} />
+          {/* Strong gradient from bottom */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.55) 45%, rgba(8,8,8,0.1) 100%)' }} />
+
+          {/* Badge top-left */}
           <span style={{
-            position: 'absolute', top: 16, left: 16,
+            position: 'absolute', top: 18, left: 18,
             background: 'var(--green)', color: '#000',
             fontSize: 10, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase',
             padding: '4px 10px', borderRadius: 4,
           }}>Hlavná správa</span>
-        </div>
 
-        {/* Text content */}
-        <div style={{ padding: '22px 24px 26px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <p style={{ fontSize: 10, color: 'var(--green)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>
-            {formatDate(article.scraped_at)}
-          </p>
-          <h2 style={{ fontSize: 'clamp(18px, 2vw, 26px)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.5px', color: 'var(--text-primary)', marginBottom: 12 }}>
-            {title}
-          </h2>
-          <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, flex: 1 }}>
-            {excerpt}
-          </p>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 18, fontSize: 11, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--green)' }}>
-            Čítať ďalej <ArrowUpRight size={13} />
-          </span>
+          {/* Text overlaid at bottom */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px 28px' }}>
+            <p style={{ fontSize: 10, color: 'var(--green)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>
+              {formatDate(article.scraped_at)}
+            </p>
+            <h2 style={{ fontSize: 'clamp(18px, 2vw, 26px)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.5px', color: '#fff', marginBottom: 12 }}>
+              {title}
+            </h2>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: 18 }}>
+              {excerpt}
+            </p>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--green)' }}>
+              Čítať ďalej <ArrowUpRight size={13} />
+            </span>
+          </div>
         </div>
       </div>
     </Link>
