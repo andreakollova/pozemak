@@ -3,8 +3,13 @@ import { getSession } from '@/lib/session'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // Allow both admin session cookie and bot API key
+  const apiKey = req.headers.get('x-api-key')
+  const expectedKey = process.env.PUBLISH_API_KEY
   const session = await getSession()
-  if (!session.isAdmin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!session.isAdmin && (!apiKey || apiKey !== expectedKey)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const { id } = await params
   const body = await req.json()
