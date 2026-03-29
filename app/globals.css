@@ -16,7 +16,9 @@
   --announcement-text: rgba(255,255,255,0.85);
   --card-shadow-hover: 0 20px 60px rgba(0,0,0,0.5);
   --dot-bg: rgba(255,255,255,0.08);
-  --tag-color: rgba(255,255,255,0.5);
+  --tag-text: rgba(255,255,255,0.6);
+  --tag-bg: rgba(255,255,255,0.1);
+  --green-text: #00FF87;
 }
 
 .light {
@@ -33,7 +35,9 @@
   --announcement-text: #1a4a2e;
   --card-shadow-hover: 0 12px 40px rgba(0,0,0,0.12);
   --dot-bg: rgba(0,0,0,0.06);
-  --tag-color: rgba(0,0,0,0.45);
+  --tag-text: rgba(0,0,0,0.55);
+  --tag-bg: rgba(0,0,0,0.07);
+  --green-text: #007a40;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

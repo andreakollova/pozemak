@@ -167,9 +167,9 @@ function SecondaryCard({ article }: { article: Article }) {
         </div>
         <div style={{ padding: '16px 18px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.08)', padding: '3px 7px', borderRadius: 4 }}>🇳🇱 Holandsko</span>
-            <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#00FF87' }} />
-            <span style={{ fontSize: 10, color: '#00FF87', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '3px 7px', borderRadius: 4, border: '1px solid var(--border)' }}>🇳🇱 Holandsko</span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
+            <span style={{ fontSize: 10, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>
           <h3 className="title-hover" style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {title}
@@ -196,9 +196,9 @@ function GridCard({ article }: { article: Article }) {
         </div>
         <div style={{ padding: '13px 15px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', background: 'rgba(255,255,255,0.07)', padding: '2px 6px', borderRadius: 4 }}>🇳🇱 NL</span>
-            <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#00FF87' }} />
-            <span style={{ fontSize: 9, color: '#00FF87', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border)' }}>🇳🇱 NL</span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
+            <span style={{ fontSize: 9, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>
           <h3 className="title-hover" style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {title}
