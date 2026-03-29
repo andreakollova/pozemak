@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getArticleById, getTitle, getText } from '@/lib/supabase'
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Save, Share2 } from 'lucide-react'
 
 export default function EditArticlePage() {
   const router = useRouter()
@@ -20,6 +20,9 @@ export default function EditArticlePage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [posting, setPosting] = useState(false)
+  const [posted, setPosted] = useState(false)
+  const [igError, setIgError] = useState('')
 
   useEffect(() => {
     getArticleById(id).then(a => {
@@ -31,6 +34,21 @@ export default function EditArticlePage() {
       setLoading(false)
     })
   }, [id])
+
+  const postInstagram = async () => {
+    setPosting(true)
+    setIgError('')
+    setPosted(false)
+    const res = await fetch(`/api/admin/instagram/${id}`, { method: 'POST' })
+    const data = await res.json()
+    if (res.ok) {
+      setPosted(true)
+      setTimeout(() => setPosted(false), 5000)
+    } else {
+      setIgError(data.error || 'Chyba pri postovaní')
+    }
+    setPosting(false)
+  }
 
   const save = async () => {
     setSaving(true)
@@ -80,26 +98,50 @@ export default function EditArticlePage() {
             </h1>
           </div>
         </div>
-        <button
-          onClick={save}
-          disabled={saving}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '10px 20px', borderRadius: 10, border: 'none',
-            background: saved ? 'var(--green)' : 'var(--green)',
-            color: '#000', fontWeight: 800, fontSize: 13,
-            cursor: saving ? 'not-allowed' : 'pointer',
-            opacity: saving ? 0.7 : 1,
-            letterSpacing: 1, textTransform: 'uppercase',
-          }}
-        >
-          <Save size={14} /> {saving ? 'Ukladám…' : saved ? 'Uložené!' : 'Uložiť'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={postInstagram}
+            disabled={posting}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '10px 20px', borderRadius: 10,
+              border: '1px solid rgba(225,48,108,0.4)',
+              background: posted ? '#E1306C' : 'rgba(225,48,108,0.15)',
+              color: posted ? '#fff' : '#E1306C',
+              fontWeight: 800, fontSize: 13,
+              cursor: posting ? 'not-allowed' : 'pointer',
+              opacity: posting ? 0.7 : 1,
+              letterSpacing: 1, textTransform: 'uppercase',
+            }}
+          >
+            <Share2 size={14} /> {posting ? 'Posielam…' : posted ? 'Odoslané!' : 'Instagram'}
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '10px 20px', borderRadius: 10, border: 'none',
+              background: 'var(--green)',
+              color: '#000', fontWeight: 800, fontSize: 13,
+              cursor: saving ? 'not-allowed' : 'pointer',
+              opacity: saving ? 0.7 : 1,
+              letterSpacing: 1, textTransform: 'uppercase',
+            }}
+          >
+            <Save size={14} /> {saving ? 'Ukladám…' : saved ? 'Uložené!' : 'Uložiť'}
+          </button>
+        </div>
       </div>
 
       {error && (
         <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 8, marginBottom: 24 }}>
           {error}
+        </p>
+      )}
+      {igError && (
+        <p style={{ color: '#E1306C', fontSize: 13, padding: '10px 14px', background: 'rgba(225,48,108,0.1)', borderRadius: 8, marginBottom: 24 }}>
+          Instagram: {igError}
         </p>
       )}
 
