@@ -15,11 +15,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const body = await req.json()
   const db = getSupabaseAdmin()
 
-  const { error } = await db.from('articles').update({
+  const update: Record<string, unknown> = {
     title_sk: body.title_sk,
     text_sk: body.text_sk,
     image_url: body.image_url,
-  }).eq('id', id)
+  }
+  if (body.published !== undefined) update.published = body.published
+
+  const { error } = await db.from('articles').update(update).eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ ok: true })

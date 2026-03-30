@@ -23,6 +23,7 @@ export type Article = {
   text_sk: string | null
   image_url: string
   scraped_at: string
+  published: boolean
 }
 
 // Helpers — vždy vráti slovenský text ak existuje, inak originál
@@ -43,6 +44,7 @@ export async function getArticles(limit = 20): Promise<Article[]> {
   const { data, error } = await getSupabaseClient()
     .from('articles')
     .select('*')
+    .eq('published', true)
     .order('scraped_at', { ascending: false })
     .limit(limit)
   if (error) throw error
