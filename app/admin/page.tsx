@@ -30,7 +30,7 @@ export default function AdminDashboard() {
           <h1 style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.5px' }}>
             Admin <span style={{ color: 'var(--green)' }}>panel</span>
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>Správa článkov</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>Article management</p>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <Link href="/admin/article/new" style={{ textDecoration: 'none' }}>
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
               background: 'var(--green)', color: '#000', fontWeight: 800,
               fontSize: 13, cursor: 'pointer', letterSpacing: 1, textTransform: 'uppercase',
             }}>
-              <Plus size={15} /> Nový článok
+              <Plus size={15} /> New article
             </button>
           </Link>
           <button onClick={logout} style={{
@@ -49,14 +49,14 @@ export default function AdminDashboard() {
             background: 'transparent', color: 'var(--text-secondary)', fontSize: 13,
             cursor: 'pointer',
           }}>
-            <LogOut size={14} /> Odhlásiť
+            <LogOut size={14} /> Logout
           </button>
         </div>
       </div>
 
       {/* Article list */}
       {loading ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Načítavam…</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Loading…</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {articles.map(a => (
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
                   {getTitle(a)}
                 </p>
                 <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
-                  {new Date(a.scraped_at).toLocaleDateString('sk-SK')}
+                  {new Date(a.scraped_at).toLocaleDateString('en-GB')}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
                     background: 'transparent', color: 'var(--text-primary)', fontSize: 12,
                     cursor: 'pointer', fontWeight: 600,
                   }}>
-                    <Pencil size={12} /> Editovať
+                    <Pencil size={12} /> Edit
                   </button>
                 </Link>
                 <a href={`/article/${a.url.split('/').filter(Boolean).pop()}`} target="_blank" style={{ textDecoration: 'none' }}>

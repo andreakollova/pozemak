@@ -5,19 +5,24 @@ import { useState } from 'react'
 import { Send } from 'lucide-react'
 
 const QUICK_LINKS = [
-  { label: '🇳🇱 Holandsko', href: '/' },
-  { label: '📹 Video zóna', href: '/videos' },
-  { label: '🇸🇰 Slovensko', href: '#' },
-  { label: '🇨🇿 Česko', href: '#' },
-  { label: '🏑 EHF', href: '#' },
-  { label: '🌍 FIH', href: '#' },
+  { label: '🇳🇱 Netherlands', href: '/' },
+  { label: '🇬🇧 Great Britain', href: '/great-britain' },
+  { label: '📹 Videos', href: '/videos' },
+  { label: '🇮🇪 Ireland', href: '/ireland' },
+  { label: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland', href: '/scotland' },
+  { label: '🇦🇺 Australia', href: '/australia' },
+  { label: '🇩🇪 Germany', href: '/germany' },
+  { label: '🇧🇪 Belgium', href: '/belgium' },
+  { label: '🇪🇸 Spain', href: '/spain' },
+  { label: '🇦🇷 Argentina', href: '/argentina' },
+  { label: '🇮🇳 India',     href: '/india' },
 ]
 
 const LEGAL_LINKS = [
-  { label: 'Ochrana osobných údajov', href: '/privacy' },
-  { label: 'Zásady cookies', href: '/cookies' },
-  { label: 'Obchodné podmienky', href: '/terms' },
-  { label: 'Kontakt', href: '/contact' },
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Cookie Policy', href: '/cookies' },
+  { label: 'Terms & Conditions', href: '/terms' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 const SOCIALS = [
@@ -35,7 +40,7 @@ const SOCIALS = [
   },
 ]
 
-export default function Footer() {
+export default function Footer({ dark = true }: { dark?: boolean }) {
   const [email, setEmail] = useState('')
   const [subState, setSubState] = useState<'idle' | 'ok' | 'err'>('idle')
 
@@ -51,21 +56,24 @@ export default function Footer() {
   return (
     <footer style={{
       marginTop: 80,
-      borderTop: '1px solid var(--border)',
-      background: 'var(--bg-card)',
+      borderTop: '1px solid var(--tag-border)',
+      background: 'linear-gradient(180deg, var(--blue-subtle) 0%, var(--bg-card) 60%)',
     }}>
       {/* Main grid */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48 }}>
 
         {/* Brand column */}
         <div style={{ gridColumn: 'span 1' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <span style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-1px', color: 'var(--text-primary)' }}>
-              POZE<span style={{ color: 'var(--green)' }}>MAK</span>
-            </span>
+          <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={dark ? '/logo-dark.png' : '/logo-light.png'}
+              alt="REFRESH"
+              style={{ height: 36, width: 'auto', display: 'block' }}
+            />
           </Link>
           <p style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 220 }}>
-            Najnovšie správy, výsledky a novinky zo sveta pozemného hokeja na jednom mieste.
+            Latest news, results and updates from the world of field hockey in one place.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
             {SOCIALS.map(({ svg, href, label }) => (
@@ -85,9 +93,9 @@ export default function Footer() {
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--green)'
-                  el.style.borderColor = 'var(--green)'
-                  el.style.background = 'rgba(0,255,135,0.07)'
+                  el.style.color = 'var(--accent)'
+                  el.style.borderColor = 'var(--accent)'
+                  el.style.background = 'var(--blue-subtle)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLElement
@@ -105,7 +113,7 @@ export default function Footer() {
         {/* Quick links */}
         <div>
           <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
-            Kategórie
+            Categories
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {QUICK_LINKS.map(({ label, href }) => (
@@ -113,7 +121,7 @@ export default function Footer() {
                 <Link
                   href={href}
                   style={{ textDecoration: 'none', fontSize: 13, color: 'var(--text-secondary)', transition: 'color 0.15s', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--green)')}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent)')}
                   onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}
                 >
                   {label}
@@ -126,7 +134,7 @@ export default function Footer() {
         {/* Legal links */}
         <div>
           <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
-            Právne informácie
+            Legal
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {LEGAL_LINKS.map(({ label, href }) => (
@@ -147,17 +155,17 @@ export default function Footer() {
         {/* Newsletter */}
         <div>
           <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
-            Odber noviniek
+            Newsletter
           </p>
           <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 16 }}>
-            Dostávaj najnovšie správy priamo do e-mailu.
+            Get the latest field hockey news straight to your inbox.
           </p>
           <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="tvoj@email.sk"
+              placeholder="your@email.com"
               style={{
                 padding: '10px 14px', borderRadius: 9,
                 border: '1px solid var(--border)',
@@ -166,7 +174,7 @@ export default function Footer() {
                 fontSize: 13, outline: 'none',
                 transition: 'border-color 0.15s',
               }}
-              onFocus={e => (e.target.style.borderColor = 'var(--green)')}
+              onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
               onBlur={e => (e.target.style.borderColor = 'var(--border)')}
             />
             <button
@@ -174,7 +182,7 @@ export default function Footer() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                 padding: '10px 16px', borderRadius: 9, border: 'none',
-                background: 'var(--green)', color: '#000',
+                background: 'var(--accent)', color: '#fff',
                 fontWeight: 800, fontSize: 12, letterSpacing: 0.8,
                 textTransform: 'uppercase', cursor: 'pointer',
                 transition: 'opacity 0.15s',
@@ -182,10 +190,10 @@ export default function Footer() {
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
             >
-              {subState === 'ok' ? '✓ Prihlásený!' : <><Send size={12} /> Odoberať</>}
+              {subState === 'ok' ? '✓ Subscribed!' : <><Send size={12} /> Subscribe</>}
             </button>
             {subState === 'err' && (
-              <p style={{ fontSize: 11, color: '#ff6b6b', marginTop: 2 }}>Zadaj platný e-mail.</p>
+              <p style={{ fontSize: 11, color: '#ff6b6b', marginTop: 2 }}>Please enter a valid email address.</p>
             )}
           </form>
         </div>
@@ -199,7 +207,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-          © {new Date().getFullYear()} <strong style={{ color: 'var(--text-primary)' }}>DRIXTON s.r.o.</strong> — Všetky práva vyhradené.
+          © {new Date().getFullYear()} <strong style={{ color: 'var(--text-primary)' }}>DRIXTON s.r.o.</strong> — All rights reserved.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           {LEGAL_LINKS.slice(0, 2).map(({ label, href }) => (
@@ -215,7 +223,7 @@ export default function Footer() {
           ))}
           <span style={{ fontSize: 11, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 4 }}>
             Powered by{' '}
-            <span style={{ color: 'var(--green)', fontWeight: 700 }}>POZEMAK</span>
+            <span style={{ color: 'var(--accent)', fontWeight: 700 }}>REFRESH</span>
           </span>
         </div>
       </div>

@@ -21,11 +21,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <html lang="sk" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Pozemak – Pozemný hokej</title>
-        <meta name="description" content="Najnovšie správy zo sveta pozemného hokeja" />
+        <title>Pozemak – Field Hockey</title>
+        <meta name="description" content="Latest news from the world of field hockey" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/logo-light.png" type="image/png" media="(prefers-color-scheme: light)" />
+        <link rel="icon" href="/logo-dark.png" type="image/png" media="(prefers-color-scheme: dark)" />
+        <link rel="apple-touch-icon" href="/logo-light.png" />
       </head>
       <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh' }}>
         {/* Single sticky wrapper so announcement bar + navbar scroll as one unit */}
@@ -34,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar dark={dark} onToggle={toggle} />
         </div>
         {children}
-        <Footer />
+        <Footer dark={dark} />
       </body>
     </html>
   )

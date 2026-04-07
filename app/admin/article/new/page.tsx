@@ -16,7 +16,7 @@ export default function NewArticlePage() {
   const [error, setError] = useState('')
 
   const create = async () => {
-    if (!titleSk.trim()) { setError('Nadpis je povinný'); return }
+    if (!titleSk.trim()) { setError('Title is required'); return }
     setSaving(true)
     setError('')
     const res = await fetch('/api/admin/articles', {
@@ -35,7 +35,7 @@ export default function NewArticlePage() {
       router.push(`/admin/article/${data.article.id}`)
     } else {
       const data = await res.json()
-      setError(data.error || 'Chyba pri vytváraní')
+      setError(data.error || 'Error creating article')
       setSaving(false)
     }
   }
@@ -52,12 +52,12 @@ export default function NewArticlePage() {
               background: 'transparent', color: 'var(--text-secondary)', fontSize: 13,
               cursor: 'pointer',
             }}>
-              <ArrowLeft size={14} /> Späť
+              <ArrowLeft size={14} /> Back
             </button>
           </Link>
           <div>
             <h1 style={{ fontSize: 24, fontWeight: 900, letterSpacing: '-0.5px' }}>
-              Nový <span style={{ color: 'var(--green)' }}>článok</span>
+              New <span style={{ color: 'var(--green)' }}>article</span>
             </h1>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function NewArticlePage() {
             letterSpacing: 1, textTransform: 'uppercase',
           }}
         >
-          <Plus size={14} /> {saving ? 'Vytváram…' : 'Vytvoriť'}
+          <Plus size={14} /> {saving ? 'Creating…' : 'Create'}
         </button>
       </div>
 
@@ -87,12 +87,12 @@ export default function NewArticlePage() {
         {/* Title */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            Nadpis *
+            Title *
           </label>
           <input
             value={titleSk}
             onChange={e => setTitleSk(e.target.value)}
-            placeholder="Nadpis článku"
+            placeholder="Article title"
             style={{
               width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
@@ -106,7 +106,7 @@ export default function NewArticlePage() {
         {/* Image URL */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            URL obrázka
+            Image URL
           </label>
           <input
             value={imageUrl}
@@ -128,13 +128,13 @@ export default function NewArticlePage() {
         {/* Text */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            Text článku
+            Article text
           </label>
           <textarea
             value={textSk}
             onChange={e => setTextSk(e.target.value)}
             rows={20}
-            placeholder="Text článku…"
+            placeholder="Article text…"
             style={{
               width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 14,

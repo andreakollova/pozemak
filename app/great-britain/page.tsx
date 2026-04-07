@@ -1,0 +1,206 @@
+'use client'
+
+export const dynamic = 'force-dynamic'
+
+import { useEffect, useState, useRef } from 'react'
+import Link from 'next/link'
+import { getGBArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle } from '@/lib/supabase'
+import { Play, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const h = Math.floor(diff / 3600000)
+  const d = Math.floor(diff / 86400000)
+  if (h < 1) return 'Just now'
+  if (h < 24) return `${h}h ago`
+  return `${d}d ago`
+}
+
+export default function EnglandPage() {
+  const [articles, setArticles] = useState<Article[]>([])
+  const [loading, setLoading]   = useState(true)
+
+  useEffect(() => {
+    getGBArticles(20)
+      .then(arts => { setArticles(arts); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
+
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+      <div style={{ width: 32, height: 32, border: '2px solid rgba(255,255,255,0.1)', borderTop: '2px solid var(--accent)', borderRadius: '50%', animation: 'spin .7s linear infinite' }} />
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  )
+
+  if (!articles.length) return (
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+      <div style={{ fontSize: 48, marginBottom: 16 }}>🇬🇧</div>
+      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>No articles yet</h2>
+      <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Great Britain Hockey articles will appear here once the scraper runs.</p>
+    </div>
+  )
+
+  const [hero, ...rest] = articles
+  const secondary = rest.slice(0, 3)
+  const grid      = rest.slice(3)
+
+  return (
+    <>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .gb-wrap     { max-width:1200px; margin:0 auto; padding:24px 24px 100px; animation:fadeUp .4s ease; }
+        .sec-grid    { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+        .news-grid   { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+        @media(max-width:860px){
+          .sec-grid  { grid-template-columns:repeat(2,1fr); }
+          .news-grid { grid-template-columns:repeat(2,1fr); }
+        }
+        @media(max-width:520px){
+          .sec-grid  { grid-template-columns:1fr; }
+          .news-grid { grid-template-columns:1fr; }
+        }
+        .gb-card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+        .gb-card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+        .gb-img-zoom img { transition: transform .6s ease; }
+        .gb-img-zoom:hover img { transform: scale(1.05); }
+        .gb-title-hover { transition: color .2s ease; }
+        .gb-card-hover:hover .gb-title-hover { color: var(--accent) !important; }
+      `}</style>
+
+      <div className="gb-wrap">
+
+        {/* Country header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
+          <span style={{ fontSize: 36 }}>🇬🇧</span>
+          <div>
+            <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>Great Britain Hockey</h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>Latest news from Great Britain field hockey</p>
+          </div>
+        </div>
+
+        {/* Hero */}
+        {hero && <GBHeroCard article={hero} />}
+
+        {/* Secondary */}
+        {secondary.length > 0 && (
+          <div className="sec-grid" style={{ marginTop: 16, marginBottom: 48 }}>
+            {secondary.map(a => <GBSecondaryCard key={a.id} article={a} />)}
+          </div>
+        )}
+
+        {/* More */}
+        {grid.length > 0 && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>More News</span>
+              <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+            </div>
+            <div className="news-grid" style={{ marginBottom: 60 }}>
+              {grid.map(a => <GBGridCard key={a.id} article={a} />)}
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  )
+}
+
+function GBHeroCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+  const text  = (getText(article) || '').slice(0, 180).trim() + '…'
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 16, borderRadius: 20, overflow: 'hidden' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ position: 'relative', height: 520, overflow: 'hidden', borderRadius: 20, cursor: 'pointer' }}>
+        {article.image_url
+          ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s ease', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
+          : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
+        }
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)' }} />
+
+        <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
+          <span style={{ background: 'var(--green)', color: '#000', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
+          <span style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>🇬🇧 Great Britain</span>
+        </div>
+
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+            <Clock size={11} color="rgba(255,255,255,0.5)" />
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', letterSpacing: 1 }}>{timeAgo(article.scraped_at)}</span>
+          </div>
+          <h1 style={{ fontSize: 'clamp(24px, 3.5vw, 42px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', color: '#fff', marginBottom: 14, maxWidth: 760, transition: 'color .2s', ...(hov ? { color: 'var(--green)' } : {}) }}>
+            {title}
+          </h1>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 640 }}>{text}</p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 20, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 18px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
+            Read article →
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+function GBSecondaryCard({ article }: { article: Article }) {
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
+      <div className="gb-card-hover gb-img-zoom" style={{ borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+        <div style={{ height: 190, overflow: 'hidden', position: 'relative' }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : <div style={{ width: '100%', height: '100%', background: '#111' }} />
+          }
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' }} />
+        </div>
+        <div style={{ padding: '16px 18px 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '3px 7px', borderRadius: 4, border: '1px solid var(--border)' }}>🇬🇧 Great Britain</span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
+            <span style={{ fontSize: 10, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
+          </div>
+          <h3 className="gb-title-hover" style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {title}
+          </h3>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+function GBGridCard({ article }: { article: Article }) {
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
+      <div className="gb-card-hover gb-img-zoom" style={{ borderRadius: 14, overflow: 'hidden', background: 'var(--bg-card-2)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+        <div style={{ height: 165, overflow: 'hidden', position: 'relative' }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : <div style={{ width: '100%', height: '100%', background: '#111' }} />
+          }
+        </div>
+        <div style={{ padding: '13px 15px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border)' }}>🇬🇧 GB</span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
+            <span style={{ fontSize: 9, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
+          </div>
+          <h3 className="gb-title-hover" style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.35, color: 'var(--text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {title}
+          </h3>
+        </div>
+      </div>
+    </Link>
+  )
+}

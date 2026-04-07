@@ -7,7 +7,7 @@ export type Video = {
   title_sk: string | null
   thumbnail_url: string
   youtube_url: string
-  category: 'dames' | 'heren'
+  category: 'dames' | 'heren' | 'fih'
   published_at: string
   scraped_at: string
 }
@@ -26,7 +26,7 @@ export type Article = {
   published: boolean
 }
 
-// Helpers — vždy vráti slovenský text ak existuje, inak originál
+// Helpers — return English rewrite if available, otherwise fall back to original
 export const getTitle = (a: Article) => a.title_sk || a.title
 export const getText = (a: Article) => a.text_sk || a.text
 
@@ -47,7 +47,7 @@ export async function getArticles(limit = 20): Promise<Article[]> {
     .eq('published', true)
     .order('scraped_at', { ascending: false })
     .limit(limit)
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data || []
 }
 
@@ -55,7 +55,45 @@ export function getSlug(article: Article): string {
   return article.url.split('/').filter(Boolean).pop() || article.id
 }
 
-export async function getVideos(category?: 'dames' | 'heren', limit = 20): Promise<Video[]> {
+export function getArticleSource(article: Article): { flag: string; country: string } {
+  const url = article.url
+  if (url.includes('greatbritainhockey'))  return { flag: '🇬🇧', country: 'Great Britain' }
+  if (url.includes('hockey.ie'))           return { flag: '🇮🇪', country: 'Ireland' }
+  if (url.includes('scottish-hockey'))     return { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', country: 'Scotland' }
+  if (url.includes('hockey.org.au'))       return { flag: '🇦🇺', country: 'Australia' }
+  if (url.includes('eshockey.es'))         return { flag: '🇪🇸', country: 'Spain' }
+  if (url.includes('cahockey.org.ar'))     return { flag: '🇦🇷', country: 'Argentina' }
+  if (url.includes('hockey.de'))           return { flag: '🇩🇪', country: 'Germany' }
+  if (url.includes('hockey.be'))           return { flag: '🇧🇪', country: 'Belgium' }
+  if (url.includes('hockeyindia'))         return { flag: '🇮🇳', country: 'India' }
+  return { flag: '🇳🇱', country: 'Netherlands' }
+}
+
+export async function getArticlesByDomain(domain: string, limit = 20): Promise<Article[]> {
+  const { data, error } = await getSupabaseClient()
+    .from('articles')
+    .select('*')
+    .ilike('url', `%${domain}%`)
+    .eq('published', true)
+    .order('scraped_at', { ascending: false })
+    .limit(limit)
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export async function getGBArticles(limit = 20): Promise<Article[]> {
+  const { data, error } = await getSupabaseClient()
+    .from('articles')
+    .select('*')
+    .ilike('url', '%greatbritainhockey%')
+    .eq('published', true)
+    .order('scraped_at', { ascending: false })
+    .limit(limit)
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export async function getVideos(category?: 'dames' | 'heren' | 'fih', limit = 20): Promise<Video[]> {
   let query = getSupabaseClient()
     .from('videos')
     .select('*')
@@ -63,7 +101,7 @@ export async function getVideos(category?: 'dames' | 'heren', limit = 20): Promi
     .limit(limit)
   if (category) query = query.eq('category', category)
   const { data, error } = await query
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data || []
 }
 

@@ -1,17 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { Sun, Moon, Play } from 'lucide-react'
+import { Sun, Moon, Play, BarChart2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { label: 'Slovensko', href: '#', flag: '🇸🇰' },
-  { label: 'Česko',     href: '#', flag: '🇨🇿' },
-  { label: 'Holandsko', href: '/', flag: '🇳🇱', active: true },
-  { label: 'Nemecko',   href: '#', flag: '🇩🇪' },
-  { label: 'Anglicko',  href: '#', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { label: 'EHF',       href: '#', flag: '🏑' },
-  { label: 'FIH',       href: '#', flag: '🌍' },
+  { label: 'Netherlands',   href: '/netherlands',  flag: '🇳🇱' },
+  { label: 'Great Britain', href: '/great-britain', flag: '🇬🇧' },
+  { label: 'Australia',     href: '/australia',    flag: '🇦🇺' },
+  { label: 'Germany',       href: '/germany',      flag: '🇩🇪' },
+  { label: 'Belgium',       href: '/belgium',      flag: '🇧🇪' },
+  { label: 'Spain',         href: '/spain',        flag: '🇪🇸' },
+  { label: 'Argentina',     href: '/argentina',    flag: '🇦🇷' },
+  { label: 'Ireland',       href: '/ireland',      flag: '🇮🇪' },
+  { label: 'Scotland',      href: '/scotland',     flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { label: 'India',         href: '/india',        flag: '🇮🇳' },
 ]
 
 export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
@@ -26,19 +29,30 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
     }}>
       {/* Top bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span style={{ fontSize: 25, fontWeight: 900, letterSpacing: '-1px', color: 'var(--text-primary)', textTransform: 'uppercase' }}>
-            POZE<span style={{ color: 'var(--green)' }}>MAK</span>
-          </span>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={dark ? '/logo-dark.png' : '/logo-light.png'}
+            alt="REFRESH"
+            style={{ height: 36, width: 'auto', display: 'block' }}
+          />
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
-            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--green)'; e.currentTarget.style.borderColor = 'rgba(0,255,135,0.25)'; e.currentTarget.style.background = 'rgba(0,255,135,0.06)' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
-            <Play size={12} fill="currentColor" /> Video zóna
+            <Play size={12} fill="currentColor" /> Videos
+          </Link>
+
+          <Link href="/competition"
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+          >
+            <BarChart2 size={12} /> Standings
           </Link>
 
           <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
@@ -57,7 +71,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       <div style={{ borderTop: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', overflowX: 'auto', scrollbarWidth: 'none' }}>
           {NAV_ITEMS.map((item) => {
-            const isActive = item.active && (pathname === '/' || pathname === item.href)
+            const isActive = item.href !== '#' && pathname === item.href
             return (
               <Link key={item.label} href={item.href}
                 style={{
@@ -67,13 +81,13 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                   fontSize: 11, fontWeight: isActive ? 800 : 600,
                   letterSpacing: isActive ? 1.2 : 1,
                   textTransform: 'uppercase',
-                  color: isActive ? '#00FF87' : 'var(--text-secondary)',
+                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
                   whiteSpace: 'nowrap',
-                  borderBottom: isActive ? '2px solid #00FF87' : '2px solid transparent',
+                  borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
                   transition: 'color 0.15s, border-color 0.15s',
                 }}
                 onMouseEnter={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'rgba(0,180,80,0.4)' }
+                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'var(--blue-subtle)' }
                 }}
                 onMouseLeave={(e: any) => {
                   if (!isActive) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderBottomColor = 'transparent' }

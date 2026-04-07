@@ -45,7 +45,7 @@ export default function EditArticlePage() {
       setPosted(true)
       setTimeout(() => setPosted(false), 5000)
     } else {
-      setIgError(data.error || 'Chyba pri postovaní')
+      setIgError(data.error || 'Error posting to Instagram')
     }
     setPosting(false)
   }
@@ -64,7 +64,7 @@ export default function EditArticlePage() {
       setTimeout(() => setSaved(false), 3000)
     } else {
       const data = await res.json()
-      setError(data.error || 'Chyba pri ukladaní')
+      setError(data.error || 'Error saving article')
     }
     setSaving(false)
   }
@@ -72,7 +72,7 @@ export default function EditArticlePage() {
   if (loading) {
     return (
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Načítavam…</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Loading…</p>
       </div>
     )
   }
@@ -89,12 +89,12 @@ export default function EditArticlePage() {
               background: 'transparent', color: 'var(--text-secondary)', fontSize: 13,
               cursor: 'pointer',
             }}>
-              <ArrowLeft size={14} /> Späť
+              <ArrowLeft size={14} /> Back
             </button>
           </Link>
           <div>
             <h1 style={{ fontSize: 24, fontWeight: 900, letterSpacing: '-0.5px' }}>
-              Editovať <span style={{ color: 'var(--green)' }}>článok</span>
+              Edit <span style={{ color: 'var(--green)' }}>article</span>
             </h1>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function EditArticlePage() {
               letterSpacing: 1, textTransform: 'uppercase',
             }}
           >
-            <Share2 size={14} /> {posting ? 'Posielam…' : posted ? 'Odoslané!' : 'Instagram'}
+            <Share2 size={14} /> {posting ? 'Posting…' : posted ? 'Posted!' : 'Instagram'}
           </button>
           <button
             onClick={save}
@@ -129,7 +129,7 @@ export default function EditArticlePage() {
               letterSpacing: 1, textTransform: 'uppercase',
             }}
           >
-            <Save size={14} /> {saving ? 'Ukladám…' : saved ? 'Uložené!' : 'Uložiť'}
+            <Save size={14} /> {saving ? 'Saving…' : saved ? 'Saved!' : 'Save'}
           </button>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default function EditArticlePage() {
         {/* Title */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            Nadpis (SK)
+            Title (EN)
           </label>
           <input
             value={titleSk}
@@ -167,7 +167,7 @@ export default function EditArticlePage() {
         {/* Image URL */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            URL obrázka
+            Image URL
           </label>
           <input
             value={imageUrl}
@@ -188,7 +188,7 @@ export default function EditArticlePage() {
         {/* Text */}
         <div>
           <label style={{ fontSize: 12, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-            Text (SK)
+            Text (EN)
           </label>
           <textarea
             value={textSk}

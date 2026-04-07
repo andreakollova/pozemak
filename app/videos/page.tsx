@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { getVideos, Video, getVideoTitle } from '@/lib/supabase'
 import { Play, ArrowLeft } from 'lucide-react'
 
-type Category = 'all' | 'dames' | 'heren'
+type Category = 'all' | 'dames' | 'heren' | 'fih'
 
 export default function VideosPage() {
   const [videos, setVideos] = useState<Video[]>([])
@@ -22,9 +22,10 @@ export default function VideosPage() {
   }, [category])
 
   const tabs: { key: Category; label: string }[] = [
-    { key: 'all', label: 'Všetky' },
+    { key: 'all', label: 'All' },
     { key: 'dames', label: 'Hoofdklasse Dames' },
     { key: 'heren', label: 'Hoofdklasse Heren' },
+    { key: 'fih', label: '🌍 FIH' },
   ]
 
   return (
@@ -32,13 +33,13 @@ export default function VideosPage() {
       {/* Header */}
       <div style={{ marginBottom: 40 }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 13, marginBottom: 24 }}>
-          <ArrowLeft size={14} /> Späť na články
+          <ArrowLeft size={14} /> Back to articles
         </Link>
         <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
-          Video<span style={{ color: 'var(--green)' }}>záznamy</span>
+          Video<span style={{ color: 'var(--green)' }}>s</span>
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
-          Najnovšie videá z holandskej Hoofdklasse
+          Latest videos from the Dutch Hoofdklasse
         </p>
       </div>
 
@@ -65,9 +66,9 @@ export default function VideosPage() {
 
       {/* Grid */}
       {loading ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Načítavam…</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Loading…</p>
       ) : videos.length === 0 ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Zatiaľ žiadne videá.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>No videos yet.</p>
       ) : (
         <div style={{
           display: 'grid',
@@ -149,7 +150,7 @@ function VideoCard({ video }: { video: Video }) {
             {getVideoTitle(video)}
           </p>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 6 }}>
-            {new Date(video.published_at).toLocaleDateString('sk-SK')}
+            {new Date(video.published_at).toLocaleDateString('en-GB')}
           </p>
         </div>
       </div>

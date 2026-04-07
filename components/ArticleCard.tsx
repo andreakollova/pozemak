@@ -6,7 +6,7 @@ import { Article, getSlug, getTitle, getText } from '@/lib/supabase'
 import { ArrowUpRight } from 'lucide-react'
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('sk-SK', {
+  return new Date(iso).toLocaleDateString('en-GB', {
     day: 'numeric', month: 'long', year: 'numeric',
   })
 }
@@ -30,7 +30,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
             cursor: 'pointer',
             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
             transform: hovered ? 'translateY(-4px)' : 'none',
-            boxShadow: hovered ? '0 20px 60px rgba(0,255,135,0.12)' : '0 0 0 transparent',
+            boxShadow: hovered ? '0 20px 60px rgba(0,58,208,0.12)' : '0 0 0 transparent',
           }}
         >
           {/* Image */}
@@ -67,7 +67,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
                 padding: '4px 12px',
                 borderRadius: 4,
               }}>
-                Hlavná správa
+                Top Story
               </div>
             </div>
           )}
@@ -100,7 +100,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
               letterSpacing: 1,
               textTransform: 'uppercase',
             }}>
-              Čítať <ArrowUpRight size={14} />
+              Read <ArrowUpRight size={14} />
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
           cursor: 'pointer',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
           transform: hovered ? 'translateY(-4px)' : 'none',
-          boxShadow: hovered ? '0 16px 40px rgba(0,255,135,0.1)' : 'none',
+          boxShadow: hovered ? '0 16px 40px var(--blue-subtle)' : 'none',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -173,7 +173,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--green)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}
           >
-            Čítať <ArrowUpRight size={12} />
+            Read <ArrowUpRight size={12} />
           </div>
         </div>
       </div>

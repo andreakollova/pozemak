@@ -38,7 +38,7 @@ export default function AnnouncementBar() {
         <span style={{
           flexShrink: 0,
           display: 'flex', alignItems: 'center', gap: 5,
-          background: '#00FF87', color: '#000',
+          background: 'var(--green)', color: '#000',
           fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase',
           padding: '3px 8px', borderRadius: 4,
         }}>
@@ -56,7 +56,7 @@ export default function AnnouncementBar() {
           letterSpacing: 0.3,
           transition: 'color .15s',
         }}
-          onMouseEnter={(e: any) => (e.currentTarget.style.color = '#00aa55')}
+          onMouseEnter={(e: any) => (e.currentTarget.style.color = 'var(--accent)')}
           onMouseLeave={(e: any) => (e.currentTarget.style.color = 'var(--announcement-text)')}
         >
           {title}
