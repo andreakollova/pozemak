@@ -125,10 +125,10 @@ export default function ArticlePage() {
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-              <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Credit:</strong> {source.flag} {source.country}
+              <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Credit:</strong> {source.flag} {source.name}
             </span>
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-              <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Photo:</strong> {source.flag} {source.country}
+              <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Photo:</strong> {source.flag} {source.name}
             </span>
           </div>
         </div>

@@ -55,18 +55,18 @@ export function getSlug(article: Article): string {
   return article.url.split('/').filter(Boolean).pop() || article.id
 }
 
-export function getArticleSource(article: Article): { flag: string; country: string } {
+export function getArticleSource(article: Article): { flag: string; country: string; name: string } {
   const url = article.url
-  if (url.includes('greatbritainhockey'))  return { flag: '🇬🇧', country: 'Great Britain' }
-  if (url.includes('hockey.ie'))           return { flag: '🇮🇪', country: 'Ireland' }
-  if (url.includes('scottish-hockey'))     return { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', country: 'Scotland' }
-  if (url.includes('hockey.org.au'))       return { flag: '🇦🇺', country: 'Australia' }
-  if (url.includes('eshockey.es'))         return { flag: '🇪🇸', country: 'Spain' }
-  if (url.includes('cahockey.org.ar'))     return { flag: '🇦🇷', country: 'Argentina' }
-  if (url.includes('hockey.de'))           return { flag: '🇩🇪', country: 'Germany' }
-  if (url.includes('hockey.be'))           return { flag: '🇧🇪', country: 'Belgium' }
-  if (url.includes('hockeyindia'))         return { flag: '🇮🇳', country: 'India' }
-  return { flag: '🇳🇱', country: 'Netherlands' }
+  if (url.includes('greatbritainhockey'))  return { flag: '🇬🇧', country: 'Great Britain', name: 'GB Hockey' }
+  if (url.includes('hockey.ie'))           return { flag: '🇮🇪', country: 'Ireland', name: 'Hockey Ireland' }
+  if (url.includes('scottish-hockey'))     return { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', country: 'Scotland', name: 'Scottish Hockey' }
+  if (url.includes('hockey.org.au'))       return { flag: '🇦🇺', country: 'Australia', name: 'Hockey Australia' }
+  if (url.includes('eshockey.es'))         return { flag: '🇪🇸', country: 'Spain', name: 'Real Federación Española de Hockey' }
+  if (url.includes('cahockey.org.ar'))     return { flag: '🇦🇷', country: 'Argentina', name: 'CAH Argentina' }
+  if (url.includes('hockey.de'))           return { flag: '🇩🇪', country: 'Germany', name: 'Hockey Germany' }
+  if (url.includes('hockey.be'))           return { flag: '🇧🇪', country: 'Belgium', name: 'Hockey Belgium' }
+  if (url.includes('hockeyindia'))         return { flag: '🇮🇳', country: 'India', name: 'Hockey India' }
+  return { flag: '🇳🇱', country: 'Netherlands', name: 'HockeyNL' }
 }
 
 export async function getArticlesByDomain(domain: string, limit = 20): Promise<Article[]> {
