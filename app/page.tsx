@@ -127,7 +127,7 @@ export default function Home() {
         )}
 
         {/* Articles (GB + AU + DE + BE) left | 🌍 International Matches right */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
           <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 40 }}>
             {(byCountry['Great Britain']?.length ?? 0) > 0 && (
               <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
@@ -146,11 +146,9 @@ export default function Home() {
               <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
             )}
           </div>
-          {(intlMen || intlWomen) && (
-            <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
-              <IntlMatchSection menData={intlMen} womenData={intlWomen} />
-            </div>
-          )}
+          <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
+            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+          </div>
         </div>
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
@@ -486,8 +484,16 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
 
       {/* Match list — 5 visible, rest scrollable */}
       <div style={{ padding: '12px 14px 14px', overflowY: 'auto', maxHeight: 490, scrollbarWidth: 'thin', scrollbarColor: 'var(--border) transparent' }}>
-        {!data
-          ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>Loading…</p>
+        {!menData && !womenData
+          ? <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[...Array(5)].map((_, i) => (
+                <div key={i} style={{ border: '1px solid var(--border)', borderRadius: 12, padding: '14px', background: 'var(--bg-card-2)', opacity: 0.5 }}>
+                  <div style={{ height: 8, width: '60%', background: 'var(--border)', borderRadius: 4, marginBottom: 12 }} />
+                  <div style={{ height: 10, width: '80%', background: 'var(--border)', borderRadius: 4, marginBottom: 8 }} />
+                  <div style={{ height: 10, width: '70%', background: 'var(--border)', borderRadius: 4 }} />
+                </div>
+              ))}
+            </div>
           : matches.length === 0
             ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
