@@ -7,7 +7,7 @@ export type Video = {
   title_sk: string | null
   thumbnail_url: string
   youtube_url: string
-  category: 'dames' | 'heren' | 'fih'
+  category: 'dames' | 'heren' | 'fih' | 'fih-mens' | 'fih-womens'
   published_at: string
   scraped_at: string
 }
