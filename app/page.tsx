@@ -185,7 +185,7 @@ export default function Home() {
       <div className="page-anim">
 
         {/* ── HERO ──────────────────────────────────────────────────────────── */}
-        {hero && <HeroSection article={hero} />}
+        {hero && <HeroCard article={hero} />}
 
         {/* ── MAIN CONTENT ──────────────────────────────────────────────────── */}
         <div style={{ padding: '56px 0 0' }}>
@@ -297,111 +297,39 @@ export default function Home() {
   )
 }
 
-/* ─── HERO SECTION ────────────────────────────────────────────────────────── */
-function HeroSection({ article }: { article: Article }) {
+/* ─── HERO (original) ─────────────────────────────────────────────────────── */
+function HeroCard({ article }: { article: Article }) {
   const [hov, setHov] = useState(false)
   const slug = getSlug(article)
   const title = getTitle(article)
   const text = (getText(article) || '').slice(0, 200).trim() + '…'
   const source = getArticleSource(article)
-
   return (
-    <div style={{ position: 'relative', background: '#00084a', overflow: 'hidden', minHeight: 680 }}>
-
-      {/* ── Giant green BALL — top-right, partially off-screen ── */}
-      <Ball size={953} style={{ top: -320, right: -320, opacity: 0.18 }} />
-      {/* Oval pill behind ball */}
-      <Oval gradient="linear-gradient(180deg, rgba(217,217,217,0.07) 0%, rgba(255,255,255,0.02) 100%)"
-        style={{ top: -900, right: -420 }} />
-      <Oval gradient="radial-gradient(78.54% 175.42% at 50% 50%, rgba(217,217,217,0.04) 0%, rgba(217,217,217,0.08) 100%)"
-        style={{ top: -820, right: -380 }} />
-
-      {/* ── Layered triangles — bottom-left ── */}
-      <LayeredTriangles style={{ bottom: -60, left: -40 }} scale={0.9} />
-
-      {/* Background article image tinted */}
-      {article.image_url && (
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.12 }}>
-          <img src={article.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-      )}
-
-      {/* ── GIANT background text (decorative) ── */}
-      <div style={{ position: 'absolute', top: -60, left: -20, right: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
-        <span style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(140px, 18vw, 260px)',
-          fontWeight: 800,
-          color: '#fff',
-          opacity: 0.03,
-          letterSpacing: '-0.07em',
-          whiteSpace: 'nowrap',
-          lineHeight: 1,
-          display: 'block',
-          userSelect: 'none',
-        }}>HOCKEY</span>
-      </div>
-
-      {/* ── Liquid glass panel (rotated) ── */}
-      <div style={{
-        position: 'absolute',
-        top: -180, right: -120,
-        width: 520, height: 680,
-        transform: 'rotate(15.047deg)',
-        borderRadius: 200,
-        border: '1px solid rgba(255,255,255,0.04)',
-        background: 'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(50px)',
-        WebkitBackdropFilter: 'blur(50px)',
-        pointerEvents: 'none',
-        zIndex: 1,
-      }} />
-
-      {/* ── Article image — right side glass card ── */}
-      {article.image_url && (
-        <div style={{
-          position: 'absolute', right: 60, top: '50%', transform: 'translateY(-50%)',
-          width: 380, borderRadius: 24, overflow: 'hidden',
-          border: '1px solid rgba(255,255,255,0.10)',
-          backdropFilter: 'blur(2px)',
-          boxShadow: '0 40px 100px rgba(0,0,0,0.6)',
-          zIndex: 3,
-          display: 'none',
-        }}>
-          <img src={article.image_url} alt={title} style={{ width: '100%', height: 270, objectFit: 'cover', display: 'block' }} />
-        </div>
-      )}
-
-      {/* ── Content ── */}
-      <div className="pw" style={{ position: 'relative', zIndex: 4, display: 'flex', alignItems: 'center', minHeight: 680, padding: '100px 24px 80px' }}>
-        <div style={{ maxWidth: 680 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
-            <span style={{ background: '#94FF00', color: '#000', fontSize: 9, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', padding: '5px 14px', borderRadius: 100 }}>Top Story</span>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 1 }}>{source.flag} {source.country}</span>
-            <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
-            <Clock size={10} color="rgba(255,255,255,0.3)" />
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{timeAgo(article.scraped_at)}</span>
+    <div className="pw" style={{ paddingTop: 0, paddingBottom: 0 }}>
+      <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 48, borderRadius: 20, overflow: 'hidden' }}
+        onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      >
+        <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: 20 }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
+            : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
+          }
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,58,208,0.92) 0%, rgba(0,58,208,0.55) 32%, transparent 62%)' }} />
+          <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
+            <span style={{ background: 'var(--green)', color: '#003ad0', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
+            <span style={{ background: '#003ad0', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>{source.flag} {source.country}</span>
           </div>
-
-          <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(34px, 5.5vw, 72px)', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-2.5px', color: hov ? '#94FF00' : '#fff', marginBottom: 24, transition: 'color .2s' }}>
-              {title}
-            </h1>
-          </Link>
-
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, marginBottom: 36, maxWidth: 520 }}>{text}</p>
-
-          <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, padding: '13px 28px', borderRadius: 100, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 0.3, transition: 'all .2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#94FF00'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = '#94FF00' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)' }}
-          >
-            Read full story <ExternalLink size={13} />
-          </Link>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+              <Clock size={11} color="rgba(255,255,255,0.45)" />
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: 1 }}>{timeAgo(article.scraped_at)}</span>
+            </div>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 44px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', color: hov ? 'var(--green)' : '#fff', marginBottom: 14, maxWidth: 760, transition: 'color .2s' }}>{title}</h1>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 620 }}>{text}</p>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 20px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>Read article →</div>
+          </div>
         </div>
-      </div>
-
-      {/* Bottom fade to page bg */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 140, background: 'linear-gradient(to bottom, transparent, var(--bg-dark))', pointerEvents: 'none', zIndex: 5 }} />
+      </Link>
     </div>
   )
 }
@@ -681,7 +609,7 @@ function VideoZone({ dames, heren, fih }: { dames: Video[]; heren: Video[]; fih:
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -270 : 270, behavior: 'smooth' })
 
   return (
-    <section style={{ position: 'relative', background: 'linear-gradient(180deg, var(--bg-dark) 0%, #001060 40%, #000d50 100%)', overflow: 'hidden', padding: '80px 0 100px', marginTop: 24 }}>
+    <section style={{ position: 'relative', background: '#003ad0', overflow: 'hidden', padding: '80px 0 100px', marginTop: 24 }}>
       {/* ── Giant vertical ball — bottom left ── */}
       <Ball size={1341} style={{ bottom: -600, left: -400, opacity: 0.13, transform: 'none' }} />
       {/* Oval behind ball */}
