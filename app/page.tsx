@@ -147,7 +147,9 @@ export default function Home() {
             )}
           </div>
           {(intlMen || intlWomen) && (
-            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+            <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
+              <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+            </div>
           )}
         </div>
 
@@ -482,13 +484,13 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
         ))}
       </div>
 
-      {/* Match grid — 2 columns */}
-      <div style={{ padding: '12px 16px 16px' }}>
+      {/* Match list — 5 visible, rest scrollable */}
+      <div style={{ padding: '12px 14px 14px', overflowY: 'auto', maxHeight: 490, scrollbarWidth: 'thin', scrollbarColor: 'var(--border) transparent' }}>
         {!data
           ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>Loading…</p>
           : matches.length === 0
             ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
-            : <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+            : <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)}
               </div>
         }
