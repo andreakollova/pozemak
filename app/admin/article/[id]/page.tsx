@@ -94,7 +94,7 @@ export default function EditArticlePage() {
           </Link>
           <div>
             <h1 style={{ fontSize: 24, fontWeight: 900, letterSpacing: '-0.5px' }}>
-              Edit <span style={{ color: 'var(--green)' }}>article</span>
+              Edit <span style={{ color: 'var(--blue)' }}>article</span>
             </h1>
           </div>
         </div>
@@ -122,8 +122,8 @@ export default function EditArticlePage() {
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '10px 20px', borderRadius: 10, border: 'none',
-              background: 'var(--green)',
-              color: '#000', fontWeight: 800, fontSize: 13,
+              background: 'var(--blue)',
+              color: '#fff', fontWeight: 800, fontSize: 13,
               cursor: saving ? 'not-allowed' : 'pointer',
               opacity: saving ? 0.7 : 1,
               letterSpacing: 1, textTransform: 'uppercase',
@@ -159,7 +159,7 @@ export default function EditArticlePage() {
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
-            onFocus={e => (e.target.style.borderColor = 'var(--green)')}
+            onFocus={e => (e.target.style.borderColor = 'var(--blue)')}
             onBlur={e => (e.target.style.borderColor = 'var(--border)')}
           />
         </div>
@@ -177,7 +177,7 @@ export default function EditArticlePage() {
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
-            onFocus={e => (e.target.style.borderColor = 'var(--green)')}
+            onFocus={e => (e.target.style.borderColor = 'var(--blue)')}
             onBlur={e => (e.target.style.borderColor = 'var(--border)')}
           />
           {imageUrl && (
@@ -200,7 +200,7 @@ export default function EditArticlePage() {
               outline: 'none', boxSizing: 'border-box', resize: 'vertical', lineHeight: 1.7,
               fontFamily: 'inherit',
             }}
-            onFocus={e => (e.target.style.borderColor = 'var(--green)')}
+            onFocus={e => (e.target.style.borderColor = 'var(--blue)')}
             onBlur={e => (e.target.style.borderColor = 'var(--border)')}
           />
         </div>

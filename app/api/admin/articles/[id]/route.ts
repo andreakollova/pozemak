@@ -19,7 +19,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.title_sk  !== undefined) update.title_sk  = body.title_sk
   if (body.text_sk   !== undefined) update.text_sk   = body.text_sk
   if (body.image_url !== undefined) update.image_url = body.image_url
-  if (body.published !== undefined) update.published = body.published
+  if (body.published  !== undefined) update.published  = body.published
+  if (body.top_story  !== undefined) update.top_story  = body.top_story
+
+  // Only one article can be top story at a time
+  if (body.top_story === true) {
+    await db.from('articles').update({ top_story: false }).neq('id', id)
+  }
 
   const { error } = await db.from('articles').update(update).eq('id', id)
 

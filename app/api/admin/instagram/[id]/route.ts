@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import sharp from 'sharp'
+import { getSession } from '@/lib/session'
 import * as fs from 'fs'
 import * as path from 'path'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
@@ -91,10 +91,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  // Auth check — must have admin session cookie
-  const cookieStore = await cookies()
-  const session = cookieStore.get('pozemak_session')
-  if (!session?.value) {
+  // Auth check
+  const session = await getSession()
+  if (!session.isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
