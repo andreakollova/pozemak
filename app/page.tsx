@@ -121,16 +121,15 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
-        {/* 🇳🇱 Netherlands + International Matches side by side */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
-          {(byCountry['Netherlands']?.length ?? 0) > 0
-            ? <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} noMargin />
-            : <div />
-          }
-          {(intlMen || intlWomen) && (
-            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
-          )}
-        </div>
+        {/* 🇳🇱 Netherlands — editorial */}
+        {(byCountry['Netherlands']?.length ?? 0) > 0 && (
+          <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
+        )}
+
+        {/* 🌍 International Matches */}
+        {(intlMen || intlWomen) && (
+          <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+        )}
 
         {/* 🇬🇧 Great Britain — 3-column grid all with excerpt */}
         {(byCountry['Great Britain']?.length ?? 0) > 0 && (
@@ -252,11 +251,11 @@ function HeroCard({ article }: { article: Article }) {
 }
 
 /* ─── 1. Editorial: big left + stacked list right (Netherlands) ──────────── */
-function EditorialSection({ cfg, articles, noMargin }: { cfg: CountryCfg; articles: Article[]; noMargin?: boolean }) {
+function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Article[] }) {
   const featured = articles[0]
   const rest = articles.slice(1, 5)
   return (
-    <div style={{ marginBottom: noMargin ? 0 : 56 }}>
+    <div style={{ marginBottom: 56 }}>
       <SectionHeader cfg={cfg} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
         <FeaturedCard article={featured} />
@@ -485,13 +484,15 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
         ))}
       </div>
 
-      {/* Match list — vertical */}
-      <div style={{ maxHeight: 440, overflowY: 'auto', scrollbarWidth: 'none' }}>
+      {/* Match grid — 2 columns */}
+      <div style={{ padding: '12px 16px 16px' }}>
         {!data
-          ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '20px 16px', textAlign: 'center' }}>Loading…</p>
+          ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>Loading…</p>
           : matches.length === 0
-            ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '20px 16px', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
-            : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
+            ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+                {matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)}
+              </div>
         }
       </div>
     </div>
@@ -502,21 +503,19 @@ function MatchRow({ match: m, isResult }: { match: Match; isResult: boolean }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
   return (
-    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--bg-card-2)' }}>
       <div style={{ fontSize: 9, color: isResult ? 'var(--text-secondary)' : 'var(--green)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
         {isResult ? `Final · ${fmtMatchDate(m.date)}` : `Upcoming · ${fmtMatchDate(m.date)}`}
       </div>
-      {/* Home */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <TeamLogo logo={m.home.logo} name={m.home.name} small />
         <span style={{ flex: 1, fontSize: 12, fontWeight: homeWon ? 900 : 500, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.name}</span>
-        {isResult && m.score && <span style={{ fontSize: 16, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 16, textAlign: 'right' }}>{m.score.home}</span>}
+        {isResult && m.score && <span style={{ fontSize: 18, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 18, textAlign: 'right' }}>{m.score.home}</span>}
       </div>
-      {/* Away */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <TeamLogo logo={m.away.logo} name={m.away.name} small />
         <span style={{ flex: 1, fontSize: 12, fontWeight: awayWon ? 900 : 500, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.name}</span>
-        {isResult && m.score && <span style={{ fontSize: 16, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 16, textAlign: 'right' }}>{m.score.away}</span>}
+        {isResult && m.score && <span style={{ fontSize: 18, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 18, textAlign: 'right' }}>{m.score.away}</span>}
       </div>
     </div>
   )
