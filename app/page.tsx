@@ -126,15 +126,17 @@ export default function Home() {
           <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
         )}
 
-        {/* 🌍 International Matches */}
-        {(intlMen || intlWomen) && (
-          <IntlMatchSection menData={intlMen} womenData={intlWomen} />
-        )}
-
-        {/* 🇬🇧 Great Britain — 3-column grid all with excerpt */}
-        {(byCountry['Great Britain']?.length ?? 0) > 0 && (
-          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} />
-        )}
+        {/* 🇬🇧 Great Britain + 🌍 International Matches side by side */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
+          <div style={{ minWidth: 0 }}>
+            {(byCountry['Great Britain']?.length ?? 0) > 0 && (
+              <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
+            )}
+          </div>
+          {(intlMen || intlWomen) && (
+            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+          )}
+        </div>
 
         {/* 🇦🇺 Australia + 🇩🇪 Germany — side by side, each scroll */}
         {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
@@ -314,9 +316,9 @@ function ListCard({ article }: { article: Article }) {
 }
 
 /* ─── 2. Grid-3: 3 equal cards all with excerpt (Great Britain) ──────────── */
-function Grid3Section({ cfg, articles }: { cfg: CountryCfg; articles: Article[] }) {
+function Grid3Section({ cfg, articles, noMargin }: { cfg: CountryCfg; articles: Article[]; noMargin?: boolean }) {
   return (
-    <div style={{ marginBottom: 56 }}>
+    <div style={{ marginBottom: noMargin ? 0 : 56 }}>
       <SectionHeader cfg={cfg} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
         {articles.map(a => <Grid3Card key={a.id} article={a} />)}
@@ -469,7 +471,7 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
       {/* Men / Women tabs */}
       <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
         {(['men', 'women'] as const).map(g => (
-          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '10px', border: 'none', background: gender === g ? 'var(--accent)' : 'transparent', color: gender === g ? '#000' : 'var(--text-secondary)', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '10px', border: 'none', background: gender === g ? 'var(--green)' : 'transparent', color: gender === g ? '#003ad0' : 'var(--text-secondary)', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {g === 'men' ? '♂ Men' : '♀ Women'}
           </button>
         ))}
@@ -478,7 +480,7 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
       {/* Results / Upcoming tabs */}
       <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
         {(['results', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '8px', border: 'none', background: 'transparent', color: tab === t ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', borderBottom: tab === t ? '2px solid var(--accent)' : '2px solid transparent', transition: 'all .15s' }}>
+          <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '8px', border: 'none', background: tab === t ? 'var(--green)' : 'transparent', color: tab === t ? '#003ad0' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {t === 'results' ? 'Results' : 'Upcoming'}
           </button>
         ))}
