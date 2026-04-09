@@ -53,7 +53,12 @@ const COUNTRY_CONFIG = [
   { flag: '🇮🇳', name: 'India',         href: '/india',         domain: 'hockeyindia' },
 ]
 
-// ── Main page ──────────────────────────────────────────────────────────────────
+// Pairs of smaller countries shown side-by-side
+const PAIRED_COUNTRIES = [
+  ['Germany', 'Belgium'],
+  ['Spain', 'Argentina'],
+  ['Ireland', 'Scotland'],
+]
 
 interface MatchData { name: string; results: Match[]; upcoming: Match[] }
 
@@ -98,7 +103,6 @@ export default function Home() {
     </div>
   )
 
-  // Group articles by country
   const byCountry: Record<string, Article[]> = {}
   for (const a of articles) {
     const src = getArticleSource(a)
@@ -107,8 +111,12 @@ export default function Home() {
     byCountry[key].push(a)
   }
 
-  // Hero = latest article overall
   const hero = articles[0]
+  const nlArticles = byCountry['Netherlands'] || []
+  const gbArticles = byCountry['Great Britain'] || []
+  const auArticles = byCountry['Australia'] || []
+
+  const pairedRendered = new Set(PAIRED_COUNTRIES.flat())
 
   return (
     <>
@@ -118,13 +126,16 @@ export default function Home() {
         .page-wrap        { max-width: 1200px; margin: 0 auto; padding: 28px 24px 100px; animation: fadeUp .4s ease; }
         .card-hover       { transition: transform .22s ease, box-shadow .22s ease; }
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 56px rgba(0,0,0,.5); }
-        .img-zoom img     { transition: transform .6s ease; }
-        .img-zoom:hover img { transform: scale(1.05); }
-        .title-hover      { transition: color .2s ease; }
-        .card-hover:hover .title-hover { color: var(--accent) !important; }
         .art-row          { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .art-row::-webkit-scrollbar { display: none; }
         .match-tab        { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
+        .nl-grid          { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .gb-grid          { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .paired-grid      { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+        @media (max-width: 768px) {
+          .nl-grid, .gb-grid { grid-template-columns: 1fr; }
+          .paired-grid { grid-template-columns: 1fr; }
+        }
       `}</style>
 
       <div className="page-wrap">
@@ -132,14 +143,50 @@ export default function Home() {
         {/* ═══ HERO ════════════════════════════════════════════════════════ */}
         {hero && <HeroCard article={hero} />}
 
-        {/* ═══ PER-COUNTRY ARTICLE FEEDS ════════════════════════════════════ */}
-        {COUNTRY_CONFIG.map(c => {
-          const arts = byCountry[c.name]
-          if (!arts?.length) return null
+        {/* ═══ NETHERLANDS — Featured editorial layout ══════════════════════ */}
+        {nlArticles.length > 0 && (
+          <NetherlandsSection articles={nlArticles} />
+        )}
+
+        {/* ═══ GREAT BRITAIN — 3-column grid ═══════════════════════════════ */}
+        {gbArticles.length > 0 && (
+          <GridSection
+            config={COUNTRY_CONFIG.find(c => c.name === 'Great Britain')!}
+            articles={gbArticles.slice(0, 3)}
+          />
+        )}
+
+        {/* ═══ AUSTRALIA — horizontal scroll ═══════════════════════════════ */}
+        {auArticles.length > 0 && (
+          <CountryFeed
+            config={COUNTRY_CONFIG.find(c => c.name === 'Australia')!}
+            articles={auArticles.slice(0, 8)}
+          />
+        )}
+
+        {/* ═══ PAIRED COUNTRIES — two side by side ══════════════════════════ */}
+        {PAIRED_COUNTRIES.map(pair => {
+          const [nameA, nameB] = pair
+          const cfgA = COUNTRY_CONFIG.find(c => c.name === nameA)
+          const cfgB = COUNTRY_CONFIG.find(c => c.name === nameB)
+          const artsA = byCountry[nameA]
+          const artsB = byCountry[nameB]
+          if (!cfgA || !cfgB || (!artsA?.length && !artsB?.length)) return null
           return (
-            <CountryFeed key={c.name} config={c} articles={arts.slice(0, 8)} />
+            <div key={pair.join('-')} className="paired-grid" style={{ marginBottom: 52 }}>
+              {artsA?.length ? <CountryFeed config={cfgA} articles={artsA.slice(0, 6)} /> : <div />}
+              {artsB?.length ? <CountryFeed config={cfgB} articles={artsB.slice(0, 6)} /> : <div />}
+            </div>
           )
         })}
+
+        {/* ═══ INDIA — solo scroll if exists ═══════════════════════════════ */}
+        {(() => {
+          const cfg = COUNTRY_CONFIG.find(c => c.name === 'India')
+          const arts = byCountry['India']
+          if (!cfg || !arts?.length) return null
+          return <CountryFeed config={cfg} articles={arts.slice(0, 8)} />
+        })()}
 
         {/* ═══ INTERNATIONAL MATCHES ════════════════════════════════════════ */}
         {intlData && (intlData.results.length > 0 || intlData.upcoming.length > 0) && (
@@ -153,6 +200,199 @@ export default function Home() {
 
       </div>
     </>
+  )
+}
+
+/* ─── Netherlands — editorial featured layout ─────────────────────────────── */
+function NetherlandsSection({ articles }: { articles: Article[] }) {
+  const cfg = COUNTRY_CONFIG.find(c => c.name === 'Netherlands')!
+  const featured = articles[0]
+  const rest = articles.slice(1, 5)
+
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <SectionHeader config={cfg} />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 16 }}>
+        {/* Big featured card */}
+        <FeaturedCard article={featured} />
+        {/* Stacked list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {rest.map(a => <ListCard key={a.id} article={a} />)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FeaturedCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug   = getSlug(article)
+  const title  = getTitle(article)
+  const text   = (getText(article) || '').slice(0, 160).trim() + '…'
+  const source = getArticleSource(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ position: 'relative', height: 420, borderRadius: 16, overflow: 'hidden', cursor: 'pointer' }}>
+        {article.image_url
+          ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
+          : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
+        }
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, transparent 75%)' }} />
+        <div style={{ position: 'absolute', top: 16, left: 16 }}>
+          <span style={{ background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>{source.flag} {source.country}</span>
+        </div>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px 24px' }}>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', marginBottom: 8, letterSpacing: 1 }}>{timeAgo(article.scraped_at)}</div>
+          <h2 style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', fontWeight: 900, lineHeight: 1.2, color: hov ? 'var(--green)' : '#fff', margin: '0 0 10px', transition: 'color .2s', letterSpacing: '-0.5px' }}>
+            {title}
+          </h2>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, margin: 0 }}>{text}</p>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+function ListCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ display: 'flex', gap: 12, padding: '12px', borderRadius: 12, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'background .2s, border-color .2s', borderColor: hov ? 'var(--accent)' : 'var(--border)' }}>
+        <div style={{ width: 80, height: 60, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
+          {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 9, color: 'var(--text-secondary)', marginBottom: 5, letterSpacing: 0.5 }}>{timeAgo(article.scraped_at)}</div>
+          <p style={{ fontSize: 12, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {title}
+          </p>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/* ─── Great Britain — 3-column grid ──────────────────────────────────────── */
+interface CountryCfg { flag: string; name: string; href: string; domain: string }
+
+function GridSection({ config, articles }: { config: CountryCfg; articles: Article[] }) {
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <SectionHeader config={config} />
+      <div className="gb-grid">
+        {articles.map((a, i) => <GridCard key={a.id} article={a} large={i === 0} />)}
+      </div>
+    </div>
+  )
+}
+
+function GridCard({ article, large }: { article: Article; large?: boolean }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+  const text  = large ? (getText(article) || '').slice(0, 120).trim() + '…' : ''
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .22s, box-shadow .22s, border-color .2s', transform: hov ? 'translateY(-4px)' : 'none', boxShadow: hov ? '0 20px 56px rgba(0,0,0,.5)' : 'none', borderColor: hov ? 'var(--accent)' : 'var(--border)' }}>
+        <div style={{ height: large ? 200 : 160, overflow: 'hidden', background: '#111', position: 'relative' }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
+            : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
+          }
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%)' }} />
+        </div>
+        <div style={{ padding: '14px 16px 18px' }}>
+          <div style={{ fontSize: 9, color: 'var(--text-secondary)', marginBottom: 8, letterSpacing: 0.5 }}>{timeAgo(article.scraped_at)}</div>
+          <p style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', margin: '0 0 8px', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {title}
+          </p>
+          {large && text && <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>{text}</p>}
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/* ─── Section header ─────────────────────────────────────────────────────── */
+function SectionHeader({ config }: { config: CountryCfg }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 22 }}>{config.flag}</span>
+        <span style={{ fontSize: 14, fontWeight: 900, letterSpacing: 0.5, color: 'var(--text-primary)' }}>{config.name}</span>
+        <div style={{ width: 30, height: 1, background: 'var(--border)' }} />
+      </div>
+      <Link href={config.href} style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>All News →</Link>
+    </div>
+  )
+}
+
+/* ─── Country feed — horizontal scroll (smaller countries) ───────────────── */
+function CountryFeed({ config, articles }: { config: CountryCfg; articles: Article[] }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -280 : 280, behavior: 'smooth' })
+
+  return (
+    <div style={{ marginBottom: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 18 }}>{config.flag}</span>
+          <span style={{ fontSize: 12, fontWeight: 900, letterSpacing: 0.5, color: 'var(--text-primary)' }}>{config.name}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Link href={config.href} style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>All →</Link>
+          {(['left', 'right'] as const).map(d => (
+            <button key={d} onClick={() => scroll(d)} style={{ width: 24, height: 24, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .15s' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+            >
+              {d === 'left' ? <ChevronLeft size={10} /> : <ChevronRight size={10} />}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div ref={ref} className="art-row">
+        {articles.map(a => <ArticleMiniCard key={a.id} article={a} />)}
+      </div>
+    </div>
+  )
+}
+
+function ArticleMiniCard({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug  = getSlug(article)
+  const title = getTitle(article)
+
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 200 }}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    >
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .22s, box-shadow .22s, border-color .2s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 48px rgba(0,0,0,.45)' : 'none', borderColor: hov ? 'var(--accent)' : 'var(--border)' }}>
+        <div style={{ height: 120, overflow: 'hidden', background: '#111', position: 'relative' }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
+            : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
+          }
+        </div>
+        <div style={{ padding: '10px 12px 13px' }}>
+          <div style={{ fontSize: 9, color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: 0.5, marginBottom: 6 }}>{timeAgo(article.scraped_at)}</div>
+          <p style={{ fontSize: 12, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: 0 }}>
+            {title}
+          </p>
+        </div>
+      </div>
+    </Link>
   )
 }
 
@@ -211,71 +451,6 @@ function HeroCard({ article }: { article: Article }) {
   )
 }
 
-/* ─── Country feed row ───────────────────────────────────────────────────── */
-interface CountryCfg { flag: string; name: string; href: string; domain: string }
-
-function CountryFeed({ config, articles }: { config: CountryCfg; articles: Article[] }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -280 : 280, behavior: 'smooth' })
-
-  return (
-    <div style={{ marginBottom: 52 }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 20 }}>{config.flag}</span>
-          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.5, color: 'var(--text-primary)' }}>{config.name}</span>
-          <div style={{ width: 30, height: 1, background: 'var(--border)' }} />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href={config.href} style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>All News →</Link>
-          {(['left', 'right'] as const).map(d => (
-            <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .15s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
-            >
-              {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Horizontal article cards */}
-      <div ref={ref} className="art-row">
-        {articles.map(a => <ArticleMiniCard key={a.id} article={a} />)}
-      </div>
-    </div>
-  )
-}
-
-function ArticleMiniCard({ article }: { article: Article }) {
-  const [hov, setHov] = useState(false)
-  const slug  = getSlug(article)
-  const title = getTitle(article)
-
-  return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 220 }}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-    >
-      <div style={{ borderRadius: 13, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .22s, box-shadow .22s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 48px rgba(0,0,0,.45)' : 'none' }}>
-        <div style={{ height: 130, overflow: 'hidden', background: '#111', position: 'relative' }}>
-          {article.image_url
-            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
-            : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
-          }
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 60%)' }} />
-        </div>
-        <div style={{ padding: '11px 13px 14px' }}>
-          <div style={{ fontSize: 9, color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: 0.5, marginBottom: 6 }}>{timeAgo(article.scraped_at)}</div>
-          <p style={{ fontSize: 12, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: 0 }}>
-            {title}
-          </p>
-        </div>
-      </div>
-    </Link>
-  )
-}
-
 /* ─── International matches section ─────────────────────────────────────── */
 function IntlMatchSection({ data }: { data: MatchData }) {
   const [tab, setTab] = useState<'results' | 'upcoming'>(
@@ -286,24 +461,17 @@ function IntlMatchSection({ data }: { data: MatchData }) {
   return (
     <div style={{ marginBottom: 64 }}>
       <SectionDivider label="International Matches" href="/competition" />
-
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: 6, marginBottom: 20, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 24, padding: 4, width: 'fit-content' }}>
         {([['results', 'Recent Results'], ['upcoming', 'Upcoming']] as const).map(([key, label]) => (
           <button key={key} className="match-tab"
             onClick={() => setTab(key)}
-            style={{
-              color: tab === key ? '#000' : 'var(--text-secondary)',
-              background: tab === key ? 'var(--accent)' : 'transparent',
-            }}
+            style={{ color: tab === key ? '#000' : 'var(--text-secondary)', background: tab === key ? 'var(--accent)' : 'transparent' }}
           >
             {key === 'upcoming' && <Calendar size={10} style={{ display: 'inline', marginRight: 5, verticalAlign: 'middle' }} />}
             {label}
           </button>
         ))}
       </div>
-
-      {/* Match cards */}
       {matches.length === 0 ? (
         <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'recent results' : 'upcoming matches'} available.</p>
       ) : (
@@ -333,67 +501,28 @@ function MatchCard({ match: m, type }: { match: Match; type: 'results' | 'upcomi
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
 
   return (
-    <div style={{
-      flexShrink: 0,
-      width: 210,
-      background: 'var(--bg-card)',
-      border: '1px solid var(--border)',
-      borderRadius: 16,
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      transition: 'border-color .2s',
-    }}>
-      {/* Header */}
-      <div style={{
-        padding: '9px 14px',
-        borderBottom: '1px solid var(--border)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: 'var(--bg-card-2)',
-      }}>
+    <div style={{ flexShrink: 0, width: 210, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color .2s' }}>
+      <div style={{ padding: '9px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-card-2)' }}>
         <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', color: isResult ? 'var(--text-secondary)' : 'var(--green)' }}>
           {isResult ? 'Final' : '● Upcoming'}
         </span>
         <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-secondary)' }}>{fmtMatchDate(m.date)}</span>
       </div>
-
-      {/* Teams */}
       <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
-        {/* Home row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 10 }}>
           <TeamLogo logo={m.home.logo} name={m.home.name} />
-          <span style={{ flex: 1, fontSize: 13, fontWeight: homeWon ? 900 : 600, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {m.home.name}
-          </span>
-          {isResult && m.score && (
-            <span style={{ fontSize: 22, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>
-              {m.score.home}
-            </span>
-          )}
+          <span style={{ flex: 1, fontSize: 13, fontWeight: homeWon ? 900 : 600, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.name}</span>
+          {isResult && m.score && <span style={{ fontSize: 22, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>{m.score.home}</span>}
         </div>
-
-        {/* Separator */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 48, paddingBottom: 10 }}>
           <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 2, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
-            {isResult ? 'vs' : 'vs'}
-          </span>
+          <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 2, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>vs</span>
           <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
         </div>
-
-        {/* Away row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <TeamLogo logo={m.away.logo} name={m.away.name} />
-          <span style={{ flex: 1, fontSize: 13, fontWeight: awayWon ? 900 : 600, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {m.away.name}
-          </span>
-          {isResult && m.score && (
-            <span style={{ fontSize: 22, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>
-              {m.score.away}
-            </span>
-          )}
+          <span style={{ flex: 1, fontSize: 13, fontWeight: awayWon ? 900 : 600, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.name}</span>
+          {isResult && m.score && <span style={{ fontSize: 22, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>{m.score.away}</span>}
         </div>
       </div>
     </div>
