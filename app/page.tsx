@@ -51,36 +51,46 @@ const COUNTRIES: CountryCfg[] = [
 interface MatchData { name: string; results: Match[]; upcoming: Match[]; gender: 'men' | 'women' }
 
 /* ─── Decorative elements ─────────────────────────────────────────────────── */
-function GreenBall({ size, style }: { size: number; style?: React.CSSProperties }) {
+
+/** Large rotated pill — the "oval" shapes from the design spec */
+function Oval({ gradient, style }: { gradient: string; style?: React.CSSProperties }) {
   return (
     <div style={{
-      width: size, height: size, borderRadius: '50%',
-      background: '#94FF00',
-      flexShrink: 0,
+      position: 'absolute', pointerEvents: 'none',
+      width: 1070, height: 2394,
+      borderRadius: 535,
+      background: gradient,
+      transform: 'rotate(-89.93deg)',
       ...style,
     }} />
   )
 }
 
-function GlassTriangle({ style }: { style?: React.CSSProperties }) {
+/** Solid green circle — the "ball" shape */
+function Ball({ size, opacity = 1, style }: { size: number; opacity?: number; style?: React.CSSProperties }) {
   return (
-    <div style={{ position: 'absolute', pointerEvents: 'none', ...style }}>
-      <svg width="340" height="306" viewBox="0 0 1168 1053" fill="none">
-        <path d="M1167.51 0.000580842L822.09 1052.87L-5.30466e-05 194.917L1167.51 0.000580842Z" fill="#94FF00" fillOpacity="0.07"/>
-      </svg>
-    </div>
+    <div style={{
+      position: 'absolute', pointerEvents: 'none',
+      width: size, height: size, borderRadius: '50%',
+      background: '#94FF00',
+      opacity,
+      transform: 'rotate(-89.93deg)',
+      ...style,
+    }} />
   )
 }
 
-function LayeredTriangles({ style }: { style?: React.CSSProperties }) {
-  const opacities = [0.08, 0.06, 0.045, 0.03, 0.015]
+/** 5 layered triangles at decreasing opacity */
+function LayeredTriangles({ style, scale = 1 }: { style?: React.CSSProperties; scale?: number }) {
+  const opacities = [0.8, 0.7, 0.6, 0.5, 0.4]
+  const w = Math.round(580 * scale), h = Math.round(523 * scale)
   return (
     <div style={{ position: 'absolute', pointerEvents: 'none', ...style }}>
       {opacities.map((op, i) => (
-        <svg key={i} width="320" height="288" viewBox="0 0 1168 1053" fill="none"
-          style={{ position: i === 0 ? 'relative' : 'absolute', top: i * 18, left: i * 14 }}>
+        <svg key={i} width={w} height={h} viewBox="0 0 1168 1053" fill="none"
+          style={{ position: i === 0 ? 'relative' : 'absolute', top: i * 10, left: i * 8, display: 'block' }}>
           <path d="M1167.51 0.000580842L822.09 1052.87L-5.30466e-05 194.917L1167.51 0.000580842Z"
-            fill="#94FF00" fillOpacity={op}/>
+            fill="#94FF00" fillOpacity={op} />
         </svg>
       ))}
     </div>
@@ -292,69 +302,106 @@ function HeroSection({ article }: { article: Article }) {
   const [hov, setHov] = useState(false)
   const slug = getSlug(article)
   const title = getTitle(article)
-  const text = (getText(article) || '').slice(0, 180).trim() + '…'
+  const text = (getText(article) || '').slice(0, 200).trim() + '…'
   const source = getArticleSource(article)
 
   return (
-    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #060810 0%, #001080 50%, #060810 100%)', overflow: 'hidden', minHeight: 600 }}>
-      {/* Background image */}
+    <div style={{ position: 'relative', background: '#00084a', overflow: 'hidden', minHeight: 680 }}>
+
+      {/* ── Giant green BALL — top-right, partially off-screen ── */}
+      <Ball size={953} style={{ top: -320, right: -320, opacity: 0.18 }} />
+      {/* Oval pill behind ball */}
+      <Oval gradient="linear-gradient(180deg, rgba(217,217,217,0.07) 0%, rgba(255,255,255,0.02) 100%)"
+        style={{ top: -900, right: -420 }} />
+      <Oval gradient="radial-gradient(78.54% 175.42% at 50% 50%, rgba(217,217,217,0.04) 0%, rgba(217,217,217,0.08) 100%)"
+        style={{ top: -820, right: -380 }} />
+
+      {/* ── Layered triangles — bottom-left ── */}
+      <LayeredTriangles style={{ bottom: -60, left: -40 }} scale={0.9} />
+
+      {/* Background article image tinted */}
       {article.image_url && (
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.2 }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.12 }}>
           <img src={article.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       )}
 
-      {/* Giant ball - top right */}
-      <div style={{ position: 'absolute', top: -200, right: -200, width: 600, height: 600, borderRadius: '50%', background: '#94FF00', opacity: 0.12, filter: 'blur(60px)', pointerEvents: 'none' }} />
-      {/* Small solid ball accent */}
-      <div style={{ position: 'absolute', top: 40, right: 80, width: 18, height: 18, borderRadius: '50%', background: '#94FF00', opacity: 0.9, animation: 'float 4s ease-in-out infinite', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', top: 120, right: 180, width: 8, height: 8, borderRadius: '50%', background: '#94FF00', opacity: 0.5, animation: 'float 6s ease-in-out infinite 1s', pointerEvents: 'none' }} />
+      {/* ── GIANT background text (decorative) ── */}
+      <div style={{ position: 'absolute', top: -60, left: -20, right: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
+        <span style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(140px, 18vw, 260px)',
+          fontWeight: 800,
+          color: '#fff',
+          opacity: 0.03,
+          letterSpacing: '-0.07em',
+          whiteSpace: 'nowrap',
+          lineHeight: 1,
+          display: 'block',
+          userSelect: 'none',
+        }}>HOCKEY</span>
+      </div>
 
-      {/* Layered triangles - bottom left */}
-      <LayeredTriangles style={{ bottom: -40, left: -20, opacity: 0.9 }} />
+      {/* ── Liquid glass panel (rotated) ── */}
+      <div style={{
+        position: 'absolute',
+        top: -180, right: -120,
+        width: 520, height: 680,
+        transform: 'rotate(15.047deg)',
+        borderRadius: 200,
+        border: '1px solid rgba(255,255,255,0.04)',
+        background: 'rgba(255,255,255,0.04)',
+        backdropFilter: 'blur(50px)',
+        WebkitBackdropFilter: 'blur(50px)',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }} />
 
-      {/* Pill/oval shape */}
-      <div style={{ position: 'absolute', bottom: -300, right: -100, width: 400, height: 900, borderRadius: 200, background: 'linear-gradient(180deg, rgba(217,217,217,0.04) 0%, rgba(255,255,255,0.01) 100%)', transform: 'rotate(-89.93deg)', pointerEvents: 'none' }} />
+      {/* ── Article image — right side glass card ── */}
+      {article.image_url && (
+        <div style={{
+          position: 'absolute', right: 60, top: '50%', transform: 'translateY(-50%)',
+          width: 380, borderRadius: 24, overflow: 'hidden',
+          border: '1px solid rgba(255,255,255,0.10)',
+          backdropFilter: 'blur(2px)',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.6)',
+          zIndex: 3,
+          display: 'none',
+        }}>
+          <img src={article.image_url} alt={title} style={{ width: '100%', height: 270, objectFit: 'cover', display: 'block' }} />
+        </div>
+      )}
 
-      {/* Content */}
-      <div className="pw" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', minHeight: 600, padding: '80px 24px' }}>
-        <div style={{ maxWidth: 720 }}>
-          {/* Tag */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+      {/* ── Content ── */}
+      <div className="pw" style={{ position: 'relative', zIndex: 4, display: 'flex', alignItems: 'center', minHeight: 680, padding: '100px 24px 80px' }}>
+        <div style={{ maxWidth: 680 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
             <span style={{ background: '#94FF00', color: '#000', fontSize: 9, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', padding: '5px 14px', borderRadius: 100 }}>Top Story</span>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: 1 }}>{source.flag} {source.country}</span>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>·</span>
-            <Clock size={10} color="rgba(255,255,255,0.35)" />
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: 0.5 }}>{timeAgo(article.scraped_at)}</span>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 1 }}>{source.flag} {source.country}</span>
+            <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+            <Clock size={10} color="rgba(255,255,255,0.3)" />
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{timeAgo(article.scraped_at)}</span>
           </div>
 
-          {/* Title */}
           <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 64px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-2px', color: hov ? '#94FF00' : '#fff', marginBottom: 20, transition: 'color .2s', maxWidth: 660 }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(34px, 5.5vw, 72px)', fontWeight: 800, lineHeight: 1.03, letterSpacing: '-2.5px', color: hov ? '#94FF00' : '#fff', marginBottom: 24, transition: 'color .2s' }}>
               {title}
             </h1>
           </Link>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: 32, maxWidth: 540 }}>{text}</p>
 
-          {/* Glass CTA */}
-          <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', borderRadius: 100, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 0.5, transition: 'all .2s' }}
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, marginBottom: 36, maxWidth: 520 }}>{text}</p>
+
+          <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, padding: '13px 28px', borderRadius: 100, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 0.3, transition: 'all .2s' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#94FF00'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = '#94FF00' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)' }}
           >
             Read full story <ExternalLink size={13} />
           </Link>
         </div>
-
-        {/* Hero image card - glass effect */}
-        {article.image_url && (
-          <div style={{ position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)', width: 360, borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.10)', boxShadow: '0 32px 80px rgba(0,0,0,0.5)', display: 'none' }}>
-            <img src={article.image_url} alt={title} style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }} />
-          </div>
-        )}
       </div>
 
-      {/* Bottom gradient fade */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, transparent, var(--bg-dark))', pointerEvents: 'none' }} />
+      {/* Bottom fade to page bg */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 140, background: 'linear-gradient(to bottom, transparent, var(--bg-dark))', pointerEvents: 'none', zIndex: 5 }} />
     </div>
   )
 }
@@ -635,13 +682,19 @@ function VideoZone({ dames, heren, fih }: { dames: Video[]; heren: Video[]; fih:
 
   return (
     <section style={{ position: 'relative', background: 'linear-gradient(180deg, var(--bg-dark) 0%, #001060 40%, #000d50 100%)', overflow: 'hidden', padding: '80px 0 100px', marginTop: 24 }}>
-      {/* Decorative elements */}
-      <div style={{ position: 'absolute', top: -150, right: -150, width: 500, height: 500, borderRadius: '50%', background: '#94FF00', opacity: 0.08, filter: 'blur(80px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: -100, left: -100, width: 400, height: 400, borderRadius: '50%', background: '#003ad0', opacity: 0.3, filter: 'blur(60px)', pointerEvents: 'none' }} />
-      <LayeredTriangles style={{ top: 30, right: 40, transform: 'scaleX(-1)' }} />
-      {/* Small ball dots */}
-      <div style={{ position: 'absolute', top: 60, left: '15%', width: 12, height: 12, borderRadius: '50%', background: '#94FF00', opacity: 0.6, animation: 'float 5s ease-in-out infinite' }} />
-      <div style={{ position: 'absolute', top: 140, left: '30%', width: 6, height: 6, borderRadius: '50%', background: '#94FF00', opacity: 0.35, animation: 'float 7s ease-in-out infinite 2s' }} />
+      {/* ── Giant vertical ball — bottom left ── */}
+      <Ball size={1341} style={{ bottom: -600, left: -400, opacity: 0.13, transform: 'none' }} />
+      {/* Oval behind ball */}
+      <Oval gradient="linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(217,217,217,0.02) 100%)"
+        style={{ bottom: -1600, left: -500, width: 1706, height: 3816, borderRadius: 853 }} />
+      {/* Radial oval */}
+      <Oval gradient="radial-gradient(78.54% 175.42% at 50% 50%, rgba(217,217,217,0.03) 0%, rgba(217,217,217,0.07) 100%)"
+        style={{ bottom: -1500, left: -450, width: 1706, height: 3816, borderRadius: 853 }} />
+
+      {/* Layered triangles top-right, mirrored */}
+      <div style={{ position: 'absolute', top: 20, right: -40, transform: 'scaleX(-1)', pointerEvents: 'none' }}>
+        <LayeredTriangles scale={0.7} style={{ position: 'relative' }} />
+      </div>
 
       <div className="pw" style={{ position: 'relative', zIndex: 2 }}>
         {/* Header */}
