@@ -459,40 +459,41 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
   const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
 
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)' }}>
+    <div style={{ borderRadius: 18, overflow: 'hidden', background: '#ffffff', boxShadow: '0 4px 32px rgba(0,0,0,0.13)' }}>
+
       {/* Header */}
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>🌍 International</span>
-        <Link href="/competition" style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}>All →</Link>
+      <div style={{ padding: '14px 18px 12px', background: '#003ad0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', color: '#fff' }}>🌍 International</span>
+        <Link href="/competition" style={{ fontSize: 10, fontWeight: 700, color: '#94FF00', textDecoration: 'none', letterSpacing: 0.5 }}>All →</Link>
       </div>
 
       {/* Men / Women tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
         {(['men', 'women'] as const).map(g => (
-          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '10px', border: 'none', background: gender === g ? 'var(--green)' : 'transparent', color: gender === g ? '#003ad0' : 'var(--text-secondary)', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '10px', border: 'none', background: gender === g ? '#94FF00' : '#fff', color: gender === g ? '#003ad0' : '#999', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {g === 'men' ? '♂ Men' : '♀ Women'}
           </button>
         ))}
       </div>
 
       {/* Results / Upcoming tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
         {(['results', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '8px', border: 'none', background: tab === t ? 'var(--green)' : 'transparent', color: tab === t ? '#003ad0' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '8px', border: 'none', background: tab === t ? '#003ad0' : '#fff', color: tab === t ? '#fff' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {t === 'results' ? 'Results' : 'Upcoming'}
           </button>
         ))}
       </div>
 
-      {/* Match grid — 2 columns */}
-      <div style={{ padding: '12px 16px 16px' }}>
+      {/* Match list */}
+      <div style={{ padding: '10px 12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
         {!data
-          ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>Loading…</p>
+          ? [...Array(3)].map((_, i) => (
+              <div key={i} style={{ height: 72, borderRadius: 12, background: '#f4f5f8', animation: 'pulse 1.5s ease-in-out infinite', opacity: 0.6 }} />
+            ))
           : matches.length === 0
-            ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
-            : <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
-                {matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)}
-              </div>
+            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
         }
       </div>
     </div>
@@ -503,30 +504,36 @@ function MatchRow({ match: m, isResult }: { match: Match; isResult: boolean }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--bg-card-2)' }}>
-      <div style={{ fontSize: 9, color: isResult ? 'var(--text-secondary)' : 'var(--green)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
-        {isResult ? `Final · ${fmtMatchDate(m.date)}` : `Upcoming · ${fmtMatchDate(m.date)}`}
+    <div style={{ background: '#f7f8fb', borderRadius: 12, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+      {/* Home */}
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+        <TeamLogo logo={m.home.logo} name={m.home.name} />
+        <span style={{ fontSize: 10, fontWeight: homeWon ? 800 : 500, color: homeWon ? '#003ad0' : '#888', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 70 }}>{m.home.name}</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <TeamLogo logo={m.home.logo} name={m.home.name} small />
-        <span style={{ flex: 1, fontSize: 12, fontWeight: homeWon ? 900 : 500, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.name}</span>
-        {isResult && m.score && <span style={{ fontSize: 18, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 18, textAlign: 'right' }}>{m.score.home}</span>}
+      {/* Score / Date */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+        {isResult && m.score
+          ? <span style={{ fontSize: 20, fontWeight: 900, color: '#003ad0', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.score.home}–{m.score.away}</span>
+          : <span style={{ fontSize: 11, fontWeight: 700, color: '#003ad0', letterSpacing: 0.3 }}>vs</span>
+        }
+        <span style={{ fontSize: 9, color: '#bbb', fontWeight: 600, letterSpacing: 0.3 }}>{fmtMatchDate(m.date)}</span>
+        {isResult && <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: 1, color: '#94FF00', background: '#003ad0', padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase' }}>FT</span>}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <TeamLogo logo={m.away.logo} name={m.away.name} small />
-        <span style={{ flex: 1, fontSize: 12, fontWeight: awayWon ? 900 : 500, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.name}</span>
-        {isResult && m.score && <span style={{ fontSize: 18, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 18, textAlign: 'right' }}>{m.score.away}</span>}
+      {/* Away */}
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+        <TeamLogo logo={m.away.logo} name={m.away.name} />
+        <span style={{ fontSize: 10, fontWeight: awayWon ? 800 : 500, color: awayWon ? '#003ad0' : '#888', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 70 }}>{m.away.name}</span>
       </div>
     </div>
   )
 }
 
 function TeamLogo({ logo, name, small }: { logo: string | null; name: string; small?: boolean }) {
-  const size = small ? 26 : 38
-  const imgSize = small ? 18 : 28
+  const size = small ? 26 : 36
+  const imgSize = small ? 18 : 26
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: '#fff', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
-      {logo ? <img src={logo} alt={name} style={{ width: imgSize, height: imgSize, objectFit: 'contain' }} /> : <span style={{ fontSize: small ? 9 : 13, fontWeight: 900, color: '#333' }}>{name[0]}</span>}
+    <div style={{ width: size, height: size, borderRadius: '50%', background: '#fff', border: '1.5px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+      {logo ? <img src={logo} alt={name} style={{ width: imgSize, height: imgSize, objectFit: 'contain' }} /> : <span style={{ fontSize: small ? 9 : 12, fontWeight: 900, color: '#333' }}>{name[0]}</span>}
     </div>
   )
 }
