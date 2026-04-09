@@ -28,7 +28,7 @@ export default function EditArticlePage() {
     getArticleById(id).then(a => {
       if (a) {
         setTitleSk(getTitle(a))
-        setTextSk(getText(a))
+        setTextSk(getText(a) || '')
         setImageUrl(a.image_url || '')
       }
       setLoading(false)
