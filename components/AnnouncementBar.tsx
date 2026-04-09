@@ -38,11 +38,11 @@ export default function AnnouncementBar() {
         <span style={{
           flexShrink: 0,
           display: 'flex', alignItems: 'center', gap: 5,
-          background: 'var(--green)', color: '#000',
+          background: '#95ff03', color: '#003ad0',
           fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase',
           padding: '3px 8px', borderRadius: 4,
         }}>
-          <Zap size={9} fill="#000" /> Nové
+          <Zap size={9} fill="#003ad0" stroke="#003ad0" /> Trending
         </span>
 
         <div style={{ width: 1, height: 14, background: 'var(--announcement-border)', flexShrink: 0 }} />
