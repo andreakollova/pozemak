@@ -22,17 +22,16 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
   return (
     <nav style={{
-      background: 'var(--navbar-bg)',
-      backdropFilter: 'blur(24px)',
-      WebkitBackdropFilter: 'blur(24px)',
-      borderBottom: '1px solid var(--border)',
+      background: 'var(--blue)',
+      borderBottom: '1px solid rgba(255,255,255,0.15)',
+      color: '#ffffff',
     }}>
       {/* Top bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={dark ? '/logo-dark.png' : '/logo-light.png'}
+            src="/logo-dark.png"
             alt="REFRESH"
             style={{ height: 36, width: 'auto', display: 'block' }}
           />
@@ -40,27 +39,27 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
-            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
-            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.75)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--green)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
             <Play size={12} fill="currentColor" /> Videos
           </Link>
 
           <Link href="/competition"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
-            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
-            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.75)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--green)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
             <BarChart2 size={12} /> Standings
           </Link>
 
-          <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.2)' }} />
 
           <button onClick={onToggle}
-            style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', transition: 'all .15s' }}
+            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', transition: 'all .15s' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--green)'; e.currentTarget.style.color = 'var(--green)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
           >
             {dark ? <Sun size={14} /> : <Moon size={14} />}
           </button>
@@ -68,7 +67,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       </div>
 
       {/* Category nav */}
-      <div style={{ borderTop: '1px solid var(--border)' }}>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', overflowX: 'auto', scrollbarWidth: 'none' }}>
           {NAV_ITEMS.map((item) => {
             const isActive = item.href !== '#' && pathname === item.href
@@ -81,16 +80,16 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                   fontSize: 11, fontWeight: isActive ? 800 : 600,
                   letterSpacing: isActive ? 1.2 : 1,
                   textTransform: 'uppercase',
-                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                  color: isActive ? 'var(--green)' : 'rgba(255,255,255,0.75)',
                   whiteSpace: 'nowrap',
-                  borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+                  borderBottom: isActive ? '2px solid var(--green)' : '2px solid transparent',
                   transition: 'color 0.15s, border-color 0.15s',
                 }}
                 onMouseEnter={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'var(--blue-subtle)' }
+                  if (!isActive) { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.4)' }
                 }}
                 onMouseLeave={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderBottomColor = 'transparent' }
+                  if (!isActive) { e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; e.currentTarget.style.borderBottomColor = 'transparent' }
                 }}
               >
                 <span style={{ fontSize: 13 }}>{item.flag}</span>
