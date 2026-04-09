@@ -129,8 +129,8 @@ function HeroCard({ article, flag, name }: { article: Article; flag: string; nam
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,58,208,0.78) 0%, rgba(0,58,208,0.32) 45%, transparent 100%)' }} />
 
         <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
-          <span style={{ background: 'var(--green)', color: '#000', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
-          <span style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>{flag} {name}</span>
+          <span style={{ background: '#95ff03', color: '#003ad0', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
+          <span style={{ background: '#003ad0', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>{flag} {name}</span>
         </div>
 
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
