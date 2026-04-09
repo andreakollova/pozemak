@@ -82,11 +82,11 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/hockey?comp=international&id=44')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setIntlMen({ name: d.name, results: getRecentResults(m), upcoming: getUpcomingMatches(m), gender: 'men' }) })
+      .then(d => { if (!d) return; const m = getMatches(d); setIntlMen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'men' }) })
       .catch(() => {})
     fetch('/api/hockey?comp=international&id=45')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setIntlWomen({ name: d.name, results: getRecentResults(m), upcoming: getUpcomingMatches(m), gender: 'women' }) })
+      .then(d => { if (!d) return; const m = getMatches(d); setIntlWomen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'women' }) })
       .catch(() => {})
   }, [])
 
@@ -456,7 +456,7 @@ function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; w
   const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
 
   const data = gender === 'men' ? menData : womenData
-  const matches = data ? (tab === 'results' ? data.results : data.upcoming) : []
+  const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
 
   return (
     <div style={{ border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)' }}>
