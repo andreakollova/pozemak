@@ -57,6 +57,7 @@ export default function Footer() {
     <footer style={{
       marginTop: 80,
       background: 'var(--blue)',
+      color: '#ffffff',
     }}>
       {/* Main grid */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48 }}>
