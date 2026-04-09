@@ -10,6 +10,17 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async headers() {
+    return [
+      {
+        // All HTML pages — never cache
+        source: '/((?!_next/static|_next/image|favicon).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+        ],
+      },
+    ]
+  },
 };
 
 export default nextConfig;
