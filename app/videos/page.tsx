@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { getVideos, Video, getVideoTitle } from '@/lib/supabase'
 import { Play, ArrowLeft } from 'lucide-react'
 
-type Category = 'all' | 'dames' | 'heren' | 'fih'
+type Category = 'all' | 'dames' | 'heren' | 'fih' | 'fih-mens' | 'fih-womens'
 
 export default function VideosPage() {
   const [videos, setVideos] = useState<Video[]>([])
@@ -22,10 +22,12 @@ export default function VideosPage() {
   }, [category])
 
   const tabs: { key: Category; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'dames', label: 'Hoofdklasse Dames' },
-    { key: 'heren', label: 'Hoofdklasse Heren' },
-    { key: 'fih', label: '🌍 FIH' },
+    { key: 'all',       label: 'All' },
+    { key: 'dames',     label: 'Hoofdklasse Dames' },
+    { key: 'heren',     label: 'Hoofdklasse Heren' },
+    { key: 'fih',       label: '🌍 FIH' },
+    { key: 'fih-mens',  label: '🌍 FIH Mens' },
+    { key: 'fih-womens',label: '🌍 FIH Womens' },
   ]
 
   return (
@@ -135,7 +137,7 @@ function VideoCard({ video }: { video: Video }) {
             fontSize: 11, fontWeight: 700, color: 'var(--green)',
             letterSpacing: 0.5, textTransform: 'uppercase',
           }}>
-            {video.category === 'dames' ? 'Dames' : 'Heren'}
+            {video.category === 'dames' ? 'Dames' : video.category === 'heren' ? 'Heren' : video.category === 'fih-mens' ? 'FIH Mens' : video.category === 'fih-womens' ? 'FIH Womens' : 'FIH'}
           </div>
         </div>
 

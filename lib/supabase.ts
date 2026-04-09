@@ -93,13 +93,17 @@ export async function getGBArticles(limit = 20): Promise<Article[]> {
   return data || []
 }
 
-export async function getVideos(category?: 'dames' | 'heren' | 'fih', limit = 20): Promise<Video[]> {
+export async function getVideos(category?: 'dames' | 'heren' | 'fih' | 'fih-mens' | 'fih-womens', limit = 20): Promise<Video[]> {
   let query = getSupabaseClient()
     .from('videos')
     .select('*')
     .order('published_at', { ascending: false })
     .limit(limit)
-  if (category) query = query.eq('category', category)
+  if (category === 'fih') {
+    query = query.in('category', ['fih', 'fih-mens', 'fih-womens'])
+  } else if (category) {
+    query = query.eq('category', category)
+  }
   const { data, error } = await query
   if (error) throw new Error(error.message)
   return data || []
