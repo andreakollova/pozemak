@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource } from '@/lib/supabase'
-import { Play, ChevronLeft, ChevronRight, Clock, Calendar } from 'lucide-react'
+import { Play, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import type { Match, Poule } from '@/lib/hockey-api'
 
 function timeAgo(iso: string) {
@@ -21,16 +21,19 @@ function fmtMatchDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-function getRecentResults(poules: Poule[], limit = 12): Match[] {
-  return poules.flatMap(p => p.matches)
-    .filter(m => m.status === 'final' && m.score)
+function getMatches(d: { poules?: Poule[]; matches?: Match[] }): Match[] {
+  if (d.poules?.length) return d.poules.flatMap(p => p.matches)
+  return d.matches ?? []
+}
+
+function getRecentResults(matches: Match[], limit = 12): Match[] {
+  return matches.filter(m => m.status === 'final' && m.score)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, limit)
 }
 
-function getUpcomingMatches(poules: Poule[], limit = 12): Match[] {
-  return poules.flatMap(p => p.matches)
-    .filter(m => m.status !== 'final' && m.status !== 'live')
+function getUpcomingMatches(matches: Match[], limit = 12): Match[] {
+  return matches.filter(m => m.status !== 'final' && m.status !== 'live')
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, limit)
 }
@@ -50,7 +53,7 @@ const COUNTRIES: CountryCfg[] = [
   { flag: '🇮🇳', name: 'India',         href: '/india'         },
 ]
 
-interface MatchData { name: string; results: Match[]; upcoming: Match[] }
+interface MatchData { name: string; results: Match[]; upcoming: Match[]; gender: 'men' | 'women' }
 
 export default function Home() {
   const [articles, setArticles]       = useState<Article[]>([])
@@ -58,7 +61,8 @@ export default function Home() {
   const [herenVideos, setHerenVideos] = useState<Video[]>([])
   const [fihVideos,   setFihVideos]   = useState<Video[]>([])
   const [loading, setLoading]         = useState(true)
-  const [intlData,  setIntlData]      = useState<MatchData | null>(null)
+  const [intlMen,   setIntlMen]       = useState<MatchData | null>(null)
+  const [intlWomen, setIntlWomen]     = useState<MatchData | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -78,11 +82,11 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/hockey?comp=international&id=44')
       .then(r => r.ok ? r.json() : null)
-      .then(d => d && setIntlData({
-        name: d.name,
-        results:  getRecentResults(d.poules ?? []),
-        upcoming: getUpcomingMatches(d.poules ?? []),
-      }))
+      .then(d => { if (!d) return; const m = getMatches(d); setIntlMen({ name: d.name, results: getRecentResults(m), upcoming: getUpcomingMatches(m), gender: 'men' }) })
+      .catch(() => {})
+    fetch('/api/hockey?comp=international&id=45')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (!d) return; const m = getMatches(d); setIntlWomen({ name: d.name, results: getRecentResults(m), upcoming: getUpcomingMatches(m), gender: 'women' }) })
       .catch(() => {})
   }, [])
 
@@ -117,10 +121,16 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
-        {/* 🇳🇱 Netherlands — editorial: big left + stacked list right */}
-        {(byCountry['Netherlands']?.length ?? 0) > 0 && (
-          <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
-        )}
+        {/* 🇳🇱 Netherlands + International Matches side by side */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
+          {(byCountry['Netherlands']?.length ?? 0) > 0
+            ? <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} noMargin />
+            : <div />
+          }
+          {(intlMen || intlWomen) && (
+            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+          )}
+        </div>
 
         {/* 🇬🇧 Great Britain — 3-column grid all with excerpt */}
         {(byCountry['Great Britain']?.length ?? 0) > 0 && (
@@ -171,10 +181,6 @@ export default function Home() {
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
-        )}
-
-        {intlData && (intlData.results.length > 0 || intlData.upcoming.length > 0) && (
-          <IntlMatchSection data={intlData} />
         )}
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
@@ -246,11 +252,11 @@ function HeroCard({ article }: { article: Article }) {
 }
 
 /* ─── 1. Editorial: big left + stacked list right (Netherlands) ──────────── */
-function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Article[] }) {
+function EditorialSection({ cfg, articles, noMargin }: { cfg: CountryCfg; articles: Article[]; noMargin?: boolean }) {
   const featured = articles[0]
   const rest = articles.slice(1, 5)
   return (
-    <div style={{ marginBottom: 56 }}>
+    <div style={{ marginBottom: noMargin ? 0 : 56 }}>
       <SectionHeader cfg={cfg} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
         <FeaturedCard article={featured} />
@@ -445,71 +451,87 @@ function Grid2Card({ article }: { article: Article }) {
   )
 }
 
-/* ─── International matches ──────────────────────────────────────────────── */
-function IntlMatchSection({ data }: { data: MatchData }) {
-  const [tab, setTab] = useState<'results' | 'upcoming'>(data.results.length > 0 ? 'results' : 'upcoming')
-  const matches = tab === 'results' ? data.results : data.upcoming
+/* ─── International matches — sidebar ───────────────────────────────────── */
+function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; womenData: MatchData | null }) {
+  const [gender, setGender] = useState<'men' | 'women'>('men')
+  const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
+
+  const data = gender === 'men' ? menData : womenData
+  const matches = data ? (tab === 'results' ? data.results : data.upcoming) : []
+
   return (
-    <div style={{ marginBottom: 64 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-        <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>International Matches</span>
-        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-        <Link href="/competition" style={{ fontSize: 10, fontWeight: 700, color: 'var(--green)', textDecoration: 'none', letterSpacing: 1 }}>View all →</Link>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)' }}>
+      {/* Header */}
+      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>🌍 International</span>
+        <Link href="/competition" style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}>All →</Link>
       </div>
-      <div style={{ display: 'flex', gap: 6, marginBottom: 20, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 24, padding: 4, width: 'fit-content' }}>
-        {([['results', 'Recent Results'], ['upcoming', 'Upcoming']] as const).map(([key, label]) => (
-          <button key={key} className="match-tab" onClick={() => setTab(key)} style={{ color: tab === key ? '#000' : 'var(--text-secondary)', background: tab === key ? 'var(--accent)' : 'transparent' }}>
-            {key === 'upcoming' && <Calendar size={10} style={{ display: 'inline', marginRight: 5, verticalAlign: 'middle' }} />}
-            {label}
+
+      {/* Men / Women tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
+        {(['men', 'women'] as const).map(g => (
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '10px', border: 'none', background: gender === g ? 'var(--accent)' : 'transparent', color: gender === g ? '#000' : 'var(--text-secondary)', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+            {g === 'men' ? '♂ Men' : '♀ Women'}
           </button>
         ))}
       </div>
-      {matches.length === 0
-        ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'recent results' : 'upcoming matches'} available.</p>
-        : <div style={{ display: 'flex', gap: 12, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 6 }}>{matches.map(m => <MatchCard key={m.id} match={m} type={tab} />)}</div>
-      }
+
+      {/* Results / Upcoming tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
+        {(['results', 'upcoming'] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '8px', border: 'none', background: 'transparent', color: tab === t ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', borderBottom: tab === t ? '2px solid var(--accent)' : '2px solid transparent', transition: 'all .15s' }}>
+            {t === 'results' ? 'Results' : 'Upcoming'}
+          </button>
+        ))}
+      </div>
+
+      {/* Match list — vertical */}
+      <div style={{ maxHeight: 440, overflowY: 'auto', scrollbarWidth: 'none' }}>
+        {!data
+          ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '20px 16px', textAlign: 'center' }}>Loading…</p>
+          : matches.length === 0
+            ? <p style={{ fontSize: 12, color: 'var(--text-secondary)', padding: '20px 16px', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
+        }
+      </div>
     </div>
   )
 }
 
-function TeamLogo({ logo, name }: { logo: string | null; name: string }) {
-  return (
-    <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#fff', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
-      {logo ? <img src={logo} alt={name} style={{ width: 28, height: 28, objectFit: 'contain' }} /> : <span style={{ fontSize: 13, fontWeight: 900, color: '#333' }}>{name[0]}</span>}
-    </div>
-  )
-}
-
-function MatchCard({ match: m, type }: { match: Match; type: 'results' | 'upcoming' }) {
-  const isResult = type === 'results'
+function MatchRow({ match: m, isResult }: { match: Match; isResult: boolean }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
   return (
-    <div style={{ flexShrink: 0, width: 210, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '9px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-card-2)' }}>
-        <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', color: isResult ? 'var(--text-secondary)' : 'var(--green)' }}>{isResult ? 'Final' : '● Upcoming'}</span>
-        <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-secondary)' }}>{fmtMatchDate(m.date)}</span>
+    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ fontSize: 9, color: isResult ? 'var(--text-secondary)' : 'var(--green)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
+        {isResult ? `Final · ${fmtMatchDate(m.date)}` : `Upcoming · ${fmtMatchDate(m.date)}`}
       </div>
-      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 10 }}>
-          <TeamLogo logo={m.home.logo} name={m.home.name} />
-          <span style={{ flex: 1, fontSize: 13, fontWeight: homeWon ? 900 : 600, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.name}</span>
-          {isResult && m.score && <span style={{ fontSize: 22, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>{m.score.home}</span>}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 48, paddingBottom: 10 }}>
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 2, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>vs</span>
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <TeamLogo logo={m.away.logo} name={m.away.name} />
-          <span style={{ flex: 1, fontSize: 13, fontWeight: awayWon ? 900 : 600, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.name}</span>
-          {isResult && m.score && <span style={{ fontSize: 22, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 22, textAlign: 'right', lineHeight: 1 }}>{m.score.away}</span>}
-        </div>
+      {/* Home */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <TeamLogo logo={m.home.logo} name={m.home.name} small />
+        <span style={{ flex: 1, fontSize: 12, fontWeight: homeWon ? 900 : 500, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.name}</span>
+        {isResult && m.score && <span style={{ fontSize: 16, fontWeight: 900, color: homeWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 16, textAlign: 'right' }}>{m.score.home}</span>}
+      </div>
+      {/* Away */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <TeamLogo logo={m.away.logo} name={m.away.name} small />
+        <span style={{ flex: 1, fontSize: 12, fontWeight: awayWon ? 900 : 500, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.name}</span>
+        {isResult && m.score && <span style={{ fontSize: 16, fontWeight: 900, color: awayWon ? 'var(--accent)' : 'var(--text-secondary)', minWidth: 16, textAlign: 'right' }}>{m.score.away}</span>}
       </div>
     </div>
   )
 }
+
+function TeamLogo({ logo, name, small }: { logo: string | null; name: string; small?: boolean }) {
+  const size = small ? 26 : 38
+  const imgSize = small ? 18 : 28
+  return (
+    <div style={{ width: size, height: size, borderRadius: '50%', background: '#fff', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
+      {logo ? <img src={logo} alt={name} style={{ width: imgSize, height: imgSize, objectFit: 'contain' }} /> : <span style={{ fontSize: small ? 9 : 13, fontWeight: 900, color: '#333' }}>{name[0]}</span>}
+    </div>
+  )
+}
+
 
 /* ─── Video carousel ─────────────────────────────────────────────────────── */
 function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
