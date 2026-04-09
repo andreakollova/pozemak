@@ -126,8 +126,7 @@ function HeroCard({ article, flag, name }: { article: Article; flag: string; nam
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s ease', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
         }
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,58,208,0.78) 0%, rgba(0,58,208,0.32) 45%, transparent 100%)' }} />
 
         <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
           <span style={{ background: 'var(--green)', color: '#000', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
