@@ -26,13 +26,13 @@ function getMatches(d: { poules?: Poule[]; matches?: Match[] }): Match[] {
   return d.matches ?? []
 }
 
-function getRecentResults(matches: Match[], limit = 12): Match[] {
+function getRecentResults(matches: Match[], limit = 5): Match[] {
   return matches.filter(m => m.status === 'final' && m.score)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, limit)
 }
 
-function getUpcomingMatches(matches: Match[], limit = 12): Match[] {
+function getUpcomingMatches(matches: Match[], limit = 5): Match[] {
   return matches.filter(m => m.status !== 'final' && m.status !== 'live')
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, limit)
