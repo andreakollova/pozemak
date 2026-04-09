@@ -23,11 +23,11 @@
   --tag-bg: rgba(0, 58, 208, 0.22);
   --tag-border: rgba(0, 58, 208, 0.4);
 
-  /* Announcement bar — blue tones */
-  --announcement-from: #001060;
-  --announcement-to: #001f8a;
+  /* Announcement bar */
+  --announcement-from: #003ad0;
+  --announcement-to: #003ad0;
   --announcement-border: rgba(0, 58, 208, 0.45);
-  --announcement-text: rgba(255,255,255,0.9);
+  --announcement-text: #ffffff;
 
   --card-shadow-hover: 0 20px 60px rgba(0,0,0,0.55);
   --dot-bg: rgba(0, 58, 208, 0.1);
@@ -58,11 +58,11 @@
   --tag-bg: rgba(149, 255, 3, 0.18);
   --tag-border: rgba(149, 255, 3, 0.5);
 
-  /* Announcement bar — soft blue tones */
-  --announcement-from: #eaefff;
-  --announcement-to: #d4dcff;
-  --announcement-border: rgba(0, 58, 208, 0.18);
-  --announcement-text: #003ad0;
+  /* Announcement bar */
+  --announcement-from: #003ad0;
+  --announcement-to: #003ad0;
+  --announcement-border: rgba(0, 58, 208, 0.45);
+  --announcement-text: #ffffff;
 
   --card-shadow-hover: 0 12px 40px rgba(0,58,208,0.12);
   --dot-bg: rgba(0, 58, 208, 0.06);
