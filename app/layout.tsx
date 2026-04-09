@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar dark={dark} onToggle={toggle} />
         </div>
         {children}
-        <Footer dark={dark} />
+        <Footer />
       </body>
     </html>
   )

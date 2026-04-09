@@ -40,7 +40,7 @@ const SOCIALS = [
   },
 ]
 
-export default function Footer({ dark = true }: { dark?: boolean }) {
+export default function Footer() {
   const [email, setEmail] = useState('')
   const [subState, setSubState] = useState<'idle' | 'ok' | 'err'>('idle')
 
@@ -56,8 +56,7 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
   return (
     <footer style={{
       marginTop: 80,
-      borderTop: '1px solid var(--tag-border)',
-      background: 'linear-gradient(180deg, var(--blue-subtle) 0%, var(--bg-card) 60%)',
+      background: 'var(--blue)',
     }}>
       {/* Main grid */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48 }}>
@@ -67,12 +66,12 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
           <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={dark ? '/logo-dark.png' : '/logo-light.png'}
+              src="/logo-dark.png"
               alt="REFRESH"
               style={{ height: 36, width: 'auto', display: 'block' }}
             />
           </Link>
-          <p style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 220 }}>
+          <p style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,0.65)', maxWidth: 220 }}>
             Latest news, results and updates from the world of field hockey in one place.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
@@ -86,21 +85,21 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
                 style={{
                   width: 36, height: 36, borderRadius: 9,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: '1px solid var(--border)',
-                  color: 'var(--text-secondary)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: 'rgba(255,255,255,0.65)',
                   transition: 'all 0.15s',
                   textDecoration: 'none',
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--accent)'
-                  el.style.borderColor = 'var(--accent)'
-                  el.style.background = 'var(--blue-subtle)'
+                  el.style.color = 'var(--green)'
+                  el.style.borderColor = 'var(--green)'
+                  el.style.background = 'rgba(149,255,3,0.1)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--text-secondary)'
-                  el.style.borderColor = 'var(--border)'
+                  el.style.color = 'rgba(255,255,255,0.65)'
+                  el.style.borderColor = 'rgba(255,255,255,0.2)'
                   el.style.background = 'transparent'
                 }}
               >
@@ -112,7 +111,7 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
 
         {/* Quick links */}
         <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
+          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
             Categories
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -120,9 +119,9 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
               <li key={label}>
                 <Link
                   href={href}
-                  style={{ textDecoration: 'none', fontSize: 13, color: 'var(--text-secondary)', transition: 'color 0.15s', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}
+                  style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.75)', transition: 'color 0.15s', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--green)')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.75)')}
                 >
                   {label}
                 </Link>
@@ -133,7 +132,7 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
 
         {/* Legal links */}
         <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
+          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
             Legal
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -141,9 +140,9 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
               <li key={label}>
                 <Link
                   href={href}
-                  style={{ textDecoration: 'none', fontSize: 13, color: 'var(--text-secondary)', transition: 'color 0.15s' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-primary)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}
+                  style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.75)', transition: 'color 0.15s' }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.75)')}
                 >
                   {label}
                 </Link>
@@ -154,10 +153,10 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
 
         {/* Newsletter */}
         <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 18 }}>
+          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
             Newsletter
           </p>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 16 }}>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: 16 }}>
             Get the latest field hockey news straight to your inbox.
           </p>
           <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -168,21 +167,21 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
               placeholder="your@email.com"
               style={{
                 padding: '10px 14px', borderRadius: 9,
-                border: '1px solid var(--border)',
-                background: 'var(--bg-card-2)',
-                color: 'var(--text-primary)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(255,255,255,0.08)',
+                color: '#ffffff',
                 fontSize: 13, outline: 'none',
                 transition: 'border-color 0.15s',
               }}
-              onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
-              onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+              onFocus={e => (e.target.style.borderColor = '#95ff03')}
+              onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.2)')}
             />
             <button
               type="submit"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                 padding: '10px 16px', borderRadius: 9, border: 'none',
-                background: 'var(--accent)', color: '#fff',
+                background: 'var(--green)', color: 'var(--blue)',
                 fontWeight: 800, fontSize: 12, letterSpacing: 0.8,
                 textTransform: 'uppercase', cursor: 'pointer',
                 transition: 'opacity 0.15s',
@@ -193,7 +192,7 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
               {subState === 'ok' ? '✓ Subscribed!' : <><Send size={12} /> Subscribe</>}
             </button>
             {subState === 'err' && (
-              <p style={{ fontSize: 11, color: '#ff6b6b', marginTop: 2 }}>Please enter a valid email address.</p>
+              <p style={{ fontSize: 11, color: '#ffb3b3', marginTop: 2 }}>Please enter a valid email address.</p>
             )}
           </form>
         </div>
@@ -201,29 +200,29 @@ export default function Footer({ dark = true }: { dark?: boolean }) {
 
       {/* Divider */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ height: 1, background: 'var(--border)' }} />
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.15)' }} />
       </div>
 
       {/* Bottom bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-        <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-          © {new Date().getFullYear()} <strong style={{ color: 'var(--text-primary)' }}>DRIXTON s.r.o.</strong> — All rights reserved.
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)' }}>
+          © {new Date().getFullYear()} <strong style={{ color: '#ffffff' }}>DRIXTON s.r.o.</strong> — All rights reserved.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           {LEGAL_LINKS.slice(0, 2).map(({ label, href }) => (
             <Link
               key={label}
               href={href}
-              style={{ fontSize: 11, color: 'var(--text-secondary)', textDecoration: 'none', letterSpacing: 0.3, transition: 'color 0.15s' }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-primary)')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}
+              style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', letterSpacing: 0.3, transition: 'color 0.15s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
             >
               {label}
             </Link>
           ))}
-          <span style={{ fontSize: 11, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', display: 'flex', alignItems: 'center', gap: 4 }}>
             Powered by{' '}
-            <span style={{ color: 'var(--accent)', fontWeight: 700 }}>REFRESH</span>
+            <span style={{ color: 'var(--green)', fontWeight: 700 }}>REFRESH</span>
           </span>
         </div>
       </div>
