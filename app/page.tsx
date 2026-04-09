@@ -126,34 +126,30 @@ export default function Home() {
           <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
         )}
 
-        {/* 🇬🇧 Great Britain + 🌍 International Matches side by side */}
+        {/* Articles (GB + AU + DE + BE) left | 🌍 International Matches right */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
-          <div style={{ minWidth: 0 }}>
+          <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 40 }}>
             {(byCountry['Great Britain']?.length ?? 0) > 0 && (
               <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
+            )}
+            {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
+                {(byCountry['Australia']?.length ?? 0) > 0 && (
+                  <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 5)} cardHeight={140} /></div>
+                )}
+                {(byCountry['Germany']?.length ?? 0) > 0 && (
+                  <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
+                )}
+              </div>
+            )}
+            {(byCountry['Belgium']?.length ?? 0) > 0 && (
+              <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
             )}
           </div>
           {(intlMen || intlWomen) && (
             <IntlMatchSection menData={intlMen} womenData={intlWomen} />
           )}
         </div>
-
-        {/* 🇦🇺 Australia + 🇩🇪 Germany — side by side, each scroll */}
-        {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
-            {(byCountry['Australia']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 6)} cardHeight={150} /></div>
-            )}
-            {(byCountry['Germany']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 6)} cardHeight={150} /></div>
-            )}
-          </div>
-        )}
-
-        {/* 🇧🇪 Belgium — compact horizontal list rows */}
-        {(byCountry['Belgium']?.length ?? 0) > 0 && (
-          <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} />
-        )}
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
         {((byCountry['Spain']?.length ?? 0) > 0 || (byCountry['Argentina']?.length ?? 0) > 0) && (
@@ -259,7 +255,7 @@ function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Articl
   return (
     <div style={{ marginBottom: 56 }}>
       <SectionHeader cfg={cfg} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
         <FeaturedCard article={featured} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {rest.map(a => <ListCard key={a.id} article={a} />)}
@@ -276,8 +272,8 @@ function FeaturedCard({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 140).trim() + '…'
   const source = getArticleSource(article)
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: 400, borderRadius: 16, overflow: 'hidden' }}>
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+      <div style={{ position: 'relative', height: '100%', minHeight: 340, borderRadius: 16, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -385,9 +381,9 @@ function MiniCard({ article, height }: { article: Article; height: number }) {
 }
 
 /* ─── 4. Compact list rows (Belgium) ────────────────────────────────────── */
-function CompactListSection({ cfg, articles }: { cfg: CountryCfg; articles: Article[] }) {
+function CompactListSection({ cfg, articles, noMargin }: { cfg: CountryCfg; articles: Article[]; noMargin?: boolean }) {
   return (
-    <div style={{ marginBottom: 56 }}>
+    <div style={{ marginBottom: noMargin ? 0 : 56 }}>
       <SectionHeader cfg={cfg} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {articles.map(a => <CompactRow key={a.id} article={a} />)}
