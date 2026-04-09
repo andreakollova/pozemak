@@ -38,7 +38,7 @@ export default function AnnouncementBar() {
         <span style={{
           flexShrink: 0,
           display: 'flex', alignItems: 'center', gap: 5,
-          background: '#95ff03', color: '#003ad0',
+          background: '#ffffff', color: '#003ad0',
           fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase',
           padding: '3px 8px', borderRadius: 4,
         }}>
