@@ -1,71 +1,64 @@
 @import "tailwindcss";
 
-@font-face { font-family: 'Sora'; font-display: swap; }
-
 /* ── DARK MODE (default) ──────────────────────────────────────── */
 :root {
-  --green: #94FF00;
+  --green: #95ff03;
   --green-dim: #78d600;
   --blue: #003ad0;
   --blue-dim: #002da8;
   --blue-subtle: rgba(0, 58, 208, 0.14);
-  --accent: #94FF00;
+  --accent: #95ff03;
   --accent-2: #003ad0;
 
-  --bg-dark: #060810;
-  --bg-section: #0a0d18;
+  --bg-dark: #080808;
   --border: rgba(255,255,255,0.07);
-  --border-strong: rgba(255,255,255,0.13);
   --text-primary: #ffffff;
-  --text-secondary: #7a7f9a;
+  --text-secondary: #8a8a8a;
   --bg-card: rgba(255,255,255,0.03);
   --bg-card-2: rgba(255,255,255,0.02);
-  --bg-glass: rgba(255,255,255,0.06);
-  --navbar-bg: rgba(6,8,16,0.92);
+  --navbar-bg: rgba(8,8,8,0.95);
 
-  --tag-text: #94FF00;
+  /* Tags — blue bg, green text in dark mode */
+  --tag-text: #95ff03;
   --tag-bg: rgba(0, 58, 208, 0.22);
   --tag-border: rgba(0, 58, 208, 0.4);
 
+  /* Announcement bar */
   --announcement-from: #003ad0;
   --announcement-to: #003ad0;
   --announcement-border: rgba(0, 58, 208, 0.45);
   --announcement-text: #ffffff;
 
-  --card-shadow-hover: 0 24px 64px rgba(0,0,0,0.6);
+  --card-shadow-hover: 0 20px 60px rgba(0,0,0,0.55);
   --dot-bg: rgba(0, 58, 208, 0.1);
-  --green-text: #94FF00;
+  --green-text: #95ff03;
   --blue-glow: 0 0 32px rgba(0, 58, 208, 0.25);
-
-  --font-display: 'Sora', system-ui, -apple-system, sans-serif;
-  --font-body: system-ui, -apple-system, sans-serif;
 }
 
 /* ── LIGHT MODE ───────────────────────────────────────────────── */
 .light {
-  --green: #94FF00;
+  --green: #95ff03;
   --green-dim: #78d600;
   --blue: #003ad0;
   --blue-dim: #002da8;
   --blue-subtle: rgba(0, 58, 208, 0.07);
-  --accent: #003ad0;
-  --accent-2: #94FF00;
+  --accent: #003ad0;       /* primary accent = blue in light */
+  --accent-2: #95ff03;     /* secondary accent = green in light */
 
   --bg-dark: #f0f2f5;
-  --bg-section: #e8ecf4;
-  --border: rgba(0,0,0,0.08);
-  --border-strong: rgba(0,0,0,0.14);
+  --border: rgba(0,0,0,0.09);
   --text-primary: #0d0d0d;
-  --text-secondary: #606070;
+  --text-secondary: #606060;
   --bg-card: #ffffff;
   --bg-card-2: #f8f9fb;
-  --bg-glass: rgba(255,255,255,0.7);
-  --navbar-bg: rgba(255,255,255,0.95);
+  --navbar-bg: rgba(255,255,255,0.97);
 
+  /* Tags — green bg, blue text in light mode */
   --tag-text: #003ad0;
-  --tag-bg: rgba(148, 255, 0, 0.18);
-  --tag-border: rgba(148, 255, 0, 0.5);
+  --tag-bg: rgba(149, 255, 3, 0.18);
+  --tag-border: rgba(149, 255, 3, 0.5);
 
+  /* Announcement bar */
   --announcement-from: #003ad0;
   --announcement-to: #003ad0;
   --announcement-border: rgba(0, 58, 208, 0.45);
@@ -73,25 +66,21 @@
 
   --card-shadow-hover: 0 12px 40px rgba(0,58,208,0.12);
   --dot-bg: rgba(0, 58, 208, 0.06);
-  --green-text: #003ad0;
+  --green-text: #003ad0;   /* dates/labels use blue in light mode */
   --blue-glow: 0 4px 24px rgba(0, 58, 208, 0.12);
 }
 
 /* ── BASE ─────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg-dark);
   color: var(--text-primary);
-  font-family: var(--font-body);
+  font-family: system-ui, -apple-system, sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
   min-height: 100vh;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -102,26 +91,31 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── GLASS ────────────────────────────────────────────────────── */
 .glass {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0, 58, 208, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 58, 208, 0.18);
 }
+
 .light .glass {
-  background: rgba(255,255,255,0.75);
-  border: 1px solid rgba(0,58,208,0.1);
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(0, 58, 208, 0.12);
   box-shadow: 0 2px 16px rgba(0,58,208,0.06);
 }
 
+/* ── BLUE OVERLAY GRADIENT (dark mode) ───────────────────────── */
+.blue-overlay {
+  background: linear-gradient(135deg, rgba(0,58,208,0.18) 0%, transparent 60%);
+}
+
 /* ── CARD HOVER ───────────────────────────────────────────────── */
-.light .card-hover:hover { box-shadow: var(--card-shadow-hover) !important; }
+.light .card-hover:hover {
+  box-shadow: var(--card-shadow-hover) !important;
+}
 
 /* ── PAGE SECTION ─────────────────────────────────────────────── */
-.light .page-section-bg { background: #f8f9fb; border-radius: 16px; padding: 24px; }
-
-/* ── SECTION DIVIDER LINE ─────────────────────────────────────── */
-.section-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
-  margin: 0;
+.light .page-section-bg {
+  background: #f8f9fb;
+  border-radius: 16px;
+  padding: 24px;
 }

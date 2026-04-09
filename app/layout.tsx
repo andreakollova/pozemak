@@ -26,9 +26,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>Pozemak – Field Hockey</title>
         <meta name="description" content="Latest news from the world of field hockey" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
         <link rel="icon" href="/logo-light.png" type="image/png" media="(prefers-color-scheme: light)" />
         <link rel="icon" href="/logo-dark.png" type="image/png" media="(prefers-color-scheme: dark)" />
         <link rel="apple-touch-icon" href="/logo-light.png" />
