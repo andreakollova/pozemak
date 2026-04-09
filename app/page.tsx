@@ -129,12 +129,12 @@ export default function Home() {
 
         {/* 🇦🇺 Australia + 🇩🇪 Germany — side by side, each scroll */}
         {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['Australia']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 6)} cardHeight={150} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 6)} cardHeight={150} /></div>
             )}
             {(byCountry['Germany']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 6)} cardHeight={150} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 6)} cardHeight={150} /></div>
             )}
           </div>
         )}
@@ -146,12 +146,12 @@ export default function Home() {
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
         {((byCountry['Spain']?.length ?? 0) > 0 || (byCountry['Argentina']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['Spain']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 6)} cardHeight={130} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 6)} cardHeight={130} /></div>
             )}
             {(byCountry['Argentina']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 6)} cardHeight={130} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
         )}
@@ -163,12 +163,12 @@ export default function Home() {
 
         {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇳 India — side by side scroll */}
         {((byCountry['Scotland']?.length ?? 0) > 0 || (byCountry['India']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['Scotland']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'Scotland')!} articles={byCountry['Scotland'].slice(0, 6)} cardHeight={130} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Scotland')!} articles={byCountry['Scotland'].slice(0, 6)} cardHeight={130} /></div>
             )}
             {(byCountry['India']?.length ?? 0) > 0 && (
-              <ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} />
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
         )}
@@ -252,7 +252,7 @@ function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Articl
   return (
     <div style={{ marginBottom: 56 }}>
       <SectionHeader cfg={cfg} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
         <FeaturedCard article={featured} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {rest.map(a => <ListCard key={a.id} article={a} />)}
