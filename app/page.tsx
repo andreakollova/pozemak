@@ -115,6 +115,8 @@ export default function Home() {
         .art-row   { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .art-row::-webkit-scrollbar { display: none; }
         .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
+        .articles-intl-grid { display: grid; grid-template-columns: 1fr 300px; gap: 28px; margin-bottom: 56px; align-items: start; }
+        @media (max-width: 900px) { .articles-intl-grid { grid-template-columns: 1fr; } }
       `}</style>
 
       <div className="page-wrap">
@@ -127,7 +129,7 @@ export default function Home() {
         )}
 
         {/* Articles (GB + AU + DE + BE) left | 🌍 International Matches right */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
+        <div className="articles-intl-grid">
           <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 40 }}>
             {(byCountry['Great Britain']?.length ?? 0) > 0 && (
               <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
