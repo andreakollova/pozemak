@@ -121,10 +121,10 @@ export default function ArticlePage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, padding: '18px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/writer-1.png" alt="Andrea Kollo" style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }} />
+            <img src="/writer-1.png" alt="Adrian Smith" style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }} />
             <div>
               <p style={{ fontSize: 10, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 700, marginBottom: 1 }}>Written by</p>
-              <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Andrea Kollo</p>
+              <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Adrian Smith</p>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
