@@ -63,6 +63,8 @@ export default function Home() {
   const [loading, setLoading]         = useState(true)
   const [intlMen,   setIntlMen]       = useState<MatchData | null>(null)
   const [intlWomen, setIntlWomen]     = useState<MatchData | null>(null)
+  const [nlMen,     setNlMen]         = useState<MatchData | null>(null)
+  const [nlWomen,   setNlWomen]       = useState<MatchData | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -87,6 +89,14 @@ export default function Home() {
     fetch('/api/hockey?comp=international&id=45')
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (!d) return; const m = getMatches(d); setIntlWomen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'women' }) })
+      .catch(() => {})
+    fetch('/api/hockey?comp=national&id=1')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (!d) return; const m = getMatches(d); setNlMen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'men' }) })
+      .catch(() => {})
+    fetch('/api/hockey?comp=national&id=2')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (!d) return; const m = getMatches(d); setNlWomen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'women' }) })
       .catch(() => {})
   }, [])
 
@@ -151,6 +161,15 @@ export default function Home() {
           <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
             <IntlMatchSection menData={intlMen} womenData={intlWomen} />
           </div>
+        </div>
+
+        {/* 🏆 League Results */}
+        <div style={{ marginBottom: 56 }}>
+          <LeagueMatchSection
+            countries={[
+              { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
+            ]}
+          />
         </div>
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
@@ -451,6 +470,70 @@ function Grid2Card({ article }: { article: Article }) {
 }
 
 /* ─── International matches — sidebar ───────────────────────────────────── */
+// ── League Match Section ──────────────────────────────────────────────────────
+
+interface LeagueCountry { key: string; flag: string; label: string; men: MatchData | null; women: MatchData | null }
+
+function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
+  const [countryKey, setCountryKey] = useState(countries[0]?.key ?? '')
+  const [gender, setGender]         = useState<'men' | 'women'>('men')
+  const [tab, setTab]               = useState<'results' | 'upcoming'>('results')
+
+  const country = countries.find(c => c.key === countryKey) ?? countries[0]
+  const data    = gender === 'men' ? country?.men : country?.women
+  const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
+
+  return (
+    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+
+      {/* Header */}
+      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>League Results</span>
+        <Link href="/competition" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>View all →</Link>
+      </div>
+
+      {/* Country tabs */}
+      <div style={{ display: 'flex', gap: 6, padding: '10px 12px', borderBottom: '1px solid #eef0f4', flexWrap: 'wrap' }}>
+        {countries.map(c => (
+          <button key={c.key} onClick={() => setCountryKey(c.key)} style={{ padding: '5px 12px', border: 'none', borderRadius: 20, background: countryKey === c.key ? '#003ad0' : '#f0f2f5', color: countryKey === c.key ? '#fff' : '#555', fontSize: 11, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>
+            {c.flag} {c.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Men / Women tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
+        {(['men', 'women'] as const).map(g => (
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '9px', border: 'none', borderBottom: gender === g ? '2px solid #003ad0' : '2px solid transparent', background: '#fff', color: gender === g ? '#003ad0' : '#aaa', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s', marginBottom: -1 }}>
+            {g === 'men' ? 'Men' : 'Women'}
+          </button>
+        ))}
+      </div>
+
+      {/* Results / Upcoming tabs */}
+      <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
+        {(['results', 'upcoming'] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+            {t === 'results' ? 'Results' : 'Upcoming'}
+          </button>
+        ))}
+      </div>
+
+      {/* Match list */}
+      <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column' }}>
+        {!data
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', margin: '2px 0', opacity: 0.6 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+// ── International Match Section ───────────────────────────────────────────────
+
 function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; womenData: MatchData | null }) {
   const [gender, setGender] = useState<'men' | 'women'>('men')
   const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
