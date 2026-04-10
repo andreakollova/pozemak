@@ -157,19 +157,15 @@ export default function Home() {
               <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
             )}
           </div>
-          {/* Right: sticky matches sidebar */}
-          <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
+          {/* Right: sticky sidebar — International + League stacked */}
+          <div style={{ position: 'sticky', top: 20, alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 20 }}>
             <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+            <LeagueMatchSection
+              countries={[
+                { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
+              ]}
+            />
           </div>
-        </div>
-
-        {/* 🏆 League Results */}
-        <div style={{ marginBottom: 56 }}>
-          <LeagueMatchSection
-            countries={[
-              { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
-            ]}
-          />
         </div>
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
