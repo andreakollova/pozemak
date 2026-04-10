@@ -29,7 +29,12 @@ export type Article = {
 // Strip email addresses from text (e.g. redaktie@hockey.nl must never appear)
 function sanitizeText(text: string | null): string | null {
   if (!text) return text
-  return text.replace(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g, '').replace(/ {2,}/g, ' ').trim()
+  return text
+    // Remove entire sentences containing an email address
+    .replace(/[^.!?\n]*@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}[^.!?\n]*[.!?]?/g, '')
+    .replace(/ {2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 // Helpers — return English rewrite if available, otherwise fall back to original
