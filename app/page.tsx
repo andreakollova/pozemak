@@ -601,10 +601,14 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
 
 function FIHIntlCarousel({ data }: { data: FIHData | null }) {
   const ref = useRef<HTMLDivElement>(null)
-  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
   const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
-  const gData   = data ? (gender === 'M' ? data.men : data.women) : null
-  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+  const allRecent   = data ? [...(data.men.recent),   ...(data.women.recent)]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
+  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const gData   = gender === 'all' ? null : data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gender === 'all'
+    ? (tab === 'recent' ? allRecent : allUpcoming)
+    : gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
   const scroll  = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
   return (
     <div style={{ marginBottom: 40 }}>
@@ -614,8 +618,9 @@ function FIHIntlCarousel({ data }: { data: FIHData | null }) {
         hrefLabel="FIH"
         controls={
           <div style={{ display: 'flex', gap: 6 }}>
-            <TabPill active={gender === 'M'} onClick={() => setGender('M')} label="Men" />
-            <TabPill active={gender === 'F'} onClick={() => setGender('F')} label="Women" />
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             {(['left','right'] as const).map(d => (
@@ -643,10 +648,14 @@ function FIHIntlCarousel({ data }: { data: FIHData | null }) {
 
 function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
   const ref = useRef<HTMLDivElement>(null)
-  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
   const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
-  const gData   = data ? (gender === 'M' ? data.men : data.women) : null
-  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+  const allRecent   = data ? [...(data.men.recent),   ...(data.women.recent)]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
+  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const gData   = gender === 'all' ? null : data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gender === 'all'
+    ? (tab === 'recent' ? allRecent : allUpcoming)
+    : gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
   const scroll  = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
   return (
     <div style={{ marginBottom: 40 }}>
@@ -656,8 +665,9 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
         hrefLabel="FIH"
         controls={
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            <TabPill active={gender === 'M'} onClick={() => setGender('M')} label="Men" />
-            <TabPill active={gender === 'F'} onClick={() => setGender('F')} label="Women" />
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             <a href={data?.watchLiveUrl ?? 'https://www.fih.hockey/watch'} target="_blank" rel="noopener noreferrer"
