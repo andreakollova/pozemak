@@ -206,11 +206,13 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
+        {/* ── Coming Up — right below main banner ── */}
+        <ComingUpCarousel fihData={fihData} proLeagueData={proLeagueData} euroData={euroData} />
+
         {/* Trending News — article[1] featured + articles[2–5] most viewed */}
         {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
 
-        {/* ── Full-width match carousels ── */}
-        <ComingUpCarousel fihData={fihData} proLeagueData={proLeagueData} euroData={euroData} />
+        {/* ── Individual match carousels ── */}
         <FIHIntlCarousel data={fihData} />
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
