@@ -252,14 +252,14 @@ export default function Home() {
         {/* Trending News — article[1] featured + articles[2–5] most viewed */}
         {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
 
+        {/* 🏑 FIH Hockey news articles — 3 columns */}
+        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
+
         {/* 🌍 FIH International matches (Intl + Pro League combined) */}
         <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} />
 
         {/* 🏆 FIH Hockey World Cup 2026 */}
         <FIHWorldCupCarousel data={wcData} />
-
-        {/* 🇪🇺 EuroHockey match results */}
-        <EuroHockeyCarousel data={euroData} />
 
         {/* 🇳🇱 Netherlands — carousel + league */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
@@ -318,11 +318,11 @@ export default function Home() {
           </div>
         )}
 
-        {/* 🇪🇺 EuroHockey news articles — 3 columns, below Ireland */}
+        {/* 🇪🇺 EuroHockey news articles — 3 columns */}
         <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
 
-        {/* 🏑 FIH Hockey news articles — 3 columns */}
-        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
+        {/* 🇪🇺 EuroHockey match results */}
+        <EuroHockeyCarousel data={euroData} />
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
         {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
