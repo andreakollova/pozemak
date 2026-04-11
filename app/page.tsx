@@ -187,15 +187,18 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
+        {/* Trending News — article[1] featured + articles[2–5] most viewed */}
+        {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
+
         {/* ── Full-width match carousels ── */}
         <FIHIntlCarousel data={fihData} />
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
         <NLLeagueCarousel menData={nlMen} womenData={nlWomen} />
 
-        {/* 🇳🇱 Netherlands — editorial */}
+        {/* 🇳🇱 Netherlands — carousel */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
-          <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 10)} />
         )}
 
         {/* Articles — GB + AU/DE */}
@@ -317,7 +320,31 @@ function HeroCard({ article }: { article: Article }) {
   )
 }
 
-/* ─── 1. Editorial: big left + stacked list right (Netherlands) ──────────── */
+/* ─── Trending News (after hero) ────────────────────────────────────────── */
+function TrendingSection({ articles }: { articles: Article[] }) {
+  const featured = articles[0]
+  const list = articles.slice(1, 5)
+  if (!featured) return null
+  return (
+    <div style={{ marginBottom: 48 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-primary)' }}>🔥 Trending News</span>
+        <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
+        <FeaturedCard article={featured} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>Most Viewed Stories</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {list.map(a => <ListCard key={a.id} article={a} />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 1. Editorial: big left + stacked list right ────────────────────────── */
 function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Article[] }) {
   const featured = articles[0]
   const rest = articles.slice(1, 5)
