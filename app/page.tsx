@@ -191,41 +191,31 @@ export default function Home() {
         <FIHIntlCarousel data={fihData} />
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
+        <NLLeagueCarousel menData={nlMen} womenData={nlWomen} />
 
         {/* 🇳🇱 Netherlands — editorial */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
           <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
         )}
 
-        {/* Articles left | 🌍 International Matches right */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 28, marginBottom: 56, alignItems: 'start' }}>
-          {/* Left: GB + AU/DE + Belgium stacked */}
-          <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 40 }}>
-            {(byCountry['Great Britain']?.length ?? 0) > 0 && (
-              <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
-            )}
-            {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
-                {(byCountry['Australia']?.length ?? 0) > 0 && (
-                  <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 5)} cardHeight={140} /></div>
-                )}
-                {(byCountry['Germany']?.length ?? 0) > 0 && (
-                  <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
-                )}
-              </div>
-            )}
-            {(byCountry['Belgium']?.length ?? 0) > 0 && (
-              <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
-            )}
-          </div>
-          {/* Right: sticky sidebar — League only */}
-          <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
-            <LeagueMatchSection
-              countries={[
-                { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
-              ]}
-            />
-          </div>
+        {/* Articles — GB + AU/DE + Belgium */}
+        <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
+          {(byCountry['Great Britain']?.length ?? 0) > 0 && (
+            <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
+          )}
+          {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
+              {(byCountry['Australia']?.length ?? 0) > 0 && (
+                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 5)} cardHeight={140} /></div>
+              )}
+              {(byCountry['Germany']?.length ?? 0) > 0 && (
+                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
+              )}
+            </div>
+          )}
+          {(byCountry['Belgium']?.length ?? 0) > 0 && (
+            <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
+          )}
         </div>
 
         {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
@@ -298,10 +288,10 @@ function HeroCard({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 200).trim() + '…'
   const source = getArticleSource(article)
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 48, borderRadius: 20, overflow: 'hidden' }}
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 48, borderRadius: 12, overflow: 'hidden' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: 20 }}>
+      <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: 12 }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -350,7 +340,7 @@ function FeaturedCard({ article }: { article: Article }) {
   const source = getArticleSource(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: 400, borderRadius: 16, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 400, borderRadius: 10, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -375,7 +365,7 @@ function ListCard({ article }: { article: Article }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 12, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s' }}>
+      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s' }}>
         <div style={{ width: 76, height: 56, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
         </div>
@@ -407,7 +397,7 @@ function Grid3Card({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 100).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 14, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'transform .22s, box-shadow .22s, border-color .2s', transform: hov ? 'translateY(-4px)' : 'none', boxShadow: hov ? '0 20px 56px rgba(0,0,0,.5)' : 'none' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height: 180, overflow: 'hidden', background: '#111', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
@@ -444,7 +434,7 @@ function MiniCard({ article, height }: { article: Article; height: number }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 190 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'transform .22s, box-shadow .22s, border-color .2s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 48px rgba(0,0,0,.45)' : 'none' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height, overflow: 'hidden', background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />}
         </div>
@@ -476,7 +466,7 @@ function CompactRow({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 90).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', gap: 16, padding: '14px 16px', borderRadius: 12, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 16, padding: '14px 16px', borderRadius: 7, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'center' }}>
         <div style={{ width: 100, height: 68, borderRadius: 10, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.07)' : 'scale(1)' }} />}
         </div>
@@ -509,7 +499,7 @@ function Grid2Card({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 120).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: 280, borderRadius: 16, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 280, borderRadius: 10, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s', transform: hov ? 'scale(1.05)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -559,7 +549,7 @@ function TeamCell({ short, name, won, logo }: { short: string; name: string; won
           ? <img src={logo} alt={name} style={{ width: 28, height: 28, objectFit: 'contain' }} />
           : f
             ? <span style={{ fontSize: 22, lineHeight: 1 }}>{f}</span>
-            : <span style={{ fontSize: 11, fontWeight: 900, color: 'var(--text-primary)' }}>{short.slice(0,3).toUpperCase()}</span>
+            : <span style={{ fontSize: 9, fontWeight: 900, color: 'var(--text-primary)', textAlign: 'center', lineHeight: 1.15, padding: '0 2px' }}>{(short || name.split(' ')[0]).slice(0, 5).toUpperCase()}</span>
         }
       </div>
       <span style={{ fontSize: 10, fontWeight: won ? 800 : 400, color: won ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 64 }}>
@@ -577,7 +567,7 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const tourName = 'tourName' in m ? m.tourName : ''
   const logo = (t: typeof m.home) => ('logo' in t ? (t as any).logo : null)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={logo(m.home)} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
@@ -642,7 +632,7 @@ function FIHIntlCarousel({ data }: { data: FIHData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -689,7 +679,7 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -744,12 +734,12 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : tab === 'matches'
             ? filtMatches.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches found</p>
                 : filtMatches.map(m => (
-                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '10px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '10px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
                       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
                         <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
@@ -772,7 +762,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
             : filtTours.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming tournaments</p>
                 : filtTours.map(e => (
-                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 14, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 8, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
                       <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
                       <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'} · {e.location}</span>
@@ -789,6 +779,82 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
   )
 }
 
+function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; womenData: MatchData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'all' | 'men' | 'women'>('all')
+  const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  const allResults  = [...(menData?.results ?? []),  ...(womenData?.results ?? [])] .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const allUpcoming = [...(menData?.upcoming ?? []), ...(womenData?.upcoming ?? [])].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const gData   = gender === 'all' ? null : gender === 'men' ? menData : womenData
+  const matches = gender === 'all'
+    ? (tab === 'results' ? allResults : allUpcoming)
+    : gData ? (tab === 'results' ? gData.results : gData.upcoming) : []
+
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🇳🇱 Netherlands League"
+        href="/competition"
+        hrefLabel="All"
+        controls={
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <TabPill active={gender === 'all'}   onClick={() => setGender('all')}   label="All" />
+            <TabPill active={gender === 'men'}   onClick={() => setGender('men')}   label="Men" />
+            <TabPill active={gender === 'women'} onClick={() => setGender('women')} label="Women" />
+            <TabPill active={tab === 'results'}  onClick={() => setTab('results')}  label="Results" />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!menData && !womenData
+          ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : matches.map(m => <NLMatchCard key={m.id} match={m} isResult={tab === 'results'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+function NLMatchCard({ match: m, isResult }: { match: Match; isResult: boolean }) {
+  const homeWon = isResult && m.score ? m.score.home > m.score.away : false
+  const awayWon = isResult && m.score ? m.score.away > m.score.home : false
+  return (
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
+          <TeamLogo logo={m.home.logo} name={m.home.name} />
+          <span style={{ fontSize: 10, fontWeight: homeWon ? 800 : 400, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 64 }}>{m.home.name}</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+          {isResult && m.score
+            ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.score.home}–{m.score.away}</span>
+            : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+          }
+          {isResult && m.score && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+        </div>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
+          <TeamLogo logo={m.away.logo} name={m.away.name} />
+          <span style={{ fontSize: 10, fontWeight: awayWon ? 800 : 400, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 64 }}>{m.away.name}</span>
+        </div>
+      </div>
+      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+    </div>
+  )
+}
+
 /* ─── (sidebar FIH/Euro sections removed — now full-width carousels) ──────── */
 
 function _unusedFIHIntlSection({ data }: { data: FIHData | null }) {
@@ -799,7 +865,7 @@ function _unusedFIHIntlSection({ data }: { data: FIHData | null }) {
   const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
 
   return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🌍 FIH International</span>
         <a href="https://www.fih.hockey/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
@@ -840,7 +906,7 @@ function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
   const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
 
   return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🏆 FIH Pro League</span>
         <a href="https://www.fih.hockey/events/fih-pro-league/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
@@ -895,7 +961,7 @@ function _unusedEuroHockeySection({ data }: { data: EuroData | null }) {
   }
 
   return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🇪🇺 EuroHockey</span>
         <a href="https://eurohockey.org/calendar" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>Calendar →</a>
@@ -982,7 +1048,7 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
   const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
 
   return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
 
       {/* Header */}
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1104,7 +1170,7 @@ function VideoCard({ video }: { video: Video }) {
   const [hov, setHov] = useState(false)
   return (
     <a href={video.youtube_url} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, width: 240, textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .25s, box-shadow .25s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 40px rgba(0,0,0,.4)' : 'none' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .25s, box-shadow .25s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 40px rgba(0,0,0,.4)' : 'none' }}>
         <div style={{ position: 'relative', height: 135, overflow: 'hidden', background: '#0a0a0a' }}>
           <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .4s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
           <div style={{ position: 'absolute', inset: 0, background: hov ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}>
