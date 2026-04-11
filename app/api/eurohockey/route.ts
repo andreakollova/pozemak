@@ -96,7 +96,13 @@ export async function GET() {
         eventUrl: `https://eurohockey.org/calendar/event?id=${e.id}`,
         watchUrl: WATCH_URL,
       }))
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+      .filter(e => new Date(e.endDate) >= new Date()) // only current/future
+      .sort((a, b) => {
+        // ongoing first, then by startDate ascending (soonest first)
+        if (a.status === 'ongoing' && b.status !== 'ongoing') return -1
+        if (b.status === 'ongoing' && a.status !== 'ongoing') return 1
+        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      })
       .slice(0, 60)
 
     return NextResponse.json({ matches, tournaments })
