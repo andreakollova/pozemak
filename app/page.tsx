@@ -236,13 +236,17 @@ export default function Home() {
         {/* Trending News — article[1] featured + articles[2–5] most viewed */}
         {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
 
-        {/* ── Individual match carousels ── */}
-        <FIHIntlCarousel data={fihData} />
-        <FIHProLeagueCarousel data={proLeagueData} />
-        <EuroHockeyCarousel data={euroData} />
+        {/* 🏑 FIH Hockey news articles */}
+        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
 
-        {/* 🇪🇺 EuroHockey news — 3 columns right under match section */}
+        {/* 🌍 FIH International matches (Intl + Pro League combined) */}
+        <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} />
+
+        {/* 🇪🇺 EuroHockey news articles — 3 columns */}
         <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
+
+        {/* 🇪🇺 EuroHockey match results */}
+        <EuroHockeyCarousel data={euroData} />
 
         {/* 🇳🇱 Netherlands — carousel + league */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
@@ -908,6 +912,63 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
           : filtered.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : filtered.map(m => <CombinedMatchCard key={m.key} match={m} isResult={tab === 'results'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+function FIHCombinedCarousel({ fihData, proLeagueData }: { fihData: FIHData | null; proLeagueData: ProLeagueData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
+  const [tab,    setTab]    = useState<'recent' | 'upcoming'>('recent')
+  const [source, setSource] = useState<'all' | 'intl' | 'pro'>('all')
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  const intlRecent   = fihData   ? [...fihData.men.recent,   ...fihData.women.recent]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
+  const intlUpcoming = fihData   ? [...fihData.men.upcoming, ...fihData.women.upcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const proRecent    = proLeagueData ? [...proLeagueData.men.recent,   ...proLeagueData.women.recent]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
+  const proUpcoming  = proLeagueData ? [...proLeagueData.men.upcoming, ...proLeagueData.women.upcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+
+  const pool = tab === 'recent'
+    ? (source === 'intl' ? intlRecent : source === 'pro' ? proRecent : [...intlRecent, ...proRecent].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()))
+    : (source === 'intl' ? intlUpcoming : source === 'pro' ? proUpcoming : [...intlUpcoming, ...proUpcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
+
+  const matches = gender === 'all' ? pool : pool.filter(m => m.gender === gender)
+
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🌍 FIH International"
+        href="https://www.fih.hockey/schedule-fixtures-results"
+        hrefLabel="FIH"
+        controls={
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            <TabPill active={source === 'all'}  onClick={() => setSource('all')}  label="All" />
+            <TabPill active={source === 'intl'} onClick={() => setSource('intl')} label="Intl" />
+            <TabPill active={source === 'pro'}  onClick={() => setSource('pro')}  label="Pro League" />
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="Men+Women" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
+            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {(!fihData && !proLeagueData)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
         }
       </div>
     </div>
