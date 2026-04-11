@@ -36,40 +36,40 @@ async function fetchEventMatches(comp: RawCompetition): Promise<EuroMatch[]> {
   if (!res.ok) return []
   const html = await res.text()
 
-  // Extract __NEXT_DATA__
   const m = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)
   if (!m) return []
   let pageData: any
   try { pageData = JSON.parse(m[1]) } catch { return [] }
 
-  const fixtures: any[] = pageData?.props?.pageProps?.competition?.fixtures ?? []
+  // Field is 'matches', teams are 'hometeam'/'awayteam', scores are 'homescore'/'awayscore'
+  const matches: any[] = pageData?.props?.pageProps?.competition?.matches ?? []
   const gender: 'M' | 'F' = comp.gender === 'F' ? 'F' : 'M'
 
-  return fixtures.map((f: any): EuroMatch => {
-    const homeTeam = f.homeTeam ?? f.home_team ?? {}
-    const awayTeam = f.awayTeam ?? f.away_team ?? {}
-    const homeScore = f.homeScore ?? f.home_score ?? null
-    const awayScore = f.awayScore ?? f.away_score ?? null
-    const isCompleted = homeScore !== null && awayScore !== null
-    const date = f.date ?? f.startTime ?? f.start_time ?? f.scheduled ?? ''
+  return matches.map((f: any): EuroMatch => {
+    const home = f.hometeam ?? {}
+    const away = f.awayteam ?? {}
+    const hs = f.homescore ?? null
+    const as_ = f.awayscore ?? null
+    const isCompleted = f.status !== 'Upcoming' && hs !== null && as_ !== null && (hs > 0 || as_ > 0)
+    const date = f.datetime ?? f.datetimeutc ?? f.date ?? ''
 
     return {
-      id: String(f.id ?? f.game_id ?? Math.random()),
+      id: String(f.id ?? f.match_id ?? Math.random()),
       tournamentName: comp.name,
       gender,
       date,
       status: isCompleted ? 'completed' : 'upcoming',
       home: {
-        name: homeTeam.name ?? homeTeam.code ?? '',
-        code: homeTeam.code ?? homeTeam.name ?? '',
-        logo: homeTeam.logoMedia?.media?.url ?? homeTeam.logo ?? null,
-        score: homeScore !== null ? parseInt(String(homeScore), 10) : null,
+        name: home.name ?? home.code ?? '',
+        code: home.code ?? home.name ?? '',
+        logo: home.logoMedia?.media?.url ?? null,
+        score: isCompleted ? parseInt(String(hs), 10) : null,
       },
       away: {
-        name: awayTeam.name ?? awayTeam.code ?? '',
-        code: awayTeam.code ?? awayTeam.name ?? '',
-        logo: awayTeam.logoMedia?.media?.url ?? awayTeam.logo ?? null,
-        score: awayScore !== null ? parseInt(String(awayScore), 10) : null,
+        name: away.name ?? away.code ?? '',
+        code: away.code ?? away.name ?? '',
+        logo: away.logoMedia?.media?.url ?? null,
+        score: isCompleted ? parseInt(String(as_), 10) : null,
       },
       location: comp.location,
       eventUrl: url,
