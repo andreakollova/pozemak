@@ -43,16 +43,19 @@ interface EuroData { matches: EuroMatch[]; tournaments: EuroEvent[] }
 
 /* ─── Country short-code → flag emoji ───────────────────────────────────── */
 const FLAG: Record<string, string> = {
-  NED:'🇳🇱', GBR:'🇬🇧', AUS:'🇦🇺', GER:'🇩🇪', BEL:'🇧🇪', ESP:'🇪🇸', ARG:'🇦🇷',
-  IND:'🇮🇳', NZL:'🇳🇿', RSA:'🇿🇦', IRL:'🇮🇪', CAN:'🇨🇦', USA:'🇺🇸', CHN:'🇨🇳',
-  JPN:'🇯🇵', KOR:'🇰🇷', PAK:'🇵🇰', MAS:'🇲🇾', FRA:'🇫🇷', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', WAL:'🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-  AUT:'🇦🇹', POL:'🇵🇱', CZE:'🇨🇿', SUI:'🇨🇭', UKR:'🇺🇦', TPE:'🇹🇼', BAN:'🇧🇩',
-  SRI:'🇱🇰', UZB:'🇺🇿', THA:'🇹🇭', SIN:'🇸🇬', HKG:'🇭🇰', OMA:'🇴🇲', KAZ:'🇰🇿',
-  AZE:'🇦🇿', LTU:'🇱🇹', CRO:'🇭🇷', SVK:'🇸🇰', TUR:'🇹🇷', ITA:'🇮🇹', POR:'🇵🇹',
+  NED:'🇳🇱', GBR:'🇬🇧', ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', WAL:'🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+  AUS:'🇦🇺', GER:'🇩🇪', BEL:'🇧🇪', ESP:'🇪🇸', ARG:'🇦🇷', IND:'🇮🇳', NZL:'🇳🇿',
+  RSA:'🇿🇦', IRL:'🇮🇪', CAN:'🇨🇦', USA:'🇺🇸', CHN:'🇨🇳', JPN:'🇯🇵', KOR:'🇰🇷',
+  PAK:'🇵🇰', MAS:'🇲🇾', FRA:'🇫🇷', AUT:'🇦🇹', POL:'🇵🇱', CZE:'🇨🇿', SUI:'🇨🇭',
+  UKR:'🇺🇦', TPE:'🇹🇼', BAN:'🇧🇩', SRI:'🇱🇰', UZB:'🇺🇿', THA:'🇹🇭',
+  SIN:'🇸🇬', SGP:'🇸🇬', HKG:'🇭🇰', OMA:'🇴🇲', KAZ:'🇰🇿', AZE:'🇦🇿',
+  LTU:'🇱🇹', CRO:'🇭🇷', SVK:'🇸🇰', TUR:'🇹🇷', ITA:'🇮🇹', POR:'🇵🇹',
   GRE:'🇬🇷', ROM:'🇷🇴', HUN:'🇭🇺', DEN:'🇩🇰', SWE:'🇸🇪', NOR:'🇳🇴', FIN:'🇫🇮',
   LAT:'🇱🇻', CHL:'🇨🇱', CHI:'🇨🇱', MEX:'🇲🇽', URU:'🇺🇾', VEN:'🇻🇪', BRA:'🇧🇷',
-  EGY:'🇪🇬', GHA:'🇬🇭', KEN:'🇰🇪', ZIM:'🇿🇼', NGR:'🇳🇬', BLR:'🇧🇾', RUS:'🇷🇺',
-  MGL:'🇲🇳', MYA:'🇲🇲', SGP:'🇸🇬', VIE:'🇻🇳', PHI:'🇵🇭', INA:'🇮🇩', IRN:'🇮🇷',
+  EGY:'🇪🇬', GHA:'🇬🇭', KEN:'🇰🇪', ZIM:'🇿🇼', NGR:'🇳🇬', NIG:'🇳🇬', BLR:'🇧🇾',
+  RUS:'🇷🇺', MGL:'🇲🇳', MYA:'🇲🇲', VIE:'🇻🇳', PHI:'🇵🇭', INA:'🇮🇩', IRN:'🇮🇷',
+  MKD:'🇲🇰', SLO:'🇸🇮', EST:'🇪🇪', BIH:'🇧🇦', BUL:'🇧🇬', SRB:'🇷🇸',
+  SAF:'🇿🇦', TTO:'🇹🇹', PER:'🇵🇪', COL:'🇨🇴', ECU:'🇪🇨', PAN:'🇵🇦', GUA:'🇬🇹',
 }
 function flag(short: string) { return FLAG[short?.toUpperCase()] ?? '' }
 

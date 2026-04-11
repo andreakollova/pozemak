@@ -75,7 +75,7 @@ function normalizeMatch(m: RawMatch): ProLeagueMatch {
     home: { name: home?.name ?? '', short: home?.short_name ?? '', score: parseScore(home?.value ?? null) },
     away: { name: away?.name ?? '', short: away?.short_name ?? '', score: parseScore(away?.value ?? null) },
     venue: m.venue_name,
-    watchLiveUrl: m.watch_live_url ?? null,
+    watchLiveUrl: m.watch_live_url || 'https://www.fih.hockey/watch',
   }
 }
 
