@@ -674,6 +674,7 @@ interface NormMatch {
   tourName: string
   watchUrl?: string | null
   moreUrl?: string | null
+  eventUrl?: string | null
 }
 
 function normKey(date: string, home: string, away: string, gender: string) {
@@ -706,7 +707,7 @@ function normEuro(m: EuroMatch): NormMatch {
     status: m.status as NormMatch['status'],
     home: { name: m.home.name, short: m.home.code, score: m.home.score, logo: m.home.logo },
     away: { name: m.away.name, short: m.away.code, score: m.away.score, logo: m.away.logo },
-    tourName: m.tournamentName, watchUrl: m.watchUrl || null,
+    tourName: m.tournamentName, watchUrl: m.watchUrl || null, eventUrl: m.eventUrl || null,
   }
 }
 
@@ -720,14 +721,16 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={m.home.logo} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44, gap: 4 }}>
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
-            : isResult && m.home.score !== null && m.away.score !== null
-              ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
-              : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+            : isResult && m.eventUrl
+              ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 8, whiteSpace: 'nowrap' }}>Results →</a>
+              : isResult && m.home.score !== null && m.away.score !== null
+                ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+                : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
-          {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+          {isResult && !isLive && !m.eventUrl && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
         </div>
         <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={m.away.logo} />
       </div>
@@ -737,14 +740,19 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
+        {m.eventUrl && (
+          <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+            Info →
+          </a>
+        )}
         {m.watchUrl && (
-          <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
             <Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}
           </a>
         )}
         {m.moreUrl && (
-          <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
-            More →
+          <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+            Info →
           </a>
         )}
       </div>
