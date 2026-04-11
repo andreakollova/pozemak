@@ -14,6 +14,7 @@ interface FIHMatch {
   home: { name: string; short: string; score: number | null }
   away: { name: string; short: string; score: number | null }
   venue: string; tourName: string
+  game_id: string; sr_game_id: string; series_id: string
 }
 interface FIHGenderData { recent: FIHMatch[]; upcoming: FIHMatch[] }
 interface FIHData { men: FIHGenderData; women: FIHGenderData }
@@ -70,6 +71,24 @@ function timeAgo(iso: string) {
 
 function fmtMatchDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function fmtMatchTime(iso: string): string | null {
+  const m = iso.match(/T(\d{2}:\d{2})/)
+  return m ? m[1] : null
+}
+
+function slugify(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+function fihMatchUrl(m: FIHMatch): string | null {
+  if (!m.game_id || !m.sr_game_id) return null
+  const gender = m.gender === 'M' ? 'men' : 'women'
+  const seriesSlug = `${slugify(m.tourName)}-${m.series_id}`
+  const homeSlug = slugify(m.home.name)
+  const awaySlug = slugify(m.away.name)
+  return `https://www.fih.hockey/events/others/${gender}/${seriesSlug}/live-scores/${homeSlug}-vs-${awaySlug}-${m.game_id}?matchcenter=${m.sr_game_id}`
 }
 
 function getMatches(d: { poules?: Poule[]; matches?: Match[] }): Match[] {
@@ -335,7 +354,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
         <FeaturedCard article={featured} trending />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>Most Viewed Stories</div>
+          <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>🚀 Most Viewed Stories</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {list.map(a => <ListCard key={a.id} article={a} />)}
           </div>
@@ -396,9 +415,9 @@ function ListCard({ article }: { article: Article }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s' }}>
-        <div style={{ width: 76, height: 56, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
-          {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
+      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'stretch' }}>
+        <div style={{ width: 76, minHeight: 56, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111', position: 'relative', alignSelf: 'stretch' }}>
+          {article.image_url && <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 9, color: 'var(--text-secondary)', marginBottom: 5 }}>{timeAgo(article.scraped_at)}</div>
@@ -596,9 +615,11 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const awayWon  = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
   const isLive   = m.status === 'live'
   const watchUrl = 'watchLiveUrl' in m ? m.watchLiveUrl : null
+  const moreUrl  = 'game_id' in m ? fihMatchUrl(m as FIHMatch) : null
   const tourName = 'tourName' in m ? m.tourName : ''
   const logo = (t: typeof m.home) => ('logo' in t ? (t as any).logo : null)
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
+  const matchTime = fmtMatchTime(m.date)
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
@@ -615,15 +636,22 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
         <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={logo(m.away)} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
-      {watchUrl && (
-        <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
-          <Clapperboard size={11} strokeWidth={2.5} />
-          {!isResult && <span>Watch</span>}
-        </a>
-      )}
+      <div style={{ display: 'flex', gap: 6 }}>
+        {watchUrl && (
+          <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+            <Clapperboard size={11} strokeWidth={2.5} />
+            {!isResult && <span>Watch</span>}
+          </a>
+        )}
+        {moreUrl && (
+          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
+            More →
+          </a>
+        )}
+      </div>
     </div>
   )
 }
@@ -638,6 +666,7 @@ interface NormMatch {
   away: { name: string; short: string; score: number | null; logo?: string | null }
   tourName: string
   watchUrl?: string | null
+  moreUrl?: string | null
 }
 
 function normKey(date: string, home: string, away: string, gender: string) {
@@ -649,7 +678,7 @@ function normFIH(m: FIHMatch): NormMatch {
     key: normKey(m.date, m.home.short, m.away.short, m.gender),
     date: m.date, gender: m.gender, status: m.status,
     home: { ...m.home }, away: { ...m.away },
-    tourName: m.tourName, watchUrl: null,
+    tourName: m.tourName, watchUrl: null, moreUrl: fihMatchUrl(m),
   }
 }
 
@@ -679,6 +708,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
   const awayWon    = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
   const isLive     = m.status === 'live'
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
+  const matchTime  = fmtMatchTime(m.date)
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
@@ -695,14 +725,21 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
         <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={m.away.logo} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
-      {m.watchUrl && (
-        <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
-          <Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}
-        </a>
-      )}
+      <div style={{ display: 'flex', gap: 6 }}>
+        {m.watchUrl && (
+          <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+            <Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}
+          </a>
+        )}
+        {m.moreUrl && (
+          <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
+            More →
+          </a>
+        )}
+      </div>
     </div>
   )
 }
@@ -937,7 +974,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
                         </div>
                         <TeamCell short={m.away.code} name={m.away.name} won={m.status === 'completed' && (m.away.score ?? 0) > (m.home.score ?? 0)} logo={m.away.logo} />
                       </div>
-                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? fmtMatchDate(m.date) : ''}</span>
+                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? `${fmtMatchDate(m.date)}${fmtMatchTime(m.date) ? ` · ${fmtMatchTime(m.date)}` : ''}` : ''}</span>
                       <div style={{ display: 'flex', gap: 5 }}>
                         <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 6 }}>Info →</a>
                         <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: 6 }}>Watch →</a>
@@ -1196,6 +1233,8 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
   const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
   const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
   const isLive  = m.status === 'live'
+  const moreUrl = 'game_id' in m ? fihMatchUrl(m as FIHMatch) : null
+  const matchTime = fmtMatchTime(m.date)
   return (
     <div style={{ borderRadius: 10, padding: '10px 8px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid #f0f2f5' }}>
       <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
@@ -1209,10 +1248,13 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
             ? <span style={{ fontSize: 17, fontWeight: 800, color: '#111', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
             : <span style={{ fontSize: 11, fontWeight: 500, color: '#bbb' }}>vs</span>
         }
-        <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}</span>
+        <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
         {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: '#bbb', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
         {watchLiveUrl && (
           <a href={watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>▶ Watch</a>
+        )}
+        {moreUrl && (
+          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#555', textDecoration: 'none', background: '#f4f5f8', border: '1px solid #e8eaed', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>More →</a>
         )}
       </div>
       <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>

@@ -18,6 +18,8 @@ interface RawMatch {
   participants: Participant[]
   venue_name: string
   series_id: string
+  game_id: string
+  sr_game_id: string
 }
 
 export interface FIHMatch {
@@ -28,6 +30,9 @@ export interface FIHMatch {
   away: { name: string; short: string; score: number | null }
   venue: string
   tourName: string
+  game_id: string
+  sr_game_id: string
+  series_id: string
 }
 
 function extractFixtureData(html: string): RawMatch[] {
@@ -75,6 +80,9 @@ function normalizeMatch(m: RawMatch): FIHMatch {
     away: { name: away?.name ?? '', short: away?.short_name ?? '', score: parseScore(away?.value ?? null) },
     venue: m.venue_name,
     tourName: m.tour_name,
+    game_id: m.game_id ?? '',
+    sr_game_id: m.sr_game_id ?? '',
+    series_id: m.series_id ?? '',
   }
 }
 
