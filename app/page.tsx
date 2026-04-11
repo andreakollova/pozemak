@@ -43,6 +43,17 @@ interface EuroMatch {
 }
 interface EuroData { matches: EuroMatch[]; tournaments: EuroEvent[] }
 
+interface WCMatch {
+  date: string; gender: 'M' | 'F'; status: 'upcoming' | 'live' | 'completed' | 'cancelled'
+  home: { name: string; short: string; score: number | null }
+  away: { name: string; short: string; score: number | null }
+  venue: string; tourName: string; pool: string; eventName: string
+  game_id: string; sr_game_id: string; series_id: string
+  venueTime: string | null
+}
+interface WCGenderData { recent: WCMatch[]; upcoming: WCMatch[] }
+interface WCData { men: WCGenderData; women: WCGenderData }
+
 /* ─── Country short-code → flag emoji ───────────────────────────────────── */
 const FLAG: Record<string, string> = {
   NED:'🇳🇱', GBR:'🇬🇧', ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', WAL:'🏴󠁧󠁢󠁷󠁬󠁳󠁿',
@@ -154,6 +165,7 @@ export default function Home() {
   const [euroData,      setEuroData]      = useState<EuroData | null>(null)
   const [nlMen,           setNlMen]           = useState<MatchData | null>(null)
   const [nlWomen,         setNlWomen]         = useState<MatchData | null>(null)
+  const [wcData,          setWcData]          = useState<WCData | null>(null)
   const [euroArticles,    setEuroArticles]    = useState<Article[]>([])
   const [fihArticles,     setFihArticles]     = useState<Article[]>([])
 
@@ -188,6 +200,10 @@ export default function Home() {
     fetch('/api/eurohockey')
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d) setEuroData(d) })
+      .catch(() => {})
+    fetch('/api/fih-worldcup')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setWcData(d) })
       .catch(() => {})
     fetch('/api/hockey?comp=national&id=1')
       .then(r => r.ok ? r.json() : null)
@@ -241,6 +257,9 @@ export default function Home() {
 
         {/* 🌍 FIH International matches (Intl + Pro League combined) */}
         <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} />
+
+        {/* 🏆 FIH Hockey World Cup 2026 */}
+        <FIHWorldCupCarousel data={wcData} />
 
         {/* 🇪🇺 EuroHockey news articles — 3 columns */}
         <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
@@ -970,6 +989,89 @@ function FIHCombinedCarousel({ fihData, proLeagueData }: { fihData: FIHData | nu
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
         }
+      </div>
+    </div>
+  )
+}
+
+function FIHWorldCupCarousel({ data }: { data: WCData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
+  const [tab,    setTab]    = useState<'recent' | 'upcoming'>('upcoming')
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  const pool = (tab === 'recent'
+    ? [...(data?.men.recent ?? []), ...(data?.women.recent ?? [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    : [...(data?.men.upcoming ?? []), ...(data?.women.upcoming ?? [])].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  )
+  const matches = gender === 'all' ? pool : pool.filter(m => m.gender === gender)
+
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🏆 World Cup 2026"
+        href="https://www.fih.hockey/events/fih-hockey-worldcup-belgium-netherlands-2026/schedule-fixtures-results"
+        hrefLabel="FIH"
+        controls={
+          <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
+            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!data
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <WCMatchCard key={i} match={m} isResult={tab === 'recent'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+function WCMatchCard({ match: m, isResult }: { match: WCMatch; isResult: boolean }) {
+  const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
+  const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
+  const isLive  = m.status === 'live'
+  const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
+  const myTime  = fmtLocalTime(m.date)
+  return (
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+      {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
+        <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={null} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+          {isLive
+            ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
+            : isResult && m.home.score !== null && m.away.score !== null
+              ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+              : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+          }
+          {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+        </div>
+        <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={null} />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        {(m.venueTime || myTime) && (
+          <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 2 }}>
+            {m.venueTime && <><span style={{ fontWeight: 500 }}>{m.venueTime}</span> <span style={{ opacity: 0.6 }}>local</span>{myTime && <span style={{ opacity: 0.4 }}> · </span>}</>}
+            {myTime && <><span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{myTime}</span> <span style={{ opacity: 0.6 }}>your time</span></>}
+          </span>
+        )}
       </div>
     </div>
   )
