@@ -48,8 +48,8 @@ function extractFixtureData(html: string): RawMatch[] {
     }
     data = JSON.parse(unescaped.slice(0, end))
   }
-  // series_id is a string "1820"
-  return (data?.matches ?? []).filter(m => String(m.series_id) === '1820')
+  // Men = "1820", Women = "1819"
+  return (data?.matches ?? []).filter(m => String(m.series_id) === '1820' || String(m.series_id) === '1819')
 }
 
 function normalizeStatus(s: string): ProLeagueMatch['status'] {
