@@ -69,39 +69,31 @@ function timeAgo(iso: string) {
   return `${d}d ago`
 }
 
-const _MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-
 /**
- * Venue date: extracted directly from the ISO string, no timezone conversion.
- * e.g. "2026-04-11T19:00-03:00" → "11 Apr 2026" (the date AT the venue).
+ * Match date in the viewer's local timezone.
+ * FIH stores times in IST (+05:30) so we must use new Date() — do not extract
+ * the date string directly from ISO as that would give the IST date, not local date.
  */
 function fmtMatchDate(iso: string) {
-  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/)
-  if (!m) return ''
-  return `${parseInt(m[3])} ${_MONTHS[parseInt(m[2]) - 1]} ${m[1]}`
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return ''
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 /**
- * Venue local time: extracted directly from the ISO string.
- * e.g. "2026-04-11T19:00-03:00" → "19:00" (what the clock shows at the venue).
- */
-function fmtVenueTime(iso: string): string | null {
-  const m = iso.match(/T(\d{2}:\d{2})/)
-  return m ? m[1] : null
-}
-
-/**
- * Viewer's browser-local time: converts the ISO timestamp (which carries the venue tz offset)
- * to the viewer's timezone — same as FIH's "local time" toggle.
- * Returns null if the ISO string has no timezone offset (can't convert reliably).
+ * Match time in the viewer's local timezone (equivalent to FIH "local time" toggle).
+ * Returns null when the ISO string has no tz offset and can't be reliably converted.
  */
 function fmtLocalTime(iso: string): string | null {
-  // Only convert if the string has a timezone offset; bare times can't be reliably converted
-  if (!iso.match(/T\d{2}:\d{2}[+-]\d{2}:\d{2}$|T\d{2}:\d{2}Z$/)) return null
+  if (!iso.match(/T\d{2}:\d{2}/)) return null
   const d = new Date(iso)
   if (isNaN(d.getTime())) return null
   return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 }
+
+// Kept as alias so existing call-sites don't break — venue time can't be shown
+// correctly since FIH stores all times in IST, not the venue's local timezone.
+const fmtVenueTime = (_iso: string) => null
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -665,8 +657,7 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime}</span>}
-        {myTime && myTime !== venueTime && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 1 }}>{myTime} <span style={{ opacity: 0.6 }}>your time</span></span>}
+        {myTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{myTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>your time</span></span>}
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -760,8 +751,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime}</span>}
-        {myTime && myTime !== venueTime && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 1 }}>{myTime} <span style={{ opacity: 0.6 }}>your time</span></span>}
+        {myTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{myTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>your time</span></span>}
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -1016,7 +1006,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
                         <TeamCell short={m.away.code} name={m.away.name} won={m.status === 'completed' && (m.away.score ?? 0) > (m.home.score ?? 0)} logo={m.away.logo} />
                       </div>
                       <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? fmtMatchDate(m.date) : ''}</span>
-                      {m.date && fmtVenueTime(m.date) && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtVenueTime(m.date)}{fmtLocalTime(m.date) && fmtLocalTime(m.date) !== fmtVenueTime(m.date) ? <span style={{ opacity: 0.65 }}> · {fmtLocalTime(m.date)} yours</span> : ''}</span>}
+                      {m.date && fmtLocalTime(m.date) && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtLocalTime(m.date)} <span style={{ opacity: 0.65 }}>your time</span></span>}
                       <div style={{ display: 'flex', gap: 5 }}>
                         <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 6 }}>Info →</a>
                         <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: 6 }}>Watch →</a>
@@ -1292,7 +1282,7 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
             : <span style={{ fontSize: 11, fontWeight: 500, color: '#bbb' }}>vs</span>
         }
         <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 9, fontWeight: 700, color: '#999' }}>{venueTime}{myTime && myTime !== venueTime ? <span style={{ fontWeight: 400, color: '#bbb' }}> · {myTime} yours</span> : ''}</span>}
+        {myTime && <span style={{ fontSize: 9, fontWeight: 700, color: '#999' }}>{myTime} <span style={{ fontWeight: 400, color: '#bbb' }}>yours</span></span>}
         {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: '#bbb', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
         {watchLiveUrl && (
           <a href={watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>▶ Watch</a>
