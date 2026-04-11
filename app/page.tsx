@@ -201,7 +201,7 @@ export default function Home() {
         {/* Articles — GB + AU/DE */}
         <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
           {(byCountry['Great Britain']?.length ?? 0) > 0 && (
-            <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
+            <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 10)} noMargin />
           )}
           {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
@@ -217,12 +217,12 @@ export default function Home() {
 
         {/* 🇪🇸 Spain — full width, 3 articles */}
         {(byCountry['Spain']?.length ?? 0) > 0 && (
-          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 3)} />
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 10)} />
         )}
 
         {/* 🇦🇷 Argentina — full width, 3 articles */}
         {(byCountry['Argentina']?.length ?? 0) > 0 && (
-          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 3)} />
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 10)} />
         )}
 
         {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇪 Ireland — side by side */}
@@ -380,12 +380,13 @@ function ListCard({ article }: { article: Article }) {
   )
 }
 
-/* ─── 2. Grid-3: 3 equal cards all with excerpt (Great Britain) ──────────── */
+/* ─── 2. Grid-3 carousel (Great Britain, Spain, Argentina) ──────────────── */
 function Grid3Section({ cfg, articles, noMargin }: { cfg: CountryCfg; articles: Article[]; noMargin?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null)
   return (
     <div style={{ marginBottom: noMargin ? 0 : 56 }}>
-      <SectionHeader cfg={cfg} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+      <SectionHeader cfg={cfg} scrollRef={ref} />
+      <div ref={ref} className="art-row">
         {articles.map(a => <Grid3Card key={a.id} article={a} />)}
       </div>
     </div>
@@ -398,9 +399,9 @@ function Grid3Card({ article }: { article: Article }) {
   const title = getTitle(article)
   const text = (getText(article) || '').slice(0, 100).trim() + '…'
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 340 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
       <div style={{ borderRadius: 8, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'border-color .2s' }}>
-        <div style={{ height: 180, overflow: 'hidden', background: '#111', position: 'relative' }}>
+        <div style={{ height: 200, overflow: 'hidden', background: '#111', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
             : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
