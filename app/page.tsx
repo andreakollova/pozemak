@@ -73,9 +73,13 @@ function fmtMatchDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
+/** Returns the match kickoff time converted to the browser's local timezone, e.g. "14:30". */
 function fmtMatchTime(iso: string): string | null {
-  const m = iso.match(/T(\d{2}:\d{2})/)
-  return m ? m[1] : null
+  // Only attempt if the string contains a time component
+  if (!iso.match(/T\d{2}:\d{2}/)) return null
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return null
+  return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 }
 
 function slugify(s: string) {
@@ -638,7 +642,8 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
         <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={logo(m.away)} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        {matchTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{matchTime} <span style={{ fontSize: 8, fontWeight: 500, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -727,7 +732,8 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
         <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={m.away.logo} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        {matchTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{matchTime} <span style={{ fontSize: 8, fontWeight: 500, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
