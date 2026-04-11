@@ -206,10 +206,10 @@ export default function Home() {
           {(byCountry['Great Britain']?.length ?? 0) > 0 && (
             <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 10)} noMargin />
           )}
-          {((byCountry['Australia']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
+          {((byCountry['Belgium']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
-              {(byCountry['Australia']?.length ?? 0) > 0 && (
-                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 5)} cardHeight={140} /></div>
+              {(byCountry['Belgium']?.length ?? 0) > 0 && (
+                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 5)} cardHeight={140} /></div>
               )}
               {(byCountry['Germany']?.length ?? 0) > 0 && (
                 <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
@@ -223,14 +223,14 @@ export default function Home() {
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 10)} />
         )}
 
-        {/* 🇮🇳 India + 🇧🇪 Belgium — side by side */}
-        {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Belgium']?.length ?? 0) > 0) && (
+        {/* 🇮🇳 India + 🇦🇺 Australia — side by side */}
+        {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Australia']?.length ?? 0) > 0) && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['India']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
             )}
-            {(byCountry['Belgium']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 6)} cardHeight={130} /></div>
+            {(byCountry['Australia']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Australia')!} articles={byCountry['Australia'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
         )}
@@ -328,13 +328,13 @@ function TrendingSection({ articles }: { articles: Article[] }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-primary)' }}>🔥 Trending News</span>
+        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
         <FeaturedCard article={featured} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>Most Viewed Stories</div>
+          <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>Most Viewed Stories</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {list.map(a => <ListCard key={a.id} article={a} />)}
           </div>
@@ -368,8 +368,8 @@ function FeaturedCard({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 140).trim() + '…'
   const source = getArticleSource(article)
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: 400, borderRadius: 10, overflow: 'hidden' }}>
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+      <div style={{ position: 'relative', height: '100%', minHeight: 300, borderRadius: 10, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -551,7 +551,7 @@ function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; h
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-primary)' }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -868,7 +868,7 @@ function NLMatchCard({ match: m, isResult, gender }: { match: Match; isResult: b
   const leagueLabel = gender === 'men' ? 'Hoofdklasse Heren' : 'Hoofdklasse Dames'
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      <span style={{ fontSize: 8, fontWeight: 700, color: gColor, opacity: 0.75, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 160 }}>{leagueLabel}</span>
+      <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 160 }}>{leagueLabel}</span>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
           <TeamLogo logo={m.home.logo} name={m.home.name} />
@@ -1180,7 +1180,7 @@ function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
     <div style={{ marginBottom: 52 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>{label}</span>
+          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
           <div style={{ height: 1, background: 'var(--border)', width: 40 }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
