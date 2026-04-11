@@ -163,8 +163,8 @@ export default function Home() {
       getVideos('dames', 10),
       getVideos('heren', 10),
       getVideos('fih', 10),
-      getArticlesByDomain('eurohockey.org', 6),
-      getArticlesByDomain('fih.hockey', 6),
+      getArticlesByDomain('eurohockey.org', 3),
+      getArticlesByDomain('fih.hockey', 3),
     ]).then(([arts, dames, heren, fih, euro, fihNews]) => {
       setArticles(arts)
       setDamesVideos(dames)
@@ -241,6 +241,9 @@ export default function Home() {
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
 
+        {/* 🇪🇺 EuroHockey news — 3 columns right under match section */}
+        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
+
         {/* 🇳🇱 Netherlands — carousel + league */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 10)} />
@@ -297,12 +300,6 @@ export default function Home() {
             )}
           </div>
         )}
-
-        {/* 🏑 FIH Hockey news */}
-        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
-
-        {/* 🇪🇺 EuroHockey news */}
-        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
         {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
@@ -509,7 +506,7 @@ function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-        {articles.slice(0, 6).map(a => <NewsGrid3Card key={a.id} article={a} />)}
+        {articles.slice(0, 3).map(a => <NewsGrid3Card key={a.id} article={a} />)}
       </div>
     </div>
   )
