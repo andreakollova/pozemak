@@ -665,7 +665,7 @@ function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; h
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -1662,7 +1662,7 @@ function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
     <div style={{ marginBottom: 52 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
+          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
           <div style={{ height: 1, background: 'var(--border)', width: 40 }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
