@@ -521,7 +521,7 @@ function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; h
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>{title}</span>
+        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

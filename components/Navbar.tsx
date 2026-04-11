@@ -81,7 +81,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                   fontSize: 11, fontWeight: isActive ? 800 : 600,
                   letterSpacing: isActive ? 1.2 : 1,
                   textTransform: 'uppercase',
-                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                  color: isActive ? 'var(--accent)' : 'var(--text-primary)',
                   whiteSpace: 'nowrap',
                   borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
                   transition: 'color 0.15s, border-color 0.15s',
