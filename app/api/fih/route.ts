@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export const revalidate = 43200 // 2x/day
+export const revalidate = 0 // always fresh (venue time fix)
 
 // FIH JSON has strings for is_home ("0"/"1") and value ("4"), not numbers
 interface Participant {
