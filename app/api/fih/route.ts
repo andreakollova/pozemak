@@ -20,6 +20,13 @@ interface RawMatch {
   series_id: string
   game_id: string
   sr_game_id: string
+  // Potential timezone fields — may or may not be present in FIH data
+  timezone?: string
+  utc_offset?: string
+  venue_timezone?: string
+  local_start_time?: string
+  start_date_local?: string
+  [key: string]: unknown
 }
 
 export interface FIHMatch {
@@ -33,6 +40,7 @@ export interface FIHMatch {
   game_id: string
   sr_game_id: string
   series_id: string
+  venueTime?: string | null   // venue local time if available from raw data
 }
 
 function extractFixtureData(html: string): RawMatch[] {
@@ -69,20 +77,42 @@ function parseScore(v: string | null): number | null {
   return isNaN(n) ? null : n
 }
 
+function extractVenueTime(m: RawMatch): string | null {
+  // Try known field names that FIH might use for venue-local time
+  const localStr = m.local_start_time ?? m.start_date_local ?? null
+  if (localStr && typeof localStr === 'string') {
+    const t = localStr.match(/T?(\d{1,2}:\d{2})/)
+    if (t) return t[1]
+  }
+  // Try parsing timezone name and converting
+  const tz = m.timezone ?? m.venue_timezone ?? null
+  if (tz && typeof tz === 'string') {
+    try {
+      const d = new Date(m.start_date)
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: tz })
+      }
+    } catch { /* invalid tz */ }
+  }
+  return null
+}
+
 function normalizeMatch(m: RawMatch): FIHMatch {
-  const home = m.participants.find(p => p.is_home === '1' || p.is_home === 1 as unknown as string) ?? m.participants[0]
-  const away = m.participants.find(p => p.is_home !== '1' && p.is_home !== 1 as unknown as string) ?? m.participants[1]
+  // Use participants array order — FIH displays participants[0] first in URLs and UI
+  const first = m.participants[0]
+  const second = m.participants[1]
   return {
     date: m.start_date,
     gender: m.gender,
     status: normalizeStatus(m.event_status),
-    home: { name: home?.name ?? '', short: home?.short_name ?? '', score: parseScore(home?.value ?? null) },
-    away: { name: away?.name ?? '', short: away?.short_name ?? '', score: parseScore(away?.value ?? null) },
+    home: { name: first?.name ?? '', short: first?.short_name ?? '', score: parseScore(first?.value ?? null) },
+    away: { name: second?.name ?? '', short: second?.short_name ?? '', score: parseScore(second?.value ?? null) },
     venue: m.venue_name,
     tourName: m.tour_name,
     game_id: m.game_id ?? '',
     sr_game_id: m.sr_game_id ?? '',
     series_id: m.series_id ?? '',
+    venueTime: extractVenueTime(m),
   }
 }
 
@@ -103,6 +133,9 @@ export async function GET() {
       .filter(m => m.event_status === 'Yet to begin' || m.event_status === 'In Progress')
       .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
 
+    // _debug_raw: expose first upcoming raw match so we can discover available fields
+    const debugRaw = upcoming[0] ?? completed[0] ?? null
+
     return NextResponse.json({
       men: {
         recent:   completed.filter(m => m.gender === 'M').slice(0, 20).map(normalizeMatch),
@@ -112,6 +145,7 @@ export async function GET() {
         recent:   completed.filter(m => m.gender === 'F').slice(0, 20).map(normalizeMatch),
         upcoming: upcoming.filter(m => m.gender === 'F').slice(0, 20).map(normalizeMatch),
       },
+      _debug_raw: debugRaw,
     })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
