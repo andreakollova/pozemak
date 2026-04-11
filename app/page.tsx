@@ -315,10 +315,10 @@ function HeroCard({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 200).trim() + '…'
   const source = getArticleSource(article)
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 48, borderRadius: 12, overflow: 'hidden' }}
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 0, borderRadius: 12, overflow: 'hidden' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: 12 }}>
+      <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -784,7 +784,7 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
   )
 
   return (
-    <div style={{ marginBottom: 40 }}>
+    <div style={{ marginBottom: 48, background: 'var(--bg-card)', borderRadius: '0 0 12px 12px', border: '1px solid var(--border)', borderTop: 'none', padding: '14px 24px 0' }}>
       <CarouselHeader
         title="⚡ Coming Up"
         href="https://www.fih.hockey/schedule-fixtures-results"
@@ -807,9 +807,9 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
           </div>
         }
       />
-      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 16, margin: '0 -24px', paddingLeft: 24, paddingRight: 24 }}>
         {!isLoaded
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--border)', opacity: 0.4 }} />)
           : filtered.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : filtered.map(m => <CombinedMatchCard key={m.key} match={m} isResult={tab === 'results'} />)

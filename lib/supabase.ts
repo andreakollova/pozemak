@@ -109,7 +109,7 @@ export async function getVideos(category?: 'dames' | 'heren' | 'fih' | 'fih-mens
   let query = getSupabaseClient()
     .from('videos')
     .select('*')
-    .order('published_at', { ascending: false })
+    .order('scraped_at', { ascending: false })
     .limit(limit)
   if (category === 'fih') {
     query = query.in('category', ['fih', 'fih-mens', 'fih-womens'])
