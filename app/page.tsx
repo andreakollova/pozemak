@@ -148,11 +148,11 @@ export default function Home() {
       .catch(() => {})
     fetch('/api/hockey?comp=national&id=1')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setNlMen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'men' }) })
+      .then(d => { if (!d) return; const m = getMatches(d); setNlMen({ name: d.name, results: getRecentResults(m, 20), upcoming: getUpcomingMatches(m, 20), gender: 'men' }) })
       .catch(() => {})
     fetch('/api/hockey?comp=national&id=2')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setNlWomen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'women' }) })
+      .then(d => { if (!d) return; const m = getMatches(d); setNlWomen({ name: d.name, results: getRecentResults(m, 20), upcoming: getUpcomingMatches(m, 20), gender: 'women' }) })
       .catch(() => {})
   }, [])
 
@@ -566,8 +566,9 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const watchUrl = 'watchLiveUrl' in m ? m.watchLiveUrl : null
   const tourName = 'tourName' in m ? m.tourName : ''
   const logo = (t: typeof m.home) => ('logo' in t ? (t as any).logo : null)
+  const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={logo(m.home)} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
@@ -739,7 +740,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
             ? filtMatches.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches found</p>
                 : filtMatches.map(m => (
-                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '10px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${m.gender === 'M' ? '#003ad0' : '#e0336c'}`, padding: '7px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
                       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
                         <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
@@ -785,12 +786,14 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
   const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
 
-  const allResults  = [...(menData?.results ?? []),  ...(womenData?.results ?? [])] .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  const allUpcoming = [...(menData?.upcoming ?? []), ...(womenData?.upcoming ?? [])].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  type Tagged = Match & { _gender: 'men' | 'women' }
+  const tag = (ms: Match[], g: 'men' | 'women'): Tagged[] => ms.map(m => ({ ...m, _gender: g }))
+  const allResults  = [...tag(menData?.results ?? [], 'men'),  ...tag(womenData?.results ?? [], 'women')] .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const allUpcoming = [...tag(menData?.upcoming ?? [], 'men'), ...tag(womenData?.upcoming ?? [], 'women')].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   const gData   = gender === 'all' ? null : gender === 'men' ? menData : womenData
-  const matches = gender === 'all'
+  const matches: Tagged[] = gender === 'all'
     ? (tab === 'results' ? allResults : allUpcoming)
-    : gData ? (tab === 'results' ? gData.results : gData.upcoming) : []
+    : tag(gData ? (tab === 'results' ? gData.results : gData.upcoming) : [], gender as 'men' | 'women')
 
   return (
     <div style={{ marginBottom: 40 }}>
@@ -821,18 +824,21 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
           ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
-            : matches.map(m => <NLMatchCard key={m.id} match={m} isResult={tab === 'results'} />)
+            : matches.map(m => <NLMatchCard key={m.id} match={m} gender={m._gender} isResult={tab === 'results'} />)
         }
       </div>
     </div>
   )
 }
 
-function NLMatchCard({ match: m, isResult }: { match: Match; isResult: boolean }) {
+function NLMatchCard({ match: m, isResult, gender }: { match: Match; isResult: boolean; gender: 'men' | 'women' }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
+  const gColor = gender === 'men' ? '#003ad0' : '#e0336c'
+  const leagueLabel = gender === 'men' ? 'Hoofdklasse Heren' : 'Hoofdklasse Dames'
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      <span style={{ fontSize: 8, fontWeight: 700, color: gColor, opacity: 0.75, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 160 }}>{leagueLabel}</span>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
           <TeamLogo logo={m.home.logo} name={m.home.name} />
