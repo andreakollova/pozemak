@@ -333,7 +333,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
-        <FeaturedCard article={featured} />
+        <FeaturedCard article={featured} trending />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>Most Viewed Stories</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -362,7 +362,7 @@ function EditorialSection({ cfg, articles }: { cfg: CountryCfg; articles: Articl
   )
 }
 
-function FeaturedCard({ article }: { article: Article }) {
+function FeaturedCard({ article, trending }: { article: Article; trending?: boolean }) {
   const [hov, setHov] = useState(false)
   const slug = getSlug(article)
   const title = getTitle(article)
@@ -376,7 +376,8 @@ function FeaturedCard({ article }: { article: Article }) {
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
         }
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 75%)' }} />
-        <div style={{ position: 'absolute', top: 14, left: 14 }}>
+        <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 6 }}>
+          {trending && <span style={{ background: 'var(--green)', color: '#000', fontSize: 9, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>🔥 Trending</span>}
           <span style={{ background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>{source.flag} {source.country}</span>
         </div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '22px 22px' }}>
