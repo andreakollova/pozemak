@@ -77,24 +77,70 @@ function parseScore(v: string | null): number | null {
   return isNaN(n) ? null : n
 }
 
-function extractVenueTime(m: RawMatch): string | null {
-  // Try known field names that FIH might use for venue-local time
-  const localStr = m.local_start_time ?? m.start_date_local ?? null
-  if (localStr && typeof localStr === 'string') {
-    const t = localStr.match(/T?(\d{1,2}:\d{2})/)
-    if (t) return t[1]
-  }
-  // Try parsing timezone name and converting
-  const tz = m.timezone ?? m.venue_timezone ?? null
-  if (tz && typeof tz === 'string') {
-    try {
-      const d = new Date(m.start_date)
-      if (!isNaN(d.getTime())) {
-        return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: tz })
-      }
-    } catch { /* invalid tz */ }
+// Keyword → IANA timezone lookup for venue names
+const VENUE_TZ: Array<[RegExp, string]> = [
+  // Americas
+  [/santiago|chile/i,                      'America/Santiago'],
+  [/lima|peru/i,                            'America/Lima'],
+  [/buenos\s*aires|argentina/i,            'America/Argentina/Buenos_Aires'],
+  [/bogot[aá]|colombia/i,                  'America/Bogota'],
+  [/mexico\s*city|guadalajara|\bMEX\b/i,  'America/Mexico_City'],
+  [/new\s*york|new\s*jersey|usa\b|united\s*states/i, 'America/New_York'],
+  [/toronto|ontario|\bCAN\b|canada/i,      'America/Toronto'],
+  [/vancouver|british\s*columbia/i,        'America/Vancouver'],
+  [/montevideo|uruguay/i,                  'America/Montevideo'],
+  [/caracas|venezuela/i,                   'America/Caracas'],
+  // Europe
+  [/amsterdam|netherlands|nederland/i,     'Europe/Amsterdam'],
+  [/london|united\s*kingdom|\bGBR\b|\bENG\b|\bSCO\b|\bWAL\b/i, 'Europe/London'],
+  [/dublin|ireland|\bIRL\b/i,              'Europe/Dublin'],
+  [/berlin|germany|\bGER\b/i,              'Europe/Berlin'],
+  [/brussels|belgium|\bBEL\b/i,            'Europe/Brussels'],
+  [/madrid|spain|\bESP\b/i,               'Europe/Madrid'],
+  [/paris|france|\bFRA\b/i,               'Europe/Paris'],
+  [/rome|italy|\bITA\b/i,                 'Europe/Rome'],
+  [/barcelona/i,                           'Europe/Madrid'],
+  [/amsterdam/i,                           'Europe/Amsterdam'],
+  // Africa
+  [/johannesburg|pretoria|south\s*africa|\bRSA\b|\bSAF\b/i, 'Africa/Johannesburg'],
+  [/cairo|egypt|\bEGY\b/i,                'Africa/Cairo'],
+  [/nairobi|kenya|\bKEN\b/i,              'Africa/Nairobi'],
+  // Asia
+  [/tokyo|japan|\bJPN\b|oi\s*hockey/i,    'Asia/Tokyo'],
+  [/seoul|korea|\bKOR\b/i,                'Asia/Seoul'],
+  [/beijing|shanghai|china|\bCHN\b/i,     'Asia/Shanghai'],
+  [/hong\s*kong|\bHKG\b/i,               'Asia/Hong_Kong'],
+  [/taipei|taiwan|\bTPE\b/i,              'Asia/Taipei'],
+  [/bangkok|thailand|\bTHA\b/i,           'Asia/Bangkok'],
+  [/kuala\s*lumpur|malaysia|\bMAS\b/i,    'Asia/Kuala_Lumpur'],
+  [/jakarta|indonesia|\bINA\b/i,          'Asia/Jakarta'],
+  [/singapore|\bSIN\b|\bSGP\b/i,         'Asia/Singapore'],
+  [/new\s*delhi|mumbai|india|\bIND\b/i,   'Asia/Kolkata'],
+  [/dhaka|bangladesh|\bBAN\b|\bBGD\b/i,   'Asia/Dhaka'],
+  [/karachi|lahore|pakistan|\bPAK\b/i,    'Asia/Karachi'],
+  [/colombo|sri\s*lanka|\bSRI\b/i,        'Asia/Colombo'],
+  [/muscat|oman|\bOMA\b/i,               'Asia/Muscat'],
+  [/tashkent|uzbekistan|\bUZB\b/i,        'Asia/Tashkent'],
+  // Oceania
+  [/sydney|melbourne|brisbane|australia|\bAUS\b/i, 'Australia/Sydney'],
+  [/auckland|new\s*zealand|\bNZL\b/i,     'Pacific/Auckland'],
+]
+
+function venueTimezone(venueName: string): string | null {
+  for (const [re, tz] of VENUE_TZ) {
+    if (re.test(venueName)) return tz
   }
   return null
+}
+
+function extractVenueTime(m: RawMatch): string | null {
+  const tz = venueTimezone(m.venue_name ?? '')
+  if (!tz) return null
+  try {
+    const d = new Date(m.start_date)
+    if (isNaN(d.getTime())) return null
+    return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: tz })
+  } catch { return null }
 }
 
 function normalizeMatch(m: RawMatch): FIHMatch {
