@@ -198,7 +198,7 @@ export default function Home() {
           <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
         )}
 
-        {/* Articles — GB + AU/DE + Belgium */}
+        {/* Articles — GB + AU/DE */}
         <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
           {(byCountry['Great Britain']?.length ?? 0) > 0 && (
             <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 3)} noMargin />
@@ -213,36 +213,38 @@ export default function Home() {
               )}
             </div>
           )}
-          {(byCountry['Belgium']?.length ?? 0) > 0 && (
-            <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
-          )}
         </div>
 
-        {/* 🇪🇸 Spain + 🇦🇷 Argentina — side by side scroll */}
-        {((byCountry['Spain']?.length ?? 0) > 0 || (byCountry['Argentina']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
-            {(byCountry['Spain']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 6)} cardHeight={130} /></div>
-            )}
-            {(byCountry['Argentina']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 6)} cardHeight={130} /></div>
-            )}
-          </div>
+        {/* 🇪🇸 Spain — full width, 3 articles */}
+        {(byCountry['Spain']?.length ?? 0) > 0 && (
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 3)} />
         )}
 
-        {/* 🇮🇪 Ireland — 2-column image grid */}
-        {(byCountry['Ireland']?.length ?? 0) > 0 && (
-          <Grid2Section cfg={COUNTRIES.find(c => c.name === 'Ireland')!} articles={byCountry['Ireland'].slice(0, 2)} />
+        {/* 🇦🇷 Argentina — full width, 3 articles */}
+        {(byCountry['Argentina']?.length ?? 0) > 0 && (
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 3)} />
         )}
 
-        {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇳 India — side by side scroll */}
-        {((byCountry['Scotland']?.length ?? 0) > 0 || (byCountry['India']?.length ?? 0) > 0) && (
+        {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇪 Ireland — side by side */}
+        {((byCountry['Scotland']?.length ?? 0) > 0 || (byCountry['Ireland']?.length ?? 0) > 0) && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['Scotland']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Scotland')!} articles={byCountry['Scotland'].slice(0, 6)} cardHeight={130} /></div>
             )}
+            {(byCountry['Ireland']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Ireland')!} articles={byCountry['Ireland'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+          </div>
+        )}
+
+        {/* 🇮🇳 India + 🇧🇪 Belgium — side by side */}
+        {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Belgium']?.length ?? 0) > 0) && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['India']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+            {(byCountry['Belgium']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
         )}
