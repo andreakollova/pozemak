@@ -312,11 +312,8 @@ export default function Home() {
         {/* 🏑 FIH Hockey news articles — 3 columns */}
         <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
 
-        {/* 🌍 FIH International matches (Intl + Pro League combined) */}
-        <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} />
-
-        {/* 🏆 FIH Hockey World Cup 2026 */}
-        <FIHWorldCupCarousel data={wcData} />
+        {/* 🌍 FIH International matches (Intl + Pro League + World Cup) */}
+        <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} wcData={wcData} />
 
         {/* 🇪🇺 EuroHockey news articles — 3 columns */}
         <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
@@ -339,7 +336,7 @@ function SectionHeader({ cfg, scrollRef }: { cfg: CountryCfg; scrollRef?: React.
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <span style={{ fontSize: 20 }}>{cfg.flag}</span>
-        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3 }}>{cfg.name}</span>
+        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3 }}>{cfg.name}</span>
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -400,7 +397,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
+        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
@@ -525,7 +522,7 @@ function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string
     <div style={{ marginBottom: 56 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <span style={{ fontSize: 20 }}>{flag}</span>
-        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
+        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
@@ -668,7 +665,7 @@ function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; h
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
+        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -768,6 +765,7 @@ interface NormMatch {
   home: { name: string; short: string; score: number | null; logo?: string | null }
   away: { name: string; short: string; score: number | null; logo?: string | null }
   tourName: string
+  pool?: string | null
   watchUrl?: string | null
   moreUrl?: string | null
   eventUrl?: string | null
@@ -809,6 +807,17 @@ function normEuro(m: EuroMatch): NormMatch {
   }
 }
 
+function normWC(m: WCMatch): NormMatch {
+  return {
+    key: normKey(m.date, m.home.short, m.away.short, m.gender),
+    date: m.date, gender: m.gender, status: m.status,
+    home: { ...m.home }, away: { ...m.away },
+    tourName: 'WC 2026', pool: m.pool || null,
+    venueTime: m.venueTime,
+    moreUrl: 'https://www.fih.hockey/events/fih-hockey-worldcup-belgium-netherlands-2026/schedule-fixtures-results',
+  }
+}
+
 function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult: boolean }) {
   const homeWon    = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
   const awayWon    = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
@@ -818,6 +827,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
   const myTime     = fmtLocalTime(m.date)
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={m.home.logo} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44, gap: 4 }}>
@@ -937,21 +947,28 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
   )
 }
 
-function FIHCombinedCarousel({ fihData, proLeagueData }: { fihData: FIHData | null; proLeagueData: ProLeagueData | null }) {
+function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihData: FIHData | null; proLeagueData: ProLeagueData | null; wcData: WCData | null }) {
   const ref = useRef<HTMLDivElement>(null)
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
   const [tab,    setTab]    = useState<'recent' | 'upcoming'>('recent')
-  const [source, setSource] = useState<'all' | 'intl' | 'pro'>('all')
+  const [source, setSource] = useState<'all' | 'intl' | 'pro' | 'wc'>('all')
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
 
-  const intlRecent   = fihData   ? [...fihData.men.recent,   ...fihData.women.recent]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
-  const intlUpcoming = fihData   ? [...fihData.men.upcoming, ...fihData.women.upcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
-  const proRecent    = proLeagueData ? [...proLeagueData.men.recent,   ...proLeagueData.women.recent]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
-  const proUpcoming  = proLeagueData ? [...proLeagueData.men.upcoming, ...proLeagueData.women.upcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const byDateDesc = (a: NormMatch, b: NormMatch) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  const byDateAsc  = (a: NormMatch, b: NormMatch) => new Date(a.date).getTime() - new Date(b.date).getTime()
 
-  const pool = tab === 'recent'
-    ? (source === 'intl' ? intlRecent : source === 'pro' ? proRecent : [...intlRecent, ...proRecent].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()))
-    : (source === 'intl' ? intlUpcoming : source === 'pro' ? proUpcoming : [...intlUpcoming, ...proUpcoming].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
+  const intlRecent   = fihData        ? [...fihData.men.recent,            ...fihData.women.recent]           .map(normFIH).sort(byDateDesc) : []
+  const intlUpcoming = fihData        ? [...fihData.men.upcoming,          ...fihData.women.upcoming]         .map(normFIH).sort(byDateAsc)  : []
+  const proRecent    = proLeagueData  ? [...proLeagueData.men.recent,      ...proLeagueData.women.recent]     .map(normPro).sort(byDateDesc) : []
+  const proUpcoming  = proLeagueData  ? [...proLeagueData.men.upcoming,    ...proLeagueData.women.upcoming]   .map(normPro).sort(byDateAsc)  : []
+  const wcRecent     = wcData         ? [...wcData.men.recent,             ...wcData.women.recent]            .map(normWC).sort(byDateDesc)  : []
+  const wcUpcoming   = wcData         ? [...wcData.men.upcoming,           ...wcData.women.upcoming]          .map(normWC).sort(byDateAsc)   : []
+
+  const pool: NormMatch[] = tab === 'recent'
+    ? source === 'intl' ? intlRecent  : source === 'pro' ? proRecent  : source === 'wc' ? wcRecent
+      : [...intlRecent, ...proRecent, ...wcRecent].sort(byDateDesc)
+    : source === 'intl' ? intlUpcoming : source === 'pro' ? proUpcoming : source === 'wc' ? wcUpcoming
+      : [...intlUpcoming, ...proUpcoming, ...wcUpcoming].sort(byDateAsc)
 
   const matches = gender === 'all' ? pool : pool.filter(m => m.gender === gender)
 
@@ -966,6 +983,7 @@ function FIHCombinedCarousel({ fihData, proLeagueData }: { fihData: FIHData | nu
             <TabPill active={source === 'all'}  onClick={() => setSource('all')}  label="All" />
             <TabPill active={source === 'intl'} onClick={() => setSource('intl')} label="Intl" />
             <TabPill active={source === 'pro'}  onClick={() => setSource('pro')}  label="Pro League" />
+            <TabPill active={source === 'wc'}   onClick={() => setSource('wc')}   label="World Cup" />
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="Men+Women" />
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
@@ -983,11 +1001,11 @@ function FIHCombinedCarousel({ fihData, proLeagueData }: { fihData: FIHData | nu
         }
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
-        {(!fihData && !proLeagueData)
+        {(!fihData && !proLeagueData && !wcData)
           ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
-            : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
+            : matches.map((m, i) => <CombinedMatchCard key={i} match={m} isResult={tab === 'recent'} />)
         }
       </div>
     </div>
@@ -1644,7 +1662,7 @@ function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
     <div style={{ marginBottom: 52 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
+          <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
           <div style={{ height: 1, background: 'var(--border)', width: 40 }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
