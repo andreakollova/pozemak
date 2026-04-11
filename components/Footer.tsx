@@ -111,7 +111,7 @@ export default function Footer() {
               Report inappropriate content
             </h3>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, margin: '0 0 28px', maxWidth: 420 }}>
-              Help us keep the community fair and respectful – report racism, offensive language, copyright violations, or errors in articles.
+              Help us keep the community fair and respectful – report racism, offensive language, copyright violations, or errors in articles and comments.
             </p>
             <Link
               href="/contact"
