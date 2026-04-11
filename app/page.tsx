@@ -28,11 +28,33 @@ interface ProLeagueGenderData { recent: ProLeagueMatch[]; upcoming: ProLeagueMat
 interface ProLeagueData { men: ProLeagueGenderData; women: ProLeagueGenderData; watchLiveUrl: string | null }
 
 interface EuroEvent {
-  id: number; name: string; gender: 'M' | 'F'; startDate: string; endDate: string
+  id: string; name: string; gender: 'M' | 'F'; startDate: string; endDate: string
   location: string; status: 'upcoming' | 'ongoing' | 'completed'
   eventUrl: string; watchUrl: string
 }
-interface EuroData { upcoming: EuroEvent[]; ongoing: EuroEvent[] }
+interface EuroMatch {
+  id: string; tournamentName: string; gender: 'M' | 'F'; date: string
+  status: 'upcoming' | 'live' | 'completed'
+  home: { name: string; code: string; logo: string | null; score: number | null }
+  away: { name: string; code: string; logo: string | null; score: number | null }
+  location: string; eventUrl: string; watchUrl: string
+}
+interface EuroData { matches: EuroMatch[]; tournaments: EuroEvent[] }
+
+/* ─── Country short-code → flag emoji ───────────────────────────────────── */
+const FLAG: Record<string, string> = {
+  NED:'🇳🇱', GBR:'🇬🇧', AUS:'🇦🇺', GER:'🇩🇪', BEL:'🇧🇪', ESP:'🇪🇸', ARG:'🇦🇷',
+  IND:'🇮🇳', NZL:'🇳🇿', RSA:'🇿🇦', IRL:'🇮🇪', CAN:'🇨🇦', USA:'🇺🇸', CHN:'🇨🇳',
+  JPN:'🇯🇵', KOR:'🇰🇷', PAK:'🇵🇰', MAS:'🇲🇾', FRA:'🇫🇷', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', WAL:'🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+  AUT:'🇦🇹', POL:'🇵🇱', CZE:'🇨🇿', SUI:'🇨🇭', UKR:'🇺🇦', TPE:'🇹🇼', BAN:'🇧🇩',
+  SRI:'🇱🇰', UZB:'🇺🇿', THA:'🇹🇭', SIN:'🇸🇬', HKG:'🇭🇰', OMA:'🇴🇲', KAZ:'🇰🇿',
+  AZE:'🇦🇿', LTU:'🇱🇹', CRO:'🇭🇷', SVK:'🇸🇰', TUR:'🇹🇷', ITA:'🇮🇹', POR:'🇵🇹',
+  GRE:'🇬🇷', ROM:'🇷🇴', HUN:'🇭🇺', DEN:'🇩🇰', SWE:'🇸🇪', NOR:'🇳🇴', FIN:'🇫🇮',
+  LAT:'🇱🇻', CHL:'🇨🇱', MEX:'🇲🇽', URU:'🇺🇾', EGY:'🇪🇬', GHA:'🇬🇭', KEN:'🇰🇪',
+  ZIM:'🇿🇼', NGR:'🇳🇬', BLR:'🇧🇾', RUS:'🇷🇺', MGL:'🇲🇳', MYA:'🇲🇲', SGP:'🇸🇬',
+  VIE:'🇻🇳', PHI:'🇵🇭', INA:'🇮🇩', IRN:'🇮🇷',
+}
+function flag(short: string) { return FLAG[short?.toUpperCase()] ?? '' }
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -525,50 +547,51 @@ function TabPill({ active, onClick, label }: { active: boolean; onClick: () => v
   )
 }
 
-function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeagueMatch; isResult: boolean }) {
-  const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
-  const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
-  const isLive  = m.status === 'live'
-  const watchUrl = 'watchLiveUrl' in m ? m.watchLiveUrl : null
+function TeamCell({ short, name, won, logo }: { short: string; name: string; won: boolean; logo?: string | null }) {
+  const f = flag(short)
   return (
-    <div style={{ flexShrink: 0, width: 176, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      {/* Teams row */}
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
+      <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+        {logo
+          ? <img src={logo} alt={name} style={{ width: 28, height: 28, objectFit: 'contain' }} />
+          : f
+            ? <span style={{ fontSize: 22, lineHeight: 1 }}>{f}</span>
+            : <span style={{ fontSize: 11, fontWeight: 900, color: 'var(--text-primary)' }}>{short.slice(0,3).toUpperCase()}</span>
+        }
+      </div>
+      <span style={{ fontSize: 10, fontWeight: won ? 800 : 400, color: won ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 64 }}>
+        {short || name}
+      </span>
+    </div>
+  )
+}
+
+function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeagueMatch; isResult: boolean }) {
+  const homeWon  = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
+  const awayWon  = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
+  const isLive   = m.status === 'live'
+  const watchUrl = 'watchLiveUrl' in m ? m.watchLiveUrl : null
+  const tourName = 'tourName' in m ? m.tourName : ''
+  const logo = (t: typeof m.home) => ('logo' in t ? (t as any).logo : null)
+  return (
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
-        {/* Home */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: 'var(--text-primary)' }}>
-            {(m.home.short || m.home.name).slice(0, 3).toUpperCase()}
-          </div>
-          <span style={{ fontSize: 10, fontWeight: homeWon ? 800 : 400, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 62 }}>
-            {m.home.short || m.home.name}
-          </span>
-        </div>
-        {/* Score / vs */}
+        <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={logo(m.home)} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
             : isResult && m.home.score !== null && m.away.score !== null
-              ? <span style={{ fontSize: 20, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+              ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
               : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
           {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
         </div>
-        {/* Away */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: 'var(--text-primary)' }}>
-            {(m.away.short || m.away.name).slice(0, 3).toUpperCase()}
-          </div>
-          <span style={{ fontSize: 10, fontWeight: awayWon ? 800 : 400, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 62 }}>
-            {m.away.short || m.away.name}
-          </span>
-        </div>
+        <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={logo(m.away)} />
       </div>
-      {/* Date + venue */}
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {'tourName' in m && m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.6, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 148, marginTop: 1 }}>{m.tourName}</span>}
+        {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
-      {/* Watch live link (Pro League upcoming) */}
       {!isResult && watchUrl && (
         <a href={watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 10px', borderRadius: 10, letterSpacing: 0.5 }}>▶ Watch Live</a>
       )}
@@ -663,9 +686,13 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
 function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
   const ref = useRef<HTMLDivElement>(null)
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
-  const combined  = data ? [...(data.ongoing ?? []), ...(data.upcoming ?? [])] : []
-  const events    = gender === 'all' ? combined : combined.filter(e => e.gender === gender)
-  const scroll    = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+  const [tab, setTab]       = useState<'matches' | 'tournaments'>('matches')
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  const matches     = data?.matches ?? []
+  const tournaments = data?.tournaments ?? []
+  const filtMatches = gender === 'all' ? matches : matches.filter(m => m.gender === gender)
+  const filtTours   = gender === 'all' ? tournaments : tournaments.filter(t => t.gender === gender)
 
   function fmtDateRange(start: string, end: string) {
     const s = new Date(start), e = new Date(end)
@@ -683,6 +710,8 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
         hrefLabel="Calendar"
         controls={
           <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={tab === 'matches'}     onClick={() => setTab('matches')}     label="Matches" />
+            <TabPill active={tab === 'tournaments'} onClick={() => setTab('tournaments')} label="Tournaments" />
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
@@ -699,31 +728,54 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 196, height: 130, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
-          : events.length === 0
-            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming events</p>
-            : events.map(e => (
-                <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 14, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
-                  <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
-                  <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'}</span>
-                  <span style={{ fontSize: 10, color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.location}</span>
-                  <span style={{ fontSize: 9, color: 'var(--text-secondary)', opacity: 0.7 }}>{fmtDateRange(e.startDate, e.endDate)}</span>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
-                    <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 8 }}>Info →</a>
-                    <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 8 }}>Watch →</a>
-                  </div>
-                </div>
-              ))
+          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : tab === 'matches'
+            ? filtMatches.length === 0
+                ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches available — select Tournaments to see upcoming events</p>
+                : filtMatches.map(m => (
+                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '10px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                      <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
+                        <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+                          {m.status === 'completed' && m.home.score !== null && m.away.score !== null
+                            ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+                            : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+                          }
+                          {m.status === 'completed' && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+                        </div>
+                        <TeamCell short={m.away.code} name={m.away.name} won={m.status === 'completed' && (m.away.score ?? 0) > (m.home.score ?? 0)} logo={m.away.logo} />
+                      </div>
+                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? fmtMatchDate(m.date) : ''}</span>
+                      <div style={{ display: 'flex', gap: 5 }}>
+                        <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 6 }}>Info →</a>
+                        <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: 6 }}>Watch →</a>
+                      </div>
+                    </div>
+                  ))
+            : filtTours.length === 0
+                ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming tournaments</p>
+                : filtTours.map(e => (
+                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 14, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
+                      <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
+                      <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'} · {e.location}</span>
+                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', opacity: 0.7 }}>{fmtDateRange(e.startDate, e.endDate)}</span>
+                      <div style={{ display: 'flex', gap: 5, marginTop: 2 }}>
+                        <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 8 }}>Info →</a>
+                        <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 8 }}>Watch →</a>
+                      </div>
+                    </div>
+                  ))
         }
       </div>
     </div>
   )
 }
 
-/* ─── FIH International — sidebar ───────────────────────────────────────── */
+/* ─── (sidebar FIH/Euro sections removed — now full-width carousels) ──────── */
 
-function FIHIntlSection({ data }: { data: FIHData | null }) {
+function _unusedFIHIntlSection({ data }: { data: FIHData | null }) {
   const [gender, setGender] = useState<'M' | 'F'>('M')
   const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
 
@@ -812,10 +864,10 @@ function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
 
 /* ─── EuroHockey tournaments — sidebar ──────────────────────────────────── */
 
-function EuroHockeySection({ data }: { data: EuroData | null }) {
+function _unusedEuroHockeySection({ data }: { data: EuroData | null }) {
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
 
-  const combined = data ? [...(data.ongoing ?? []), ...(data.upcoming ?? [])] : []
+  const combined = data ? [...(data.tournaments ?? [])] : []
   const filtered = gender === 'all' ? combined : combined.filter(e => e.gender === gender)
 
   function fmtDateRange(start: string, end: string) {
