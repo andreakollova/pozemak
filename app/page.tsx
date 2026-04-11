@@ -215,14 +215,14 @@ export default function Home() {
           )}
         </div>
 
-        {/* 🇪🇸 Spain — full width, 3 articles */}
-        {(byCountry['Spain']?.length ?? 0) > 0 && (
-          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 10)} />
-        )}
-
-        {/* 🇦🇷 Argentina — full width, 3 articles */}
+        {/* 🇦🇷 Argentina — full width */}
         {(byCountry['Argentina']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 10)} />
+        )}
+
+        {/* 🇪🇸 Spain — full width */}
+        {(byCountry['Spain']?.length ?? 0) > 0 && (
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 10)} />
         )}
 
         {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇪 Ireland — side by side */}
