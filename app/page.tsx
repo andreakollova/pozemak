@@ -318,11 +318,11 @@ export default function Home() {
           </div>
         )}
 
+        {/* 🇪🇺 EuroHockey news articles — 3 columns, below Ireland */}
+        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
+
         {/* 🏑 FIH Hockey news articles — 3 columns */}
         <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
-
-        {/* 🇪🇺 EuroHockey news articles — 3 columns */}
-        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
         {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
