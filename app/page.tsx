@@ -50,9 +50,9 @@ const FLAG: Record<string, string> = {
   SRI:'🇱🇰', UZB:'🇺🇿', THA:'🇹🇭', SIN:'🇸🇬', HKG:'🇭🇰', OMA:'🇴🇲', KAZ:'🇰🇿',
   AZE:'🇦🇿', LTU:'🇱🇹', CRO:'🇭🇷', SVK:'🇸🇰', TUR:'🇹🇷', ITA:'🇮🇹', POR:'🇵🇹',
   GRE:'🇬🇷', ROM:'🇷🇴', HUN:'🇭🇺', DEN:'🇩🇰', SWE:'🇸🇪', NOR:'🇳🇴', FIN:'🇫🇮',
-  LAT:'🇱🇻', CHL:'🇨🇱', MEX:'🇲🇽', URU:'🇺🇾', EGY:'🇪🇬', GHA:'🇬🇭', KEN:'🇰🇪',
-  ZIM:'🇿🇼', NGR:'🇳🇬', BLR:'🇧🇾', RUS:'🇷🇺', MGL:'🇲🇳', MYA:'🇲🇲', SGP:'🇸🇬',
-  VIE:'🇻🇳', PHI:'🇵🇭', INA:'🇮🇩', IRN:'🇮🇷',
+  LAT:'🇱🇻', CHL:'🇨🇱', CHI:'🇨🇱', MEX:'🇲🇽', URU:'🇺🇾', VEN:'🇻🇪', BRA:'🇧🇷',
+  EGY:'🇪🇬', GHA:'🇬🇭', KEN:'🇰🇪', ZIM:'🇿🇼', NGR:'🇳🇬', BLR:'🇧🇾', RUS:'🇷🇺',
+  MGL:'🇲🇳', MYA:'🇲🇲', SGP:'🇸🇬', VIE:'🇻🇳', PHI:'🇵🇭', INA:'🇮🇩', IRN:'🇮🇷',
 }
 function flag(short: string) { return FLAG[short?.toUpperCase()] ?? '' }
 
@@ -655,11 +655,13 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
         href="https://www.fih.hockey/events/fih-pro-league/schedule-fixtures-results"
         hrefLabel="FIH"
         controls={
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <TabPill active={gender === 'M'} onClick={() => setGender('M')} label="Men" />
             <TabPill active={gender === 'F'} onClick={() => setGender('F')} label="Women" />
             <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            <a href={data?.watchLiveUrl ?? 'https://www.fih.hockey/watch'} target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: 16, textDecoration: 'none', lineHeight: 1 }} title="Watch live">📺</a>
             {(['left','right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
