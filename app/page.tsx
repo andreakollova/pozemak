@@ -8,6 +8,32 @@ import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, get
 import { Play, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import type { Match, Poule } from '@/lib/hockey-api'
 
+/* ─── FIH / EuroHockey types ─────────────────────────────────────────────── */
+interface FIHMatch {
+  date: string; gender: 'M' | 'F'; status: 'upcoming' | 'live' | 'completed' | 'cancelled'
+  home: { name: string; short: string; score: number | null }
+  away: { name: string; short: string; score: number | null }
+  venue: string; tourName: string
+}
+interface FIHGenderData { recent: FIHMatch[]; upcoming: FIHMatch[] }
+interface FIHData { men: FIHGenderData; women: FIHGenderData }
+
+interface ProLeagueMatch {
+  date: string; gender: 'M' | 'F'; status: string
+  home: { name: string; short: string; score: number | null }
+  away: { name: string; short: string; score: number | null }
+  venue: string; watchLiveUrl: string | null
+}
+interface ProLeagueGenderData { recent: ProLeagueMatch[]; upcoming: ProLeagueMatch[] }
+interface ProLeagueData { men: ProLeagueGenderData; women: ProLeagueGenderData; watchLiveUrl: string | null }
+
+interface EuroEvent {
+  id: number; name: string; gender: 'M' | 'F'; startDate: string; endDate: string
+  location: string; status: 'upcoming' | 'ongoing' | 'completed'
+  eventUrl: string; watchUrl: string
+}
+interface EuroData { upcoming: EuroEvent[]; ongoing: EuroEvent[] }
+
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
   const h = Math.floor(diff / 3600000)
@@ -61,10 +87,11 @@ export default function Home() {
   const [herenVideos, setHerenVideos] = useState<Video[]>([])
   const [fihVideos,   setFihVideos]   = useState<Video[]>([])
   const [loading, setLoading]         = useState(true)
-  const [intlMen,   setIntlMen]       = useState<MatchData | null>(null)
-  const [intlWomen, setIntlWomen]     = useState<MatchData | null>(null)
-  const [nlMen,     setNlMen]         = useState<MatchData | null>(null)
-  const [nlWomen,   setNlWomen]       = useState<MatchData | null>(null)
+  const [fihData,       setFihData]       = useState<FIHData | null>(null)
+  const [proLeagueData, setProLeagueData] = useState<ProLeagueData | null>(null)
+  const [euroData,      setEuroData]      = useState<EuroData | null>(null)
+  const [nlMen,         setNlMen]         = useState<MatchData | null>(null)
+  const [nlWomen,       setNlWomen]       = useState<MatchData | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -82,13 +109,17 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    fetch('/api/hockey?comp=international&id=44')
+    fetch('/api/fih')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setIntlMen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'men' }) })
+      .then(d => { if (d) setFihData(d) })
       .catch(() => {})
-    fetch('/api/hockey?comp=international&id=45')
+    fetch('/api/fih-pro-league')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setIntlWomen({ name: d.name, results: getRecentResults(m, 5), upcoming: getUpcomingMatches(m, 5), gender: 'women' }) })
+      .then(d => { if (d) setProLeagueData(d) })
+      .catch(() => {})
+    fetch('/api/eurohockey')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setEuroData(d) })
       .catch(() => {})
     fetch('/api/hockey?comp=national&id=1')
       .then(r => r.ok ? r.json() : null)
@@ -159,7 +190,9 @@ export default function Home() {
           </div>
           {/* Right: sticky sidebar — International + League stacked */}
           <div style={{ position: 'sticky', top: 20, alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <IntlMatchSection menData={intlMen} womenData={intlWomen} />
+            <FIHIntlSection data={fihData} />
+            <FIHProLeagueSection data={proLeagueData} />
+            <EuroHockeySection data={euroData} />
             <LeagueMatchSection
               countries={[
                 { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
@@ -465,7 +498,185 @@ function Grid2Card({ article }: { article: Article }) {
   )
 }
 
-/* ─── International matches — sidebar ───────────────────────────────────── */
+/* ─── FIH International — sidebar ───────────────────────────────────────── */
+
+function FIHIntlSection({ data }: { data: FIHData | null }) {
+  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
+
+  const gData = data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+
+  return (
+    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🌍 FIH International</span>
+        <a href="https://www.fih.hockey/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
+      </div>
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
+        {(['M', 'F'] as const).map(g => (
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '9px', border: 'none', borderBottom: gender === g ? '2px solid #003ad0' : '2px solid transparent', background: '#fff', color: gender === g ? '#003ad0' : '#aaa', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s', marginBottom: -1 }}>
+            {g === 'M' ? 'Men' : 'Women'}
+          </button>
+        ))}
+      </div>
+      <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
+        {(['recent', 'upcoming'] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+            {t === 'recent' ? 'Results' : 'Upcoming'}
+          </button>
+        ))}
+      </div>
+      <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {!data
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <FIHMatchRow key={i} match={m} isResult={tab === 'recent'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+/* ─── FIH Pro League — sidebar ───────────────────────────────────────────── */
+
+function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
+  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
+
+  const gData = data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+
+  return (
+    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🏆 FIH Pro League</span>
+        <a href="https://www.fih.hockey/events/fih-pro-league/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
+      </div>
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
+        {(['M', 'F'] as const).map(g => (
+          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '9px', border: 'none', borderBottom: gender === g ? '2px solid #003ad0' : '2px solid transparent', background: '#fff', color: gender === g ? '#003ad0' : '#aaa', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s', marginBottom: -1 }}>
+            {g === 'M' ? 'Men' : 'Women'}
+          </button>
+        ))}
+      </div>
+      <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
+        {(['recent', 'upcoming'] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+            {t === 'recent' ? 'Results' : 'Upcoming'}
+          </button>
+        ))}
+      </div>
+      <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {!data
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <FIHMatchRow key={i} match={m} isResult={tab === 'recent'} watchLiveUrl={tab === 'upcoming' ? m.watchLiveUrl : null} />)
+        }
+      </div>
+      {data?.watchLiveUrl && tab === 'upcoming' && (
+        <div style={{ padding: '0 12px 12px' }}>
+          <a href={data.watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', fontSize: 11, fontWeight: 700, color: '#003ad0', background: '#f0f4ff', borderRadius: 10, padding: '9px', textDecoration: 'none', letterSpacing: 0.5 }}>
+            ▶ Watch Live
+          </a>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ─── EuroHockey tournaments — sidebar ──────────────────────────────────── */
+
+function EuroHockeySection({ data }: { data: EuroData | null }) {
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
+
+  const combined = data ? [...(data.ongoing ?? []), ...(data.upcoming ?? [])] : []
+  const filtered = gender === 'all' ? combined : combined.filter(e => e.gender === gender)
+
+  function fmtDateRange(start: string, end: string) {
+    const s = new Date(start), e = new Date(end)
+    const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
+    if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth())
+      return `${s.getDate()}–${e.toLocaleDateString('en-GB', opts)} ${e.getFullYear()}`
+    return `${s.toLocaleDateString('en-GB', opts)} – ${e.toLocaleDateString('en-GB', opts)}`
+  }
+
+  return (
+    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🇪🇺 EuroHockey</span>
+        <a href="https://eurohockey.org/calendar" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>Calendar →</a>
+      </div>
+      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
+        {([['all', 'All'], ['M', 'Men'], ['F', 'Women']] as const).map(([g, label]) => (
+          <button key={g} onClick={() => setGender(g as 'M' | 'F' | 'all')} style={{ flex: 1, padding: '9px', border: 'none', borderBottom: gender === g ? '2px solid #003ad0' : '2px solid transparent', background: '#fff', color: gender === g ? '#003ad0' : '#aaa', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s', marginBottom: -1 }}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {!data
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 58, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          : filtered.length === 0
+            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No upcoming events</p>
+            : filtered.slice(0, 6).map(e => (
+                <div key={e.id} style={{ borderRadius: 10, padding: '10px 12px', background: e.status === 'ongoing' ? '#fff8f0' : '#fafafa', border: `1px solid ${e.status === 'ongoing' ? '#ffd6a5' : '#eef0f4'}` }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
+                    <div style={{ minWidth: 0 }}>
+                      {e.status === 'ongoing' && <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, color: '#e07000', textTransform: 'uppercase', display: 'block', marginBottom: 2 }}>● Live now</span>}
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#222', display: 'block', lineHeight: 1.3 }}>{e.name}</span>
+                      <span style={{ fontSize: 10, color: '#999', display: 'block', marginTop: 2 }}>{e.gender === 'M' ? '♂' : '♀'} · {e.location}</span>
+                      <span style={{ fontSize: 10, color: '#bbb', display: 'block' }}>{fmtDateRange(e.startDate, e.endDate)}</span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
+                      <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '3px 8px', borderRadius: 6, whiteSpace: 'nowrap' }}>Info →</a>
+                      <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: '#555', textDecoration: 'none', background: '#f4f5f8', padding: '3px 8px', borderRadius: 6, whiteSpace: 'nowrap' }}>Watch →</a>
+                    </div>
+                  </div>
+                </div>
+              ))
+        }
+      </div>
+    </div>
+  )
+}
+
+/* ─── FIH Match Row (no logos, uses short names) ─────────────────────────── */
+
+function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | ProLeagueMatch; isResult: boolean; watchLiveUrl?: string | null }) {
+  const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
+  const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
+  const isLive  = m.status === 'live'
+  return (
+    <div style={{ borderRadius: 10, padding: '10px 8px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid #f0f2f5' }}>
+      <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px', fontSize: 11, fontWeight: 900, color: '#333' }}>{(m.home.short || m.home.name)[0]}</div>
+        <span style={{ fontSize: 10, fontWeight: homeWon ? 700 : 400, color: homeWon ? '#111' : '#888', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.short || m.home.name}</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, flexShrink: 0, minWidth: 52 }}>
+        {isLive
+          ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e00', letterSpacing: 1, textTransform: 'uppercase' }}>● Live</span>
+          : isResult && m.home.score !== null && m.away.score !== null
+            ? <span style={{ fontSize: 17, fontWeight: 800, color: '#111', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+            : <span style={{ fontSize: 11, fontWeight: 500, color: '#bbb' }}>vs</span>
+        }
+        <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}</span>
+        {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: '#bbb', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
+        {watchLiveUrl && (
+          <a href={watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>▶ Watch</a>
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px', fontSize: 11, fontWeight: 900, color: '#333' }}>{(m.away.short || m.away.name)[0]}</div>
+        <span style={{ fontSize: 10, fontWeight: awayWon ? 700 : 400, color: awayWon ? '#111' : '#888', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.away.short || m.away.name}</span>
+      </div>
+    </div>
+  )
+}
+
+/* ─── League Match Section (Netherlands etc.) ────────────────────────────── */
 // ── League Match Section ──────────────────────────────────────────────────────
 
 interface LeagueCountry { key: string; flag: string; label: string; men: MatchData | null; women: MatchData | null }
@@ -528,56 +739,6 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
   )
 }
 
-// ── International Match Section ───────────────────────────────────────────────
-
-function IntlMatchSection({ menData, womenData }: { menData: MatchData | null; womenData: MatchData | null }) {
-  const [gender, setGender] = useState<'men' | 'women'>('men')
-  const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
-
-  const data = gender === 'men' ? menData : womenData
-  const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
-
-  return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
-
-      {/* Header */}
-      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>International</span>
-        <Link href="/competition" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>View all →</Link>
-      </div>
-
-      {/* Men / Women tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid #eef0f4' }}>
-        {(['men', 'women'] as const).map(g => (
-          <button key={g} onClick={() => setGender(g)} style={{ flex: 1, padding: '9px', border: 'none', borderBottom: gender === g ? '2px solid #003ad0' : '2px solid transparent', background: '#fff', color: gender === g ? '#003ad0' : '#aaa', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s', marginBottom: -1 }}>
-            {g === 'men' ? 'Men' : 'Women'}
-          </button>
-        ))}
-      </div>
-
-      {/* Results / Upcoming tabs */}
-      <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
-        {(['results', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
-            {t === 'results' ? 'Results' : 'Upcoming'}
-          </button>
-        ))}
-      </div>
-
-      {/* Match list */}
-      <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {!data
-          ? [...Array(3)].map((_, i) => (
-              <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', animation: 'pulse 1.5s ease-in-out infinite', opacity: 0.6 }} />
-            ))
-          : matches.length === 0
-            ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
-            : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
-        }
-      </div>
-    </div>
-  )
-}
 
 function MatchRow({ match: m, isResult }: { match: Match; isResult: boolean }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
