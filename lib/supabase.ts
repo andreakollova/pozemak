@@ -78,6 +78,8 @@ export function getArticleSource(article: Article): { flag: string; country: str
   if (url.includes('hockey.de'))           return { flag: '🇩🇪', country: 'Germany', name: 'Hockey Germany' }
   if (url.includes('hockey.be'))           return { flag: '🇧🇪', country: 'Belgium', name: 'Hockey Belgium' }
   if (url.includes('hockeyindia'))         return { flag: '🇮🇳', country: 'India', name: 'Hockey India' }
+  if (url.includes('eurohockey.org'))      return { flag: '🇪🇺', country: 'EuroHockey', name: 'EuroHockey' }
+  if (url.includes('fih.hockey'))          return { flag: '🏑', country: 'FIH', name: 'FIH Hockey' }
   return { flag: '🇳🇱', country: 'Netherlands', name: 'HockeyNL' }
 }
 

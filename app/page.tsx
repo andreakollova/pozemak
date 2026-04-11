@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import { useEffect, useState, useRef, useMemo } from 'react'
 import Link from 'next/link'
-import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource } from '@/lib/supabase'
+import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource, getArticlesByDomain } from '@/lib/supabase'
 import { Play, ChevronLeft, ChevronRight, Clock, Clapperboard } from 'lucide-react'
 import type { Match, Poule } from '@/lib/hockey-api'
 
@@ -152,8 +152,10 @@ export default function Home() {
   const [fihData,       setFihData]       = useState<FIHData | null>(null)
   const [proLeagueData, setProLeagueData] = useState<ProLeagueData | null>(null)
   const [euroData,      setEuroData]      = useState<EuroData | null>(null)
-  const [nlMen,         setNlMen]         = useState<MatchData | null>(null)
-  const [nlWomen,       setNlWomen]       = useState<MatchData | null>(null)
+  const [nlMen,           setNlMen]           = useState<MatchData | null>(null)
+  const [nlWomen,         setNlWomen]         = useState<MatchData | null>(null)
+  const [euroArticles,    setEuroArticles]    = useState<Article[]>([])
+  const [fihArticles,     setFihArticles]     = useState<Article[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -161,11 +163,15 @@ export default function Home() {
       getVideos('dames', 10),
       getVideos('heren', 10),
       getVideos('fih', 10),
-    ]).then(([arts, dames, heren, fih]) => {
+      getArticlesByDomain('eurohockey.org', 6),
+      getArticlesByDomain('fih.hockey', 6),
+    ]).then(([arts, dames, heren, fih, euro, fihNews]) => {
       setArticles(arts)
       setDamesVideos(dames)
       setHerenVideos(heren)
       setFihVideos(fih)
+      setEuroArticles(euro)
+      setFihArticles(fihNews)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -291,6 +297,12 @@ export default function Home() {
             )}
           </div>
         )}
+
+        {/* 🏑 FIH Hockey news */}
+        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
+
+        {/* 🇪🇺 EuroHockey news */}
+        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
         {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
@@ -479,6 +491,50 @@ function Grid3Card({ article }: { article: Article }) {
         <div style={{ padding: '14px 16px 18px' }}>
           <div style={{ fontSize: 9, color: 'var(--text-secondary)', marginBottom: 8 }}>{timeAgo(article.scraped_at)}</div>
           <p style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', margin: '0 0 8px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{title}</p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{text}</p>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/* ─── Static 3-column news grid (EuroHockey, FIH) ─────────────────────────── */
+function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string; articles: Article[] }) {
+  if (!articles.length) return null
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>{flag}</span>
+        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
+        <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        {articles.slice(0, 6).map(a => <NewsGrid3Card key={a.id} article={a} />)}
+      </div>
+    </div>
+  )
+}
+
+function NewsGrid3Card({ article }: { article: Article }) {
+  const [hov, setHov] = useState(false)
+  const slug = getSlug(article)
+  const title = getTitle(article)
+  const text = (getText(article) || '').slice(0, 100).trim() + '…'
+  const source = getArticleSource(article)
+  return (
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ height: 180, overflow: 'hidden', background: '#111', position: 'relative', flexShrink: 0 }}>
+          {article.image_url
+            ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
+            : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
+          }
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)' }} />
+          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 9, fontWeight: 700, background: 'rgba(0,0,0,0.55)', color: '#fff', padding: '3px 7px', borderRadius: 5 }}>{source.flag} {source.name}</span>
+        </div>
+        <div style={{ padding: '12px 14px 16px', flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontSize: 9, color: 'var(--text-secondary)' }}>{timeAgo(article.scraped_at)}</div>
+          <p style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.4, color: hov ? 'var(--accent)' : 'var(--text-primary)', transition: 'color .2s', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{title}</p>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{text}</p>
         </div>
       </div>
