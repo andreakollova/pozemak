@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource } from '@/lib/supabase'
-import { Play, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
+import { Play, ChevronLeft, ChevronRight, Clock, Clapperboard } from 'lucide-react'
 import type { Match, Poule } from '@/lib/hockey-api'
 
 /* ─── FIH / EuroHockey types ─────────────────────────────────────────────── */
@@ -592,8 +592,11 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
-      {!isResult && watchUrl && (
-        <a href={watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 10px', borderRadius: 10, letterSpacing: 0.5 }}>▶ Watch Live</a>
+      {watchUrl && (
+        <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <Clapperboard size={11} strokeWidth={2.5} />
+          {!isResult && <span>Watch</span>}
+        </a>
       )}
     </div>
   )
@@ -670,9 +673,7 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
-            <a href={data?.watchLiveUrl ?? 'https://www.fih.hockey/watch'} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 16, textDecoration: 'none', lineHeight: 1 }} title="Watch live">📺</a>
-            {(['left','right'] as const).map(d => (
+{(['left','right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
