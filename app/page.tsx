@@ -162,6 +162,11 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
+        {/* ── Full-width match carousels ── */}
+        <FIHIntlCarousel data={fihData} />
+        <FIHProLeagueCarousel data={proLeagueData} />
+        <EuroHockeyCarousel data={euroData} />
+
         {/* 🇳🇱 Netherlands — editorial */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
           <EditorialSection cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 5)} />
@@ -188,11 +193,8 @@ export default function Home() {
               <CompactListSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 4)} noMargin />
             )}
           </div>
-          {/* Right: sticky sidebar — International + League stacked */}
-          <div style={{ position: 'sticky', top: 20, alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <FIHIntlSection data={fihData} />
-            <FIHProLeagueSection data={proLeagueData} />
-            <EuroHockeySection data={euroData} />
+          {/* Right: sticky sidebar — League only */}
+          <div style={{ position: 'sticky', top: 20, alignSelf: 'start' }}>
             <LeagueMatchSection
               countries={[
                 { key: 'nl', flag: '🇳🇱', label: 'Netherlands', men: nlMen, women: nlWomen },
@@ -495,6 +497,227 @@ function Grid2Card({ article }: { article: Article }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+/* ─── Full-width carousels ───────────────────────────────────────────────── */
+
+function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; href: string; hrefLabel: string; controls: React.ReactNode }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>{title}</span>
+        <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        {controls}
+        <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>{hrefLabel} →</a>
+      </div>
+    </div>
+  )
+}
+
+function TabPill({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
+  return (
+    <button onClick={onClick} style={{ padding: '5px 13px', border: 'none', borderRadius: 20, background: active ? 'var(--accent)' : 'var(--bg-card)', color: active ? '#fff' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+      {label}
+    </button>
+  )
+}
+
+function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeagueMatch; isResult: boolean }) {
+  const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
+  const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
+  const isLive  = m.status === 'live'
+  const watchUrl = 'watchLiveUrl' in m ? m.watchLiveUrl : null
+  return (
+    <div style={{ flexShrink: 0, width: 176, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      {/* Teams row */}
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
+        {/* Home */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: 'var(--text-primary)' }}>
+            {(m.home.short || m.home.name).slice(0, 3).toUpperCase()}
+          </div>
+          <span style={{ fontSize: 10, fontWeight: homeWon ? 800 : 400, color: homeWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 62 }}>
+            {m.home.short || m.home.name}
+          </span>
+        </div>
+        {/* Score / vs */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+          {isLive
+            ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
+            : isResult && m.home.score !== null && m.away.score !== null
+              ? <span style={{ fontSize: 20, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+              : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+          }
+          {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+        </div>
+        {/* Away */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: 'var(--text-primary)' }}>
+            {(m.away.short || m.away.name).slice(0, 3).toUpperCase()}
+          </div>
+          <span style={{ fontSize: 10, fontWeight: awayWon ? 800 : 400, color: awayWon ? 'var(--text-primary)' : 'var(--text-secondary)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 62 }}>
+            {m.away.short || m.away.name}
+          </span>
+        </div>
+      </div>
+      {/* Date + venue */}
+      <div style={{ textAlign: 'center' }}>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        {'tourName' in m && m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.6, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 148, marginTop: 1 }}>{m.tourName}</span>}
+      </div>
+      {/* Watch live link (Pro League upcoming) */}
+      {!isResult && watchUrl && (
+        <a href={watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 10px', borderRadius: 10, letterSpacing: 0.5 }}>▶ Watch Live</a>
+      )}
+    </div>
+  )
+}
+
+function FIHIntlCarousel({ data }: { data: FIHData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
+  const gData   = data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+  const scroll  = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🌍 FIH International"
+        href="https://www.fih.hockey/schedule-fixtures-results"
+        hrefLabel="FIH"
+        controls={
+          <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={gender === 'M'} onClick={() => setGender('M')} label="Men" />
+            <TabPill active={gender === 'F'} onClick={() => setGender('F')} label="Women" />
+            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!data
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'M' | 'F'>('M')
+  const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
+  const gData   = data ? (gender === 'M' ? data.men : data.women) : null
+  const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
+  const scroll  = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🏆 FIH Pro League"
+        href="https://www.fih.hockey/events/fih-pro-league/schedule-fixtures-results"
+        hrefLabel="FIH"
+        controls={
+          <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={gender === 'M'} onClick={() => setGender('M')} label="Men" />
+            <TabPill active={gender === 'F'} onClick={() => setGender('F')} label="Women" />
+            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!data
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : matches.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
+            : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
+        }
+      </div>
+    </div>
+  )
+}
+
+function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
+  const combined  = data ? [...(data.ongoing ?? []), ...(data.upcoming ?? [])] : []
+  const events    = gender === 'all' ? combined : combined.filter(e => e.gender === gender)
+  const scroll    = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  function fmtDateRange(start: string, end: string) {
+    const s = new Date(start), e = new Date(end)
+    const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
+    if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth())
+      return `${s.getDate()}–${e.toLocaleDateString('en-GB', opts)}`
+    return `${s.toLocaleDateString('en-GB', opts)} – ${e.toLocaleDateString('en-GB', opts)}`
+  }
+
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="🇪🇺 EuroHockey"
+        href="https://eurohockey.org/calendar"
+        hrefLabel="Calendar"
+        controls={
+          <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
+            {(['left','right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!data
+          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 196, height: 130, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : events.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming events</p>
+            : events.map(e => (
+                <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 14, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
+                  <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
+                  <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'}</span>
+                  <span style={{ fontSize: 10, color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.location}</span>
+                  <span style={{ fontSize: 9, color: 'var(--text-secondary)', opacity: 0.7 }}>{fmtDateRange(e.startDate, e.endDate)}</span>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
+                    <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 8 }}>Info →</a>
+                    <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 8 }}>Watch →</a>
+                  </div>
+                </div>
+              ))
+        }
+      </div>
+    </div>
   )
 }
 

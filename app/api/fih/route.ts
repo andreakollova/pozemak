@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 43200 // refresh every 12 hours (2x/day)
 
 interface Participant {
   name: string
@@ -84,7 +84,6 @@ export async function GET() {
   try {
     const res = await fetch('https://www.fih.hockey/schedule-fixtures-results', {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; pozemak-bot/1.0)' },
-      next: { revalidate: 300 },
     })
     if (!res.ok) throw new Error(`FIH returned ${res.status}`)
     const html = await res.text()

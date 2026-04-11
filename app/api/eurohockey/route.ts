@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 43200 // refresh every 12 hours (2x/day)
 
 interface RawEvent {
   id: number
@@ -48,7 +48,6 @@ export async function GET() {
         'User-Agent': 'Mozilla/5.0 (compatible; pozemak-bot/1.0)',
         Accept: 'application/json',
       },
-      next: { revalidate: 300 },
     })
     if (!res.ok) throw new Error(`EuroHockey API returned ${res.status}`)
 
