@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Send } from 'lucide-react'
+import { Send, Flag, ArrowRight } from 'lucide-react'
 
 const QUICK_LINKS = [
   { label: '🇳🇱 Netherlands', href: '/' },
@@ -41,192 +41,202 @@ const SOCIALS = [
 ]
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [subState, setSubState] = useState<'idle' | 'ok' | 'err'>('idle')
+  const [email, setEmail]         = useState('')
+  const [subState, setSubState]   = useState<'idle' | 'ok' | 'err'>('idle')
+  const [reported, setReported]   = useState(false)
 
   const subscribe = (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.includes('@')) { setSubState('err'); return }
-    // TODO: wire up real newsletter service
     setSubState('ok')
     setEmail('')
     setTimeout(() => setSubState('idle'), 4000)
   }
 
   return (
-    <footer style={{
-      marginTop: 80,
-      background: 'var(--blue)',
-      color: '#ffffff',
-    }}>
-      {/* Main grid */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48 }}>
+    <>
+      {/* ── Pre-footer dual CTA ── */}
+      <section style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
 
-        {/* Brand column */}
-        <div style={{ gridColumn: 'span 1' }}>
-          <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo-dark.png"
-              alt="REFRESH"
-              style={{ height: 36, width: 'auto', display: 'block' }}
-            />
-          </Link>
-          <p style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,0.65)', maxWidth: 220 }}>
-            Latest news, results and updates from the world of field hockey in one place.
-          </p>
-          <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            {SOCIALS.map(({ svg, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
+          {/* Left — Newsletter */}
+          <div style={{ padding: '0 48px 0 0', borderRight: '1px solid var(--border)' }}>
+            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 20 }}>🏑 Newsletter</p>
+            <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900, lineHeight: 1.2, color: 'var(--text-primary)', margin: '0 0 12px' }}>
+              Don't miss any hockey news or competitions!
+            </h3>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, margin: '0 0 28px', maxWidth: 420 }}>
+              Subscribe to our newsletter and be the first to stay updated on everything happening on and off the pitch.
+            </p>
+            <form onSubmit={subscribe} style={{ display: 'flex', gap: 10, maxWidth: 440 }}>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="your@email.com"
                 style={{
-                  width: 36, height: 36, borderRadius: 9,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: 'rgba(255,255,255,0.65)',
-                  transition: 'all 0.15s',
-                  textDecoration: 'none',
+                  flex: 1, padding: '13px 16px', borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'var(--bg-dark)',
+                  color: 'var(--text-primary)',
+                  fontSize: 13, outline: 'none',
+                  transition: 'border-color 0.15s',
                 }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--green)'
-                  el.style.borderColor = 'var(--green)'
-                  el.style.background = 'rgba(149,255,3,0.1)'
+                onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
+                onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+              />
+              <button
+                type="submit"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  padding: '13px 22px', borderRadius: 8, border: 'none',
+                  background: 'var(--accent)', color: '#fff',
+                  fontWeight: 800, fontSize: 12, letterSpacing: 1,
+                  textTransform: 'uppercase', cursor: 'pointer',
+                  whiteSpace: 'nowrap', transition: 'opacity 0.15s',
                 }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.color = 'rgba(255,255,255,0.65)'
-                  el.style.borderColor = 'rgba(255,255,255,0.2)'
-                  el.style.background = 'transparent'
-                }}
+                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
+                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
               >
-                {svg}
-              </a>
-            ))}
+                {subState === 'ok' ? '✓ Subscribed!' : <><Send size={12} /> Subscribe</>}
+              </button>
+            </form>
+            {subState === 'err' && <p style={{ fontSize: 11, color: '#e33', marginTop: 8 }}>Please enter a valid email address.</p>}
           </div>
-        </div>
 
-        {/* Quick links */}
-        <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
-            Categories
-          </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {QUICK_LINKS.map(({ label, href }) => (
-              <li key={label}>
-                <Link
-                  href={href}
-                  style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.75)', transition: 'color 0.15s', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--green)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.75)')}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Legal links */}
-        <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
-            Legal
-          </p>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {LEGAL_LINKS.map(({ label, href }) => (
-              <li key={label}>
-                <Link
-                  href={href}
-                  style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.75)', transition: 'color 0.15s' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.75)')}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Newsletter */}
-        <div>
-          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: 18 }}>
-            Newsletter
-          </p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: 16 }}>
-            Get the latest field hockey news straight to your inbox.
-          </p>
-          <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="your@email.com"
+          {/* Right — Report Content */}
+          <div style={{ padding: '0 0 0 48px' }}>
+            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 20 }}>🚨 Report Content</p>
+            <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900, lineHeight: 1.2, color: 'var(--text-primary)', margin: '0 0 12px' }}>
+              Report inappropriate content
+            </h3>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, margin: '0 0 28px', maxWidth: 420 }}>
+              Help us keep the community fair and respectful – report racism, offensive language, copyright violations, or errors in articles.
+            </p>
+            <Link
+              href="/contact"
+              onClick={() => setReported(true)}
               style={{
-                padding: '10px 14px', borderRadius: 9,
-                border: '1px solid rgba(255,255,255,0.2)',
-                background: 'rgba(255,255,255,0.08)',
-                color: '#ffffff',
-                fontSize: 13, outline: 'none',
-                transition: 'border-color 0.15s',
-              }}
-              onFocus={e => (e.target.style.borderColor = '#95ff03')}
-              onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.2)')}
-            />
-            <button
-              type="submit"
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                padding: '10px 16px', borderRadius: 9, border: 'none',
-                background: 'var(--green)', color: 'var(--blue)',
-                fontWeight: 800, fontSize: 12, letterSpacing: 0.8,
-                textTransform: 'uppercase', cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '13px 28px', borderRadius: 8,
+                background: reported ? 'var(--bg-card-2)' : 'var(--accent)',
+                color: '#fff',
+                fontWeight: 800, fontSize: 12, letterSpacing: 1,
+                textTransform: 'uppercase', textDecoration: 'none',
                 transition: 'opacity 0.15s',
               }}
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
             >
-              {subState === 'ok' ? '✓ Subscribed!' : <><Send size={12} /> Subscribe</>}
-            </button>
-            {subState === 'err' && (
-              <p style={{ fontSize: 11, color: '#ffb3b3', marginTop: 2 }}>Please enter a valid email address.</p>
-            )}
-          </form>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.15)' }} />
-      </div>
-
-      {/* Bottom bar */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)' }}>
-          © {new Date().getFullYear()} <strong style={{ color: '#ffffff' }}>DRIXTON s.r.o.</strong> — All rights reserved.
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          {LEGAL_LINKS.slice(0, 2).map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', letterSpacing: 0.3, transition: 'color 0.15s' }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
-            >
-              {label}
+              <Flag size={13} /> Report Content <ArrowRight size={13} />
             </Link>
-          ))}
-          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', display: 'flex', alignItems: 'center', gap: 4 }}>
-            Powered by{' '}
-            <span style={{ color: 'var(--green)', fontWeight: 700 }}>REFRESH</span>
-          </span>
+          </div>
         </div>
-      </div>
-    </footer>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer style={{ background: '#0d0d0d', color: '#ffffff' }}>
+        {/* Main grid */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48 }}>
+
+          {/* Brand column */}
+          <div style={{ gridColumn: 'span 1' }}>
+            <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-dark.png" alt="REFRESH" style={{ height: 36, width: 'auto', display: 'block' }} />
+            </Link>
+            <p style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,0.55)', maxWidth: 220 }}>
+              Latest news, results and updates from the world of field hockey in one place.
+            </p>
+            <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+              {SOCIALS.map(({ svg, href, label }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                  style={{ width: 36, height: 36, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.55)', transition: 'all 0.15s', textDecoration: 'none' }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--green)'; el.style.borderColor = 'var(--green)'; el.style.background = 'rgba(149,255,3,0.1)' }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'rgba(255,255,255,0.55)'; el.style.borderColor = 'rgba(255,255,255,0.15)'; el.style.background = 'transparent' }}
+                >
+                  {svg}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 18 }}>Categories</p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {QUICK_LINKS.map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.65)', transition: 'color 0.15s' }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--green)')}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)')}
+                  >{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 18 }}>Legal</p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {LEGAL_LINKS.map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} style={{ textDecoration: 'none', fontSize: 13, color: 'rgba(255,255,255,0.65)', transition: 'color 0.15s' }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)')}
+                  >{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Newsletter mini */}
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 18 }}>Newsletter</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: 16 }}>Get the latest field hockey news straight to your inbox.</p>
+            <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com"
+                style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 13, outline: 'none', transition: 'border-color 0.15s' }}
+                onFocus={e => (e.target.style.borderColor = '#95ff03')}
+                onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.15)')}
+              />
+              <button type="submit"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--green)', color: 'var(--blue)', fontWeight: 800, fontSize: 12, letterSpacing: 0.8, textTransform: 'uppercase', cursor: 'pointer', transition: 'opacity 0.15s' }}
+                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
+                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+              >
+                {subState === 'ok' ? '✓ Subscribed!' : <><Send size={12} /> Subscribe</>}
+              </button>
+              {subState === 'err' && <p style={{ fontSize: 11, color: '#ffb3b3', marginTop: 2 }}>Please enter a valid email address.</p>}
+            </form>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
+            © {new Date().getFullYear()} <strong style={{ color: 'rgba(255,255,255,0.7)' }}>DRIXTON s.r.o.</strong> — All rights reserved.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            {LEGAL_LINKS.slice(0, 2).map(({ label, href }) => (
+              <Link key={label} href={href}
+                style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textDecoration: 'none', letterSpacing: 0.3, transition: 'color 0.15s' }}
+                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#ffffff')}
+                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)')}
+              >{label}</Link>
+            ))}
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 4 }}>
+              Powered by <span style={{ color: 'var(--green)', fontWeight: 700 }}>REFRESH</span>
+            </span>
+          </div>
+        </div>
+      </footer>
+    </>
   )
 }
