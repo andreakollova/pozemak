@@ -69,19 +69,35 @@ function timeAgo(iso: string) {
   return `${d}d ago`
 }
 
+const _MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+/**
+ * Venue date: extracted directly from the ISO string, no timezone conversion.
+ * e.g. "2026-04-11T19:00-03:00" → "11 Apr 2026" (the date AT the venue).
+ */
 function fmtMatchDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (!m) return ''
+  return `${parseInt(m[3])} ${_MONTHS[parseInt(m[2]) - 1]} ${m[1]}`
 }
 
-/** Venue local time extracted directly from the ISO string (e.g. "19:00"). */
+/**
+ * Venue local time: extracted directly from the ISO string.
+ * e.g. "2026-04-11T19:00-03:00" → "19:00" (what the clock shows at the venue).
+ */
 function fmtVenueTime(iso: string): string | null {
   const m = iso.match(/T(\d{2}:\d{2})/)
   return m ? m[1] : null
 }
 
-/** Viewer's browser-local time converted from the ISO timestamp (same as FIH "local time" toggle). */
+/**
+ * Viewer's browser-local time: converts the ISO timestamp (which carries the venue tz offset)
+ * to the viewer's timezone — same as FIH's "local time" toggle.
+ * Returns null if the ISO string has no timezone offset (can't convert reliably).
+ */
 function fmtLocalTime(iso: string): string | null {
-  if (!iso.match(/T\d{2}:\d{2}/)) return null
+  // Only convert if the string has a timezone offset; bare times can't be reliably converted
+  if (!iso.match(/T\d{2}:\d{2}[+-]\d{2}:\d{2}$|T\d{2}:\d{2}Z$/)) return null
   const d = new Date(iso)
   if (isNaN(d.getTime())) return null
   return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
