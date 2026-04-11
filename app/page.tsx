@@ -217,12 +217,12 @@ export default function Home() {
         <FIHIntlCarousel data={fihData} />
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
-        <NLLeagueCarousel menData={nlMen} womenData={nlWomen} />
 
-        {/* 🇳🇱 Netherlands — carousel */}
+        {/* 🇳🇱 Netherlands — carousel + league */}
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 10)} />
         )}
+        <NLLeagueCarousel menData={nlMen} womenData={nlWomen} />
 
         {/* Articles — GB + AU/DE */}
         <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
@@ -1032,7 +1032,7 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
   return (
     <div style={{ marginBottom: 40 }}>
       <CarouselHeader
-        title="🇳🇱 Netherlands League"
+        title="🇳🇱 Netherlands Hoofdklasse"
         href="/competition"
         hrefLabel="All"
         controls={
