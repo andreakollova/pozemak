@@ -8,6 +8,20 @@ import Link from 'next/link'
 import { supabase, Article, getTitle, getText, getArticleSource, getArticles, getSlug } from '@/lib/supabase'
 import { ArrowLeft } from 'lucide-react'
 
+const WRITERS = [
+  { id: 1, name: 'Adrian Smith',    img: '/writer-1.png' },
+  { id: 2, name: 'Emma Clarke',     img: '/writer-2.png' },
+  { id: 3, name: 'James van Berg',  img: '/writer-3.png' },
+]
+
+// Deterministic writer from article ID — distributes evenly, consistent per article
+function getWriter(articleId: string) {
+  let hash = 0
+  for (let i = 0; i < articleId.length; i++)
+    hash = (hash * 31 + articleId.charCodeAt(i)) >>> 0
+  return WRITERS[hash % 3]
+}
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', {
     day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -121,11 +135,13 @@ export default function ArticlePage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, padding: '18px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/writer-1.png" alt="Adrian Smith" style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }} />
-            <div>
-              <p style={{ fontSize: 10, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 700, marginBottom: 1 }}>Written by</p>
-              <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Adrian Smith</p>
-            </div>
+            {(() => { const w = getWriter(article.id); return (<>
+              <img src={w.img} alt={w.name} style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }} />
+              <div>
+                <p style={{ fontSize: 10, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 700, marginBottom: 1 }}>Written by</p>
+                <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{w.name}</p>
+              </div>
+            </>)})()}
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>

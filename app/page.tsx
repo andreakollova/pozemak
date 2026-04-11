@@ -220,6 +220,18 @@ export default function Home() {
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 10)} />
         )}
 
+        {/* 🇮🇳 India + 🇧🇪 Belgium — side by side */}
+        {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Belgium']?.length ?? 0) > 0) && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
+            {(byCountry['India']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+            {(byCountry['Belgium']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+          </div>
+        )}
+
         {/* 🇪🇸 Spain — full width */}
         {(byCountry['Spain']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Spain')!} articles={byCountry['Spain'].slice(0, 10)} />
@@ -233,18 +245,6 @@ export default function Home() {
             )}
             {(byCountry['Ireland']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Ireland')!} articles={byCountry['Ireland'].slice(0, 6)} cardHeight={130} /></div>
-            )}
-          </div>
-        )}
-
-        {/* 🇮🇳 India + 🇧🇪 Belgium — side by side */}
-        {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Belgium']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
-            {(byCountry['India']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
-            )}
-            {(byCountry['Belgium']?.length ?? 0) > 0 && (
-              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 6)} cardHeight={130} /></div>
             )}
           </div>
         )}
@@ -367,7 +367,7 @@ function ListCard({ article }: { article: Article }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s' }}>
+      <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s' }}>
         <div style={{ width: 76, height: 56, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
         </div>
@@ -400,7 +400,7 @@ function Grid3Card({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 100).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 340 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'border-color .2s' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height: 200, overflow: 'hidden', background: '#111', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
@@ -437,7 +437,7 @@ function MiniCard({ article, height }: { article: Article; height: number }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 190 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-card)', transition: 'border-color .2s' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height, overflow: 'hidden', background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />}
         </div>
@@ -469,7 +469,7 @@ function CompactRow({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 90).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', gap: 16, padding: '14px 16px', borderRadius: 7, border: `1px solid ${hov ? 'var(--accent)' : 'var(--border)'}`, background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 16, padding: '14px 16px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'center' }}>
         <div style={{ width: 100, height: 68, borderRadius: 10, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.07)' : 'scale(1)' }} />}
         </div>
