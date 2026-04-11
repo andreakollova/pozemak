@@ -22,6 +22,7 @@ function buildCaption(titleSk: string, textSk: string): string {
     rest,
     'Originál článku / kredit: HockeyNL',
     'Viac o novinkách zo sveta pozemného hokeja sa dočítate na pozemak.sk.',
+    '#fieldhockey',
   ]
     .filter(Boolean)
     .join('\n\n')
