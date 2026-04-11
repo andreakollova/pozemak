@@ -658,8 +658,12 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
-        {myTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: venueTime ? 0 : 2 }}>{myTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>your time</span></span>}
+        {(venueTime || myTime) && (
+          <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 2 }}>
+            {venueTime && <><span style={{ fontWeight: 500 }}>{venueTime}</span> <span style={{ opacity: 0.6 }}>local</span>{myTime && <span style={{ opacity: 0.4 }}> · </span>}</>}
+            {myTime && <><span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{myTime}</span> <span style={{ opacity: 0.6 }}>your time</span></>}
+          </span>
+        )}
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -755,8 +759,12 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
-        {myTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: venueTime ? 0 : 2 }}>{myTime} <span style={{ fontSize: 8, fontWeight: 400, color: 'var(--text-secondary)', opacity: 0.7 }}>your time</span></span>}
+        {(venueTime || myTime) && (
+          <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 2 }}>
+            {venueTime && <><span style={{ fontWeight: 500 }}>{venueTime}</span> <span style={{ opacity: 0.6 }}>local</span>{myTime && <span style={{ opacity: 0.4 }}> · </span>}</>}
+            {myTime && <><span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{myTime}</span> <span style={{ opacity: 0.6 }}>your time</span></>}
+          </span>
+        )}
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -1287,8 +1295,12 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
             : <span style={{ fontSize: 11, fontWeight: 500, color: '#bbb' }}>vs</span>
         }
         <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}</span>
-        {venueTime && <span style={{ fontSize: 9, fontWeight: 700, color: '#999' }}>{venueTime} <span style={{ fontWeight: 400, color: '#bbb' }}>local</span></span>}
-        {myTime && <span style={{ fontSize: 9, fontWeight: 700, color: '#999' }}>{myTime} <span style={{ fontWeight: 400, color: '#bbb' }}>yours</span></span>}
+        {(venueTime || myTime) && (
+          <span style={{ fontSize: 9, color: '#aaa' }}>
+            {venueTime && <><span style={{ fontWeight: 500 }}>{venueTime}</span> <span style={{ color: '#ccc' }}>local</span>{myTime && <span style={{ color: '#ddd' }}> · </span>}</>}
+            {myTime && <><span style={{ fontWeight: 800, color: '#555' }}>{myTime}</span> <span style={{ color: '#ccc' }}>yours</span></>}
+          </span>
+        )}
         {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: '#bbb', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
         {watchLiveUrl && (
           <a href={watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>▶ Watch</a>
