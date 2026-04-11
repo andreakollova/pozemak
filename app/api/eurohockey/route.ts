@@ -2,16 +2,6 @@ import { NextResponse } from 'next/server'
 
 export const revalidate = 43200 // 2x/day
 
-interface RawCompetition {
-  id: string
-  name: string
-  gender: string
-  startdate: string
-  enddate: string
-  location: string
-  competition_id: number
-}
-
 export interface EuroMatch {
   id: string
   tournamentName: string
@@ -20,102 +10,96 @@ export interface EuroMatch {
   status: 'upcoming' | 'live' | 'completed'
   home: { name: string; code: string; logo: string | null; score: number | null }
   away: { name: string; code: string; logo: string | null; score: number | null }
+  eventUrl: string
+  watchUrl: string
+}
+
+export interface EuroTournament {
+  id: string
+  name: string
+  gender: 'M' | 'F'
+  startDate: string
+  endDate: string
   location: string
+  status: 'upcoming' | 'ongoing'
   eventUrl: string
   watchUrl: string
 }
 
 const WATCH_URL = 'https://www.eurohockeytv.org/en-int/page/home-eurohockey'
 
-// Extract __NEXT_DATA__ from a EuroHockey event page and return match fixtures
-async function fetchEventMatches(comp: RawCompetition): Promise<EuroMatch[]> {
-  const url = `https://eurohockey.org/calendar/event?id=${comp.id}`
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; pozemak-bot/1.0)' },
-  })
-  if (!res.ok) return []
-  const html = await res.text()
-
-  const m = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)
-  if (!m) return []
-  let pageData: any
-  try { pageData = JSON.parse(m[1]) } catch { return [] }
-
-  // Field is 'matches', teams are 'hometeam'/'awayteam', scores are 'homescore'/'awayscore'
-  const matches: any[] = pageData?.props?.pageProps?.competition?.matches ?? []
-  const gender: 'M' | 'F' = comp.gender === 'F' ? 'F' : 'M'
-
-  return matches.map((f: any): EuroMatch => {
-    const home = f.hometeam ?? {}
-    const away = f.awayteam ?? {}
-    const hs = f.homescore ?? null
-    const as_ = f.awayscore ?? null
-    const isCompleted = f.status !== 'Upcoming' && hs !== null && as_ !== null && (hs > 0 || as_ > 0)
-    const date = f.datetime ?? f.datetimeutc ?? f.date ?? ''
-
-    return {
-      id: String(f.id ?? f.match_id ?? Math.random()),
-      tournamentName: comp.name,
-      gender,
-      date,
-      status: isCompleted ? 'completed' : 'upcoming',
-      home: {
-        name: home.name ?? home.code ?? '',
-        code: home.code ?? home.name ?? '',
-        logo: home.logoMedia?.media?.url ?? null,
-        score: isCompleted ? parseInt(String(hs), 10) : null,
-      },
-      away: {
-        name: away.name ?? away.code ?? '',
-        code: away.code ?? away.name ?? '',
-        logo: away.logoMedia?.media?.url ?? null,
-        score: isCompleted ? parseInt(String(as_), 10) : null,
-      },
-      location: comp.location,
-      eventUrl: url,
-      watchUrl: WATCH_URL,
-    }
-  })
+function genderFromName(name: string): 'M' | 'F' {
+  return /women/i.test(name) ? 'F' : 'M'
 }
 
 export async function GET() {
   try {
-    const listRes = await fetch('https://eurohockey.org/api/syncCompetitions?take=100', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; pozemak-bot/1.0)', Accept: 'application/json' },
+    // Single fetch of the calendar page — contains all upcoming matches in __NEXT_DATA__
+    const res = await fetch('https://eurohockey.org/calendar', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; pozemak-bot/1.0)' },
     })
-    if (!listRes.ok) throw new Error(`EuroHockey API returned ${listRes.status}`)
-    const listData: { upcoming?: RawCompetition[]; ongoing?: RawCompetition[] } = await listRes.json()
+    if (!res.ok) throw new Error(`EuroHockey calendar returned ${res.status}`)
+    const html = await res.text()
 
-    const now = new Date()
-    const soon = new Date(now.getTime() + 60 * 24 * 3600 * 1000) // 60 days ahead
+    const nd = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)
+    if (!nd) throw new Error('__NEXT_DATA__ not found')
+    const pageData = JSON.parse(nd[1])
+    const pp = pageData?.props?.pageProps ?? {}
 
-    // Ongoing first, then upcoming within 60 days
-    const ongoing = listData.ongoing ?? []
-    const upcomingSoon = (listData.upcoming ?? [])
-      .filter(c => new Date(c.startdate) <= soon)
-      .sort((a, b) => new Date(a.startdate).getTime() - new Date(b.startdate).getTime())
-      .slice(0, 6)
+    // ── Upcoming matches (325 entries, sorted by date) ──
+    const raw: any[] = pp.upcomingEvents ?? []
+    const matches: EuroMatch[] = raw.map((e: any, i: number): EuroMatch => {
+      const comp = e.competition ?? {}
+      const home = e.hometeam ?? {}
+      const away = e.awayteam ?? {}
+      const gender = genderFromName(comp.name ?? '')
+      return {
+        id: String(e.id ?? i),
+        tournamentName: comp.name ?? '',
+        gender,
+        date: e.datetimeutc ?? '',
+        status: e.status === 'Upcoming' ? 'upcoming' : 'live',
+        home: {
+          name: home.name ?? home.code ?? '',
+          code: home.code ?? '',
+          logo: home.logoMedia?.media?.url ?? null,
+          score: null,
+        },
+        away: {
+          name: away.name ?? away.code ?? '',
+          code: away.code ?? '',
+          logo: away.logoMedia?.media?.url ?? null,
+          score: null,
+        },
+        eventUrl: comp.id ? `https://eurohockey.org/calendar/event?id=${comp.id}` : 'https://eurohockey.org/calendar',
+        watchUrl: comp.whereToWatch || WATCH_URL,
+      }
+    })
 
-    const toFetch = [...ongoing, ...upcomingSoon].slice(0, 8)
+    // ── Tournaments from graphCalendarEvents ──
+    const calEvents: any[] = pp.graphCalendarEvents ?? []
+    const seen = new Set<string>()
+    const tournaments: EuroTournament[] = calEvents
+      .filter((e: any) => {
+        if (seen.has(e.id)) return false
+        seen.add(e.id)
+        return true
+      })
+      .map((e: any): EuroTournament => ({
+        id: String(e.id),
+        name: e.name ?? e.title ?? '',
+        gender: genderFromName(e.name ?? e.title ?? ''),
+        startDate: e.startdate ?? e.start ?? '',
+        endDate: e.enddate ?? e.end ?? '',
+        location: e.location ?? '',
+        status: e.competition_status === 'ongoing' ? 'ongoing' : 'upcoming',
+        eventUrl: `https://eurohockey.org/calendar/event?id=${e.id}`,
+        watchUrl: WATCH_URL,
+      }))
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+      .slice(0, 60)
 
-    // Fetch matches for each competition in parallel
-    const matchArrays = await Promise.all(toFetch.map(c => fetchEventMatches(c).catch(() => [])))
-    const allMatches = matchArrays.flat()
-
-    // If we got no fixture data from pages, fall back to tournament cards
-    const tournaments = toFetch.map(c => ({
-      id: c.id,
-      name: c.name,
-      gender: c.gender === 'F' ? 'F' : 'M',
-      startDate: c.startdate,
-      endDate: c.enddate,
-      location: c.location,
-      status: ongoing.find(o => o.id === c.id) ? 'ongoing' : 'upcoming',
-      eventUrl: `https://eurohockey.org/calendar/event?id=${c.id}`,
-      watchUrl: WATCH_URL,
-    }))
-
-    return NextResponse.json({ matches: allMatches, tournaments })
+    return NextResponse.json({ matches, tournaments })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[eurohockey-api]', msg)

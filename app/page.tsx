@@ -688,7 +688,7 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
 function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
   const ref = useRef<HTMLDivElement>(null)
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
-  const [tab, setTab]       = useState<'matches' | 'tournaments'>('tournaments')
+  const [tab, setTab]       = useState<'matches' | 'tournaments'>('matches')
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
 
   const matches     = data?.matches ?? []
@@ -733,7 +733,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
           ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : tab === 'matches'
             ? filtMatches.length === 0
-                ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No completed matches yet — tournaments start May 2026</p>
+                ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches found</p>
                 : filtMatches.map(m => (
                     <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '10px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
