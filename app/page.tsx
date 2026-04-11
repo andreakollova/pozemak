@@ -73,8 +73,14 @@ function fmtMatchDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-/** Returns the match time converted to the viewer's local timezone (same as FIH "local time" toggle). */
-function fmtMatchTime(iso: string): string | null {
+/** Venue local time extracted directly from the ISO string (e.g. "19:00"). */
+function fmtVenueTime(iso: string): string | null {
+  const m = iso.match(/T(\d{2}:\d{2})/)
+  return m ? m[1] : null
+}
+
+/** Viewer's browser-local time converted from the ISO timestamp (same as FIH "local time" toggle). */
+function fmtLocalTime(iso: string): string | null {
   if (!iso.match(/T\d{2}:\d{2}/)) return null
   const d = new Date(iso)
   if (isNaN(d.getTime())) return null
@@ -624,7 +630,8 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const tourName = 'tourName' in m ? m.tourName : ''
   const logo = (t: typeof m.home) => ('logo' in t ? (t as any).logo : null)
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
-  const matchTime = fmtMatchTime(m.date)
+  const venueTime = fmtVenueTime(m.date)
+  const myTime    = fmtLocalTime(m.date)
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
@@ -642,7 +649,8 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {matchTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{matchTime} <span style={{ fontSize: 8, fontWeight: 500, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
+        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime}</span>}
+        {myTime && myTime !== venueTime && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 1 }}>{myTime} <span style={{ opacity: 0.6 }}>your time</span></span>}
         {tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -715,7 +723,8 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
   const awayWon    = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
   const isLive     = m.status === 'live'
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
-  const matchTime  = fmtMatchTime(m.date)
+  const venueTime  = fmtVenueTime(m.date)
+  const myTime     = fmtLocalTime(m.date)
   return (
     <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
@@ -735,7 +744,8 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
       </div>
       <div style={{ textAlign: 'center' }}>
         <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
-        {matchTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{matchTime} <span style={{ fontSize: 8, fontWeight: 500, color: 'var(--text-secondary)', opacity: 0.7 }}>local</span></span>}
+        {venueTime && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginTop: 2 }}>{venueTime}</span>}
+        {myTime && myTime !== venueTime && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block', marginTop: 1 }}>{myTime} <span style={{ opacity: 0.6 }}>your time</span></span>}
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -989,7 +999,8 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
                         </div>
                         <TeamCell short={m.away.code} name={m.away.name} won={m.status === 'completed' && (m.away.score ?? 0) > (m.home.score ?? 0)} logo={m.away.logo} />
                       </div>
-                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? `${fmtMatchDate(m.date)}${fmtMatchTime(m.date) ? ` · ${fmtMatchTime(m.date)}` : ''}` : ''}</span>
+                      <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{m.date ? fmtMatchDate(m.date) : ''}</span>
+                      {m.date && fmtVenueTime(m.date) && <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtVenueTime(m.date)}{fmtLocalTime(m.date) && fmtLocalTime(m.date) !== fmtVenueTime(m.date) ? <span style={{ opacity: 0.65 }}> · {fmtLocalTime(m.date)} yours</span> : ''}</span>}
                       <div style={{ display: 'flex', gap: 5 }}>
                         <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 6 }}>Info →</a>
                         <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: 6 }}>Watch →</a>
@@ -1248,8 +1259,9 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
   const homeWon = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
   const awayWon = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
   const isLive  = m.status === 'live'
-  const moreUrl = 'game_id' in m ? fihMatchUrl(m as FIHMatch) : null
-  const matchTime = fmtMatchTime(m.date)
+  const moreUrl   = 'game_id' in m ? fihMatchUrl(m as FIHMatch) : null
+  const venueTime = fmtVenueTime(m.date)
+  const myTime    = fmtLocalTime(m.date)
   return (
     <div style={{ borderRadius: 10, padding: '10px 8px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid #f0f2f5' }}>
       <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
@@ -1263,7 +1275,8 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
             ? <span style={{ fontSize: 17, fontWeight: 800, color: '#111', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
             : <span style={{ fontSize: 11, fontWeight: 500, color: '#bbb' }}>vs</span>
         }
-        <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}{matchTime ? ` · ${matchTime}` : ''}</span>
+        <span style={{ fontSize: 9, color: '#ccc', fontWeight: 500 }}>{fmtMatchDate(m.date)}</span>
+        {venueTime && <span style={{ fontSize: 9, fontWeight: 700, color: '#999' }}>{venueTime}{myTime && myTime !== venueTime ? <span style={{ fontWeight: 400, color: '#bbb' }}> · {myTime} yours</span> : ''}</span>}
         {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: '#bbb', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
         {watchLiveUrl && (
           <a href={watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 8, fontWeight: 700, color: '#003ad0', textDecoration: 'none', background: '#f0f4ff', padding: '2px 6px', borderRadius: 4, marginTop: 2, whiteSpace: 'nowrap' }}>▶ Watch</a>
