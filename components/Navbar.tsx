@@ -40,17 +40,17 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
-            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
-            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
             <Play size={12} fill="currentColor" /> Videos
           </Link>
 
           <Link href="/competition"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
-            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--blue-subtle)'; e.currentTarget.style.background = 'var(--blue-subtle)' }}
-            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
             <BarChart2 size={12} /> Standings
           </Link>
@@ -84,13 +84,13 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                   color: isActive ? 'var(--accent)' : 'var(--text-primary)',
                   whiteSpace: 'nowrap',
                   borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
-                  transition: 'color 0.15s, border-color 0.15s',
+                  transition: 'color 0.15s, border-color 0.15s, font-weight 0.15s',
                 }}
                 onMouseEnter={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderBottomColor = 'var(--blue-subtle)' }
+                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '800'; e.currentTarget.style.borderBottomColor = 'var(--border)' }
                 }}
                 onMouseLeave={(e: any) => {
-                  if (!isActive) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderBottomColor = 'transparent' }
+                  if (!isActive) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '600'; e.currentTarget.style.borderBottomColor = 'transparent' }
                 }}
               >
                 <span style={{ fontSize: 13 }}>{item.flag}</span>

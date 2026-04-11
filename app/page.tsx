@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource } from '@/lib/supabase'
 import { Play, ChevronLeft, ChevronRight, Clock, Clapperboard } from 'lucide-react'
@@ -191,6 +191,7 @@ export default function Home() {
         {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
 
         {/* ── Full-width match carousels ── */}
+        <ComingUpCarousel fihData={fihData} proLeagueData={proLeagueData} euroData={euroData} />
         <FIHIntlCarousel data={fihData} />
         <FIHProLeagueCarousel data={proLeagueData} />
         <EuroHockeyCarousel data={euroData} />
@@ -622,6 +623,158 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
           {!isResult && <span>Watch</span>}
         </a>
       )}
+    </div>
+  )
+}
+
+/* ─── Combined "Coming Up" carousel ─────────────────────────────────────── */
+interface NormMatch {
+  key: string
+  date: string
+  gender: 'M' | 'F'
+  status: 'upcoming' | 'live' | 'completed' | 'cancelled'
+  home: { name: string; short: string; score: number | null; logo?: string | null }
+  away: { name: string; short: string; score: number | null; logo?: string | null }
+  tourName: string
+  watchUrl?: string | null
+}
+
+function normKey(date: string, home: string, away: string, gender: string) {
+  return `${date.slice(0, 10)}|${home.toUpperCase()}|${away.toUpperCase()}|${gender}`
+}
+
+function normFIH(m: FIHMatch): NormMatch {
+  return {
+    key: normKey(m.date, m.home.short, m.away.short, m.gender),
+    date: m.date, gender: m.gender, status: m.status,
+    home: { ...m.home }, away: { ...m.away },
+    tourName: m.tourName, watchUrl: null,
+  }
+}
+
+function normPro(m: ProLeagueMatch): NormMatch {
+  return {
+    key: normKey(m.date, m.home.short, m.away.short, m.gender),
+    date: m.date, gender: m.gender as 'M' | 'F',
+    status: m.status as NormMatch['status'],
+    home: { ...m.home }, away: { ...m.away },
+    tourName: 'FIH Pro League', watchUrl: m.watchLiveUrl,
+  }
+}
+
+function normEuro(m: EuroMatch): NormMatch {
+  return {
+    key: normKey(m.date, m.home.code, m.away.code, m.gender),
+    date: m.date, gender: m.gender,
+    status: m.status as NormMatch['status'],
+    home: { name: m.home.name, short: m.home.code, score: m.home.score, logo: m.home.logo },
+    away: { name: m.away.name, short: m.away.code, score: m.away.score, logo: m.away.logo },
+    tourName: m.tournamentName, watchUrl: m.watchUrl || null,
+  }
+}
+
+function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult: boolean }) {
+  const homeWon    = isResult && m.home.score !== null && m.away.score !== null && m.home.score > m.away.score
+  const awayWon    = isResult && m.home.score !== null && m.away.score !== null && m.away.score > m.home.score
+  const isLive     = m.status === 'live'
+  const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
+  return (
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
+        <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={m.home.logo} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
+          {isLive
+            ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
+            : isResult && m.home.score !== null && m.away.score !== null
+              ? <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-1px', lineHeight: 1 }}>{m.home.score}–{m.away.score}</span>
+              : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
+          }
+          {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
+        </div>
+        <TeamCell short={m.away.short} name={m.away.name} won={awayWon} logo={m.away.logo} />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <span style={{ fontSize: 9, color: 'var(--text-secondary)', display: 'block' }}>{fmtMatchDate(m.date)}</span>
+        {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
+      </div>
+      {m.watchUrl && (
+        <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}
+        </a>
+      )}
+    </div>
+  )
+}
+
+function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHData | null; proLeagueData: ProLeagueData | null; euroData: EuroData | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [gender, setGender] = useState<'all' | 'M' | 'F'>('all')
+  const [tab, setTab]       = useState<'upcoming' | 'results'>('upcoming')
+  const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
+
+  const all = useMemo(() => {
+    const combined: NormMatch[] = []
+    if (fihData) {
+      combined.push(...fihData.men.recent.map(normFIH), ...fihData.men.upcoming.map(normFIH))
+      combined.push(...fihData.women.recent.map(normFIH), ...fihData.women.upcoming.map(normFIH))
+    }
+    // Pro League may overlap with FIH — add only if key not already present
+    if (proLeagueData) {
+      combined.push(...proLeagueData.men.recent.map(normPro), ...proLeagueData.men.upcoming.map(normPro))
+      combined.push(...proLeagueData.women.recent.map(normPro), ...proLeagueData.women.upcoming.map(normPro))
+    }
+    if (euroData) {
+      combined.push(...euroData.matches.map(normEuro))
+    }
+    // Deduplicate: first occurrence wins
+    const seen = new Set<string>()
+    return combined.filter(m => { if (seen.has(m.key)) return false; seen.add(m.key); return true })
+  }, [fihData, proLeagueData, euroData])
+
+  const isLoaded = fihData !== null || proLeagueData !== null || euroData !== null
+
+  const filtered = all.filter(m => {
+    if (gender !== 'all' && m.gender !== gender) return false
+    if (tab === 'upcoming') return m.status === 'upcoming' || m.status === 'live'
+    return m.status === 'completed'
+  }).sort((a, b) =>
+    tab === 'upcoming'
+      ? new Date(a.date).getTime() - new Date(b.date).getTime()
+      : new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <CarouselHeader
+        title="⚡ Coming Up"
+        href="https://www.fih.hockey/schedule-fixtures-results"
+        hrefLabel="FIH"
+        controls={
+          <div style={{ display: 'flex', gap: 6 }}>
+            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
+            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
+            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
+            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
+            <TabPill active={tab === 'results'}  onClick={() => setTab('results')}  label="Results" />
+            {(['left', 'right'] as const).map(d => (
+              <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+              >
+                {d === 'left' ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
+        {!isLoaded
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          : filtered.length === 0
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
+            : filtered.map(m => <CombinedMatchCard key={m.key} match={m} isResult={tab === 'results'} />)
+        }
+      </div>
     </div>
   )
 }
