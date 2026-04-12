@@ -11,7 +11,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     const saved = localStorage.getItem('pozemak-theme')
-    if (saved) setDark(saved === 'dark')
+    if (saved) {
+      setDark(saved === 'dark')
+    } else {
+      // Default: dark on mobile, light on desktop
+      const isMobile = window.innerWidth < 640
+      setDark(isMobile)
+    }
   }, [])
 
   const toggle = () => {
