@@ -336,7 +336,7 @@ function SectionHeader({ cfg, scrollRef }: { cfg: CountryCfg; scrollRef?: React.
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <span style={{ fontSize: 20 }}>{cfg.flag}</span>
-        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3 }}>{cfg.name}</span>
+        <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3 }}>{cfg.name}</span>
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -397,7 +397,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
+        <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
@@ -522,7 +522,7 @@ function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string
     <div style={{ marginBottom: 56 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <span style={{ fontSize: 20 }}>{flag}</span>
-        <span style={{ fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
+        <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
