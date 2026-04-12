@@ -409,7 +409,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
         <FeaturedCard article={featured} trending />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>🚀 Most Viewed Stories</div>
+          <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>📰 Today's Headlines</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {list.map(a => <ListCard key={a.id} article={a} />)}
           </div>
