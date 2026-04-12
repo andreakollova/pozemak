@@ -52,15 +52,16 @@ export const supabase = {
 }
 
 export async function getArticles(limit = 20): Promise<Article[]> {
-  const { data, error } = await getSupabaseClient()
-    .from('articles')
-    .select('*')
-    .eq('published', true)
-    .order('top_story', { ascending: false, nullsFirst: false })
-    .order('scraped_at', { ascending: false })
-    .limit(limit)
+  const db = getSupabaseClient()
+  // Fetch top story first (if any), then the rest ordered by scraped_at
+  const [{ data: top }, { data: rest, error }] = await Promise.all([
+    db.from('articles').select('*').eq('published', true).eq('top_story', true)
+      .order('scraped_at', { ascending: false }).limit(1),
+    db.from('articles').select('*').eq('published', true).neq('top_story', true)
+      .order('scraped_at', { ascending: false }).limit(limit),
+  ])
   if (error) throw new Error(error.message)
-  return data || []
+  return [...(top || []), ...(rest || [])].slice(0, limit)
 }
 
 export function getSlug(article: Article): string {
