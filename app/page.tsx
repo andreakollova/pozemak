@@ -166,12 +166,6 @@ export default function Home() {
   const [herenVideos, setHerenVideos] = useState<Video[]>([])
   const [fihVideos,   setFihVideos]   = useState<Video[]>([])
   const [loading, setLoading]         = useState(true)
-  const [fihData,       setFihData]       = useState<FIHData | null>(null)
-  const [proLeagueData, setProLeagueData] = useState<ProLeagueData | null>(null)
-  const [euroData,      setEuroData]      = useState<EuroData | null>(null)
-  const [nlMen,           setNlMen]           = useState<MatchData | null>(null)
-  const [nlWomen,         setNlWomen]         = useState<MatchData | null>(null)
-  const [wcData,          setWcData]          = useState<WCData | null>(null)
   const [euroArticles,    setEuroArticles]    = useState<Article[]>([])
   const [fihArticles,     setFihArticles]     = useState<Article[]>([])
 
@@ -194,32 +188,6 @@ export default function Home() {
     }).catch(() => setLoading(false))
   }, [])
 
-  useEffect(() => {
-    fetch('/api/fih')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d) setFihData(d) })
-      .catch(() => {})
-    fetch('/api/fih-pro-league')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d) setProLeagueData(d) })
-      .catch(() => {})
-    fetch('/api/eurohockey')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d) setEuroData(d) })
-      .catch(() => {})
-    fetch('/api/fih-worldcup')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d) setWcData(d) })
-      .catch(() => {})
-    fetch('/api/hockey?comp=national&id=1')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setNlMen({ name: d.name, results: getRecentResults(m, 20), upcoming: getUpcomingMatches(m, 20), gender: 'men' }) })
-      .catch(() => {})
-    fetch('/api/hockey?comp=national&id=2')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (!d) return; const m = getMatches(d); setNlWomen({ name: d.name, results: getRecentResults(m, 20), upcoming: getUpcomingMatches(m, 20), gender: 'women' }) })
-      .catch(() => {})
-  }, [])
 
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
@@ -252,8 +220,6 @@ export default function Home() {
 
         {hero && <HeroCard article={hero} />}
 
-        {/* ── Coming Up — right below main banner ── */}
-        <ComingUpCarousel fihData={fihData} proLeagueData={proLeagueData} euroData={euroData} />
 
         {/* Trending News — article[1] featured + articles[2–5] most viewed */}
         {articles.length > 1 && <TrendingSection articles={articles.slice(1, 6)} />}
@@ -262,7 +228,6 @@ export default function Home() {
         {(byCountry['Netherlands']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 10)} />
         )}
-        <NLLeagueCarousel menData={nlMen} womenData={nlWomen} />
 
         {/* Articles — GB + AU/DE */}
         <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
@@ -318,14 +283,8 @@ export default function Home() {
         {/* 🏑 FIH Hockey news articles — 3 columns */}
         <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
 
-        {/* 🌍 FIH International matches (Intl + Pro League + World Cup) */}
-        <FIHCombinedCarousel fihData={fihData} proLeagueData={proLeagueData} wcData={wcData} />
-
         {/* 🇪🇺 EuroHockey news articles — 3 columns */}
         <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
-
-        {/* 🇪🇺 EuroHockey match results */}
-        <EuroHockeyCarousel data={euroData} />
 
         {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
         {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
