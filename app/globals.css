@@ -79,9 +79,9 @@ body {
   color: var(--text-primary);
   font-family: system-ui, -apple-system, sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
   min-height: 100vh;
 }
+html { overflow-x: hidden; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }

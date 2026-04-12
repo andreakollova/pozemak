@@ -28,17 +28,26 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       borderBottom: '1px solid var(--border)',
     }}>
       {/* Top bar */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .navbar-topbar { padding: 0 14px !important; height: 54px !important; }
+          .navbar-logo { height: 28px !important; }
+          .navbar-links { gap: 4px !important; }
+          .navbar-link-label { display: none; }
+        }
+      `}</style>
+      <div className="navbar-topbar" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dark ? '/logo-dark.png' : '/logo-light.png'}
             alt="REFRESH"
-            style={{ height: 36, width: 'auto', display: 'block' }}
+            className="navbar-logo"
+            style={{ height: 36, width: 'auto', display: 'block', maxWidth: '100%', objectFit: 'contain' }}
           />
         </Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="navbar-links" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}

@@ -7,7 +7,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [dark, setDark] = useState(true)
+  const [dark, setDark] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem('pozemak-theme')
@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh' }}>
         {/* Single sticky wrapper so announcement bar + navbar scroll as one unit */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ position: 'sticky', top: 0, zIndex: 100, willChange: 'transform' }}>
           <AnnouncementBar />
           <Navbar dark={dark} onToggle={toggle} />
         </div>
