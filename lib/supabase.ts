@@ -56,7 +56,7 @@ export async function getArticles(limit = 20): Promise<Article[]> {
     .from('articles')
     .select('*')
     .eq('published', true)
-    .order('top_story', { ascending: false })
+    .order('top_story', { ascending: false, nullsFirst: false })
     .order('scraped_at', { ascending: false })
     .limit(limit)
   if (error) throw new Error(error.message)
