@@ -728,7 +728,7 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
             : isResult && m.home.score !== null && m.away.score !== null
-              ? <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
+              ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
               : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
           {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
@@ -842,7 +842,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
             : isResult && m.eventUrl
               ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 8, whiteSpace: 'nowrap' }}>Results →</a>
               : isResult && m.home.score !== null && m.away.score !== null
-                ? <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
+                ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
                 : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
           {isResult && !isLive && !m.eventUrl && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>FT</span>}
@@ -1081,7 +1081,7 @@ function WCMatchCard({ match: m, isResult }: { match: WCMatch; isResult: boolean
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
             : isResult && m.home.score !== null && m.away.score !== null
-              ? <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
+              ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
               : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
           {isResult && !isLive && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
@@ -1251,7 +1251,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
                         <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
                           {m.status === 'completed' && m.home.score !== null && m.away.score !== null
-                            ? <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
+                            ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
                             : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
                           }
                           {m.status === 'completed' && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
@@ -1352,7 +1352,7 @@ function NLMatchCard({ match: m, isResult, gender }: { match: Match; isResult: b
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
           {isResult && m.score
-            ? <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.score.home}-{m.score.away}</span>
+            ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.score.home}-{m.score.away}</span>
             : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
           }
           {isResult && m.score && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 2 }}>FT</span>}
