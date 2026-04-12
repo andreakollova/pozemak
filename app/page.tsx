@@ -107,6 +107,12 @@ function fmtLocalTime(iso: string): string | null {
 // correctly since FIH stores all times in IST, not the venue's local timezone.
 const fmtVenueTime = (_iso: string) => null
 
+// Hide from Upcoming once start time + 3-hour match buffer has elapsed
+const MATCH_BUFFER_MS = 3 * 60 * 60 * 1000
+function notPast(date: string): boolean {
+  return new Date(date).getTime() + MATCH_BUFFER_MS > Date.now()
+}
+
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
@@ -132,7 +138,7 @@ function getRecentResults(matches: Match[], limit = 5): Match[] {
 }
 
 function getUpcomingMatches(matches: Match[], limit = 5): Match[] {
-  return matches.filter(m => m.status !== 'final' && m.status !== 'live')
+  return matches.filter(m => m.status !== 'final' && m.status !== 'live' && notPast(m.date))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, limit)
 }
@@ -903,7 +909,7 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
 
   const filtered = all.filter(m => {
     if (gender !== 'all' && m.gender !== gender) return false
-    if (tab === 'upcoming') return m.status === 'upcoming' || m.status === 'live'
+    if (tab === 'upcoming') return m.status === 'live' || (m.status === 'upcoming' && notPast(m.date))
     return m.status === 'completed'
   }).sort((a, b) =>
     tab === 'upcoming'
@@ -958,11 +964,11 @@ function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihData: FIHD
   const byDateAsc  = (a: NormMatch, b: NormMatch) => new Date(a.date).getTime() - new Date(b.date).getTime()
 
   const intlRecent   = fihData        ? [...fihData.men.recent,            ...fihData.women.recent]           .map(normFIH).sort(byDateDesc) : []
-  const intlUpcoming = fihData        ? [...fihData.men.upcoming,          ...fihData.women.upcoming]         .map(normFIH).sort(byDateAsc)  : []
+  const intlUpcoming = fihData        ? [...fihData.men.upcoming,          ...fihData.women.upcoming]         .map(normFIH).filter(m => notPast(m.date)).sort(byDateAsc)  : []
   const proRecent    = proLeagueData  ? [...proLeagueData.men.recent,      ...proLeagueData.women.recent]     .map(normPro).sort(byDateDesc) : []
-  const proUpcoming  = proLeagueData  ? [...proLeagueData.men.upcoming,    ...proLeagueData.women.upcoming]   .map(normPro).sort(byDateAsc)  : []
+  const proUpcoming  = proLeagueData  ? [...proLeagueData.men.upcoming,    ...proLeagueData.women.upcoming]   .map(normPro).filter(m => notPast(m.date)).sort(byDateAsc)  : []
   const wcRecent     = wcData         ? [...wcData.men.recent,             ...wcData.women.recent]            .map(normWC).sort(byDateDesc)  : []
-  const wcUpcoming   = wcData         ? [...wcData.men.upcoming,           ...wcData.women.upcoming]          .map(normWC).sort(byDateAsc)   : []
+  const wcUpcoming   = wcData         ? [...wcData.men.upcoming,           ...wcData.women.upcoming]          .map(normWC).filter(m => notPast(m.date)).sort(byDateAsc)   : []
 
   const pool: NormMatch[] = tab === 'recent'
     ? source === 'intl' ? intlRecent  : source === 'pro' ? proRecent  : source === 'wc' ? wcRecent
@@ -1100,7 +1106,7 @@ function FIHIntlCarousel({ data }: { data: FIHData | null }) {
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
   const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
   const allRecent   = data ? [...(data.men.recent),   ...(data.women.recent)]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
-  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].filter(m => notPast(m.date)).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
   const gData   = gender === 'all' ? null : data ? (gender === 'M' ? data.men : data.women) : null
   const matches = gender === 'all'
     ? (tab === 'recent' ? allRecent : allUpcoming)
@@ -1147,7 +1153,7 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
   const [tab, setTab]       = useState<'recent' | 'upcoming'>('recent')
   const allRecent   = data ? [...(data.men.recent),   ...(data.women.recent)]  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : []
-  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
+  const allUpcoming = data ? [...(data.men.upcoming), ...(data.women.upcoming)].filter(m => notPast(m.date)).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : []
   const gData   = gender === 'all' ? null : data ? (gender === 'M' ? data.men : data.women) : null
   const matches = gender === 'all'
     ? (tab === 'recent' ? allRecent : allUpcoming)
@@ -1289,7 +1295,7 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
   type Tagged = Match & { _gender: 'men' | 'women' }
   const tag = (ms: Match[], g: 'men' | 'women'): Tagged[] => ms.map(m => ({ ...m, _gender: g }))
   const allResults  = [...tag(menData?.results ?? [], 'men'),  ...tag(womenData?.results ?? [], 'women')] .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  const allUpcoming = [...tag(menData?.upcoming ?? [], 'men'), ...tag(womenData?.upcoming ?? [], 'women')].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const allUpcoming = [...tag(menData?.upcoming ?? [], 'men'), ...tag(womenData?.upcoming ?? [], 'women')].filter(m => notPast(m.date)).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   const gData   = gender === 'all' ? null : gender === 'men' ? menData : womenData
   const matches: Tagged[] = gender === 'all'
     ? (tab === 'results' ? allResults : allUpcoming)
