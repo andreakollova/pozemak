@@ -246,6 +246,19 @@ export default function Home() {
         .art-row   { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .art-row::-webkit-scrollbar { display: none; }
         .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
+        @media (max-width: 640px) {
+          .page-wrap { padding: 10px 12px 80px !important; }
+          .hero-img { height: 240px !important; }
+          .hero-content { padding: 16px 14px !important; }
+          .hero-title { font-size: 18px !important; letter-spacing: -0.3px !important; margin-bottom: 8px !important; }
+          .hero-text { display: none !important; }
+          .hero-read-btn { margin-top: 12px !important; }
+          .trending-grid { grid-template-columns: 1fr !important; }
+          .side-by-side { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .news-grid-3 { grid-template-columns: 1fr !important; }
+          .carousel-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+          .carousel-hdr-controls { flex-wrap: wrap !important; gap: 4px !important; }
+        }
       `}</style>
 
       <div className="page-wrap">
@@ -270,7 +283,7 @@ export default function Home() {
             <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 10)} noMargin />
           )}
           {((byCountry['Belgium']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
+            <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
               {(byCountry['Belgium']?.length ?? 0) > 0 && (
                 <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 5)} cardHeight={140} /></div>
               )}
@@ -288,7 +301,7 @@ export default function Home() {
 
         {/* 🇮🇳 India + 🇦🇺 Australia — side by side */}
         {((byCountry['India']?.length ?? 0) > 0 || (byCountry['Australia']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
+          <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['India']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'India')!} articles={byCountry['India'].slice(0, 6)} cardHeight={130} /></div>
             )}
@@ -305,7 +318,7 @@ export default function Home() {
 
         {/* 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland + 🇮🇪 Ireland — side by side */}
         {((byCountry['Scotland']?.length ?? 0) > 0 || (byCountry['Ireland']?.length ?? 0) > 0) && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
+          <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
             {(byCountry['Scotland']?.length ?? 0) > 0 && (
               <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Scotland')!} articles={byCountry['Scotland'].slice(0, 6)} cardHeight={130} /></div>
             )}
@@ -371,7 +384,7 @@ function HeroCard({ article }: { article: Article }) {
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 0, borderRadius: 12, overflow: 'hidden' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
+      <div className="hero-img" style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -381,14 +394,14 @@ function HeroCard({ article }: { article: Article }) {
           <span style={{ background: 'var(--green)', color: '#003ad0', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
           <span style={{ background: '#003ad0', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>{source.flag} {source.country}</span>
         </div>
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
+        <div className="hero-content" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
             <Clock size={11} color="rgba(255,255,255,0.45)" />
             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: 1 }}>{timeAgo(article.scraped_at)}</span>
           </div>
-          <h1 style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', color: hov ? 'var(--green)' : '#fff', marginBottom: 14, maxWidth: 760, transition: 'color .2s' }}>{title}</h1>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 620 }}>{text}</p>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 20px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>Read article →</div>
+          <h1 className="hero-title" style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', color: hov ? 'var(--green)' : '#fff', marginBottom: 14, maxWidth: 760, transition: 'color .2s' }}>{title}</h1>
+          <p className="hero-text" style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 620 }}>{text}</p>
+          <div className="hero-read-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 20px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>Read article →</div>
         </div>
       </div>
     </Link>
@@ -406,7 +419,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
         <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
+      <div className="trending-grid" style={{ display: 'grid', gridTemplateColumns: '1fr minmax(0, 300px)', gap: 16, alignItems: 'stretch' }}>
         <FeaturedCard article={featured} trending />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>📰 Today's Headlines</div>
@@ -531,7 +544,7 @@ function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string
         <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3 }}>{name}</span>
         <div style={{ width: 28, height: 1, background: 'var(--border)' }} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+      <div className="news-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
         {articles.slice(0, 3).map(a => <NewsGrid3Card key={a.id} article={a} />)}
       </div>
     </div>
@@ -669,7 +682,7 @@ function Grid2Card({ article }: { article: Article }) {
 
 function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; href: string; hrefLabel: string; controls: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+    <div className="carousel-hdr" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
@@ -924,7 +937,7 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
         href="https://www.fih.hockey/schedule-fixtures-results"
         hrefLabel="FIH"
         controls={
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div className="carousel-hdr-controls" style={{ display: 'flex', gap: 6 }}>
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
@@ -1221,7 +1234,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
         href="https://eurohockey.org/calendar"
         hrefLabel="Calendar"
         controls={
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div className="carousel-hdr-controls" style={{ display: 'flex', gap: 6 }}>
             <TabPill active={tab === 'matches'}     onClick={() => setTab('matches')}     label="Matches" />
             <TabPill active={tab === 'tournaments'} onClick={() => setTab('tournaments')} label="Tournaments" />
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
@@ -1308,7 +1321,7 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
         href="/competition"
         hrefLabel="All"
         controls={
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <div className="carousel-hdr-controls" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <TabPill active={gender === 'all'}   onClick={() => setGender('all')}   label="All" />
             <TabPill active={gender === 'men'}   onClick={() => setGender('men')}   label="Men" />
             <TabPill active={gender === 'women'} onClick={() => setGender('women')} label="Women" />
