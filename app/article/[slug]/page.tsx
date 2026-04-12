@@ -157,24 +157,13 @@ export default function ArticlePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {(() => {
             const SUBHEAD_RE = /^[\u{1F300}-\u{1FAFF}]/u
-            const stripEmoji = (s: string) => s.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '').trim()
             const isSubheading = (s: string) => SUBHEAD_RE.test(s.trim()) && s.trim().length < 100 && !/[.!?]\s/.test(s)
-            let subheadIdx = 0
             return paragraphs.map((p, i) => {
               if (isSubheading(p)) {
-                const isFirst = subheadIdx === 0
-                subheadIdx++
-                if (isFirst) {
-                  return (
-                    <h4 key={i} style={{ fontSize: 19, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0 0', lineHeight: 1.35, letterSpacing: '-0.3px' }}>
-                      {p.trim()}
-                    </h4>
-                  )
-                }
                 return (
-                  <h5 key={i} style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0 0', lineHeight: 1.35, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    {stripEmoji(p)}
-                  </h5>
+                  <h4 key={i} style={{ fontSize: 19, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0 0', lineHeight: 1.35, letterSpacing: '-0.3px' }}>
+                    {p.trim()}
+                  </h4>
                 )
               }
               return (
