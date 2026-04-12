@@ -57,7 +57,8 @@ export async function getArticles(limit = 20): Promise<Article[]> {
   const [{ data: top }, { data: rest, error }] = await Promise.all([
     db.from('articles').select('*').eq('published', true).eq('top_story', true)
       .order('scraped_at', { ascending: false }).limit(1),
-    db.from('articles').select('*').eq('published', true).neq('top_story', true)
+    db.from('articles').select('*').eq('published', true)
+      .or('top_story.is.null,top_story.eq.false')
       .order('scraped_at', { ascending: false }).limit(limit),
   ])
   if (error) throw new Error(error.message)
