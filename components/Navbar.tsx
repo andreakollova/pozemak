@@ -63,7 +63,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
-            <BarChart2 size={12} /> Standings
+            <BarChart2 size={12} /> Matches
           </Link>
 
           <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
