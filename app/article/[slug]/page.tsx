@@ -111,7 +111,7 @@ export default function ArticlePage() {
 
         {/* Tags + Date */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 6 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#003ad0', background: '#95ff03', border: 'none', padding: '4px 10px', borderRadius: 6 }}>
             {source.flag} {source.country}
           </span>
           <span style={{ fontSize: 12, color: 'var(--green-text)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>
