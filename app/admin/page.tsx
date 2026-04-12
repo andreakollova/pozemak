@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getArticles, Article, getTitle } from '@/lib/supabase'
-import { Plus, LogOut, Pencil, ExternalLink } from 'lucide-react'
+import { Plus, LogOut, Pencil, ExternalLink, Star } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -68,9 +68,14 @@ export default function AdminDashboard() {
                 <img src={a.image_url} alt="" style={{ width: 64, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
               )}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {getTitle(a)}
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  {a.top_story && (
+                    <Star size={12} fill="#FFC107" color="#FFC107" style={{ flexShrink: 0 }} />
+                  )}
+                  <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {getTitle(a)}
+                  </p>
+                </div>
                 <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
                   {new Date(a.scraped_at).toLocaleDateString('en-GB')}
                 </p>

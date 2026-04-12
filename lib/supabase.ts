@@ -24,6 +24,7 @@ export type Article = {
   image_url: string
   scraped_at: string
   published: boolean
+  top_story?: boolean
 }
 
 // Strip email addresses from text (e.g. redaktie@hockey.nl must never appear)

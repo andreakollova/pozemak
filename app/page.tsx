@@ -246,19 +246,6 @@ export default function Home() {
         .art-row   { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .art-row::-webkit-scrollbar { display: none; }
         .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
-        @media (max-width: 640px) {
-          .page-wrap { padding: 10px 16px 80px !important; }
-          .hero-img { height: 360px !important; }
-          .hero-content { padding: 16px 16px !important; }
-          .hero-title { font-size: 20px !important; letter-spacing: -0.3px !important; margin-bottom: 8px !important; }
-          .hero-text { display: none !important; }
-          .hero-read-btn { margin-top: 12px !important; }
-          .trending-grid { grid-template-columns: 1fr !important; }
-          .side-by-side { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .news-grid-3 { grid-template-columns: 1fr !important; }
-          .carousel-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
-          .carousel-hdr-controls { flex-wrap: wrap !important; gap: 4px !important; }
-        }
       `}</style>
 
       <div className="page-wrap">
@@ -942,7 +929,6 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
-            <TabPill active={tab === 'results'}  onClick={() => setTab('results')}  label="Results" />
             {(['left', 'right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
@@ -969,7 +955,7 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
 function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihData: FIHData | null; proLeagueData: ProLeagueData | null; wcData: WCData | null }) {
   const ref = useRef<HTMLDivElement>(null)
   const [gender, setGender] = useState<'M' | 'F' | 'all'>('all')
-  const [tab,    setTab]    = useState<'recent' | 'upcoming'>('recent')
+  const [tab,    setTab]    = useState<'recent' | 'upcoming'>('upcoming')
   const [source, setSource] = useState<'all' | 'intl' | 'pro' | 'wc'>('all')
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
 
@@ -1006,8 +992,6 @@ function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihData: FIHD
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="Men+Women" />
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
-            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
-            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             {(['left','right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
@@ -1054,8 +1038,6 @@ function FIHWorldCupCarousel({ data }: { data: WCData | null }) {
             <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
             <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
             <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
-            <TabPill active={tab === 'recent'}   onClick={() => setTab('recent')}   label="Results"  />
-            <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             {(['left','right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
@@ -1071,8 +1053,8 @@ function FIHWorldCupCarousel({ data }: { data: WCData | null }) {
         {!data
           ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
-            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
-            : matches.map((m, i) => <WCMatchCard key={i} match={m} isResult={tab === 'recent'} />)
+            ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming matches</p>
+            : matches.map((m, i) => <WCMatchCard key={i} match={m} isResult={false} />)
         }
       </div>
     </div>
@@ -1216,7 +1198,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
 
   const matches     = data?.matches ?? []
   const tournaments = data?.tournaments ?? []
-  const filtMatches = gender === 'all' ? matches : matches.filter(m => m.gender === gender)
+  const filtMatches = (gender === 'all' ? matches : matches.filter(m => m.gender === gender)).filter(m => m.status !== 'completed')
   const filtTours   = gender === 'all' ? tournaments : tournaments.filter(t => t.gender === gender)
 
   function fmtDateRange(start: string, end: string) {
@@ -1302,7 +1284,7 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
 function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; womenData: MatchData | null }) {
   const ref = useRef<HTMLDivElement>(null)
   const [gender, setGender] = useState<'all' | 'men' | 'women'>('all')
-  const [tab, setTab]       = useState<'results' | 'upcoming'>('results')
+  const [tab, setTab]       = useState<'results' | 'upcoming'>('upcoming')
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -200 : 200, behavior: 'smooth' })
 
   type Tagged = Match & { _gender: 'men' | 'women' }
@@ -1325,7 +1307,6 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
             <TabPill active={gender === 'all'}   onClick={() => setGender('all')}   label="All" />
             <TabPill active={gender === 'men'}   onClick={() => setGender('men')}   label="Men" />
             <TabPill active={gender === 'women'} onClick={() => setGender('women')} label="Women" />
-            <TabPill active={tab === 'results'}  onClick={() => setTab('results')}  label="Results" />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             {(['left','right'] as const).map(d => (
               <button key={d} onClick={() => scroll(d)} style={{ width: 26, height: 26, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getArticleById, getTitle, getText } from '@/lib/supabase'
-import { ArrowLeft, Save, Share2 } from 'lucide-react'
+import { ArrowLeft, Save, Share2, Star } from 'lucide-react'
 
 export default function EditArticlePage() {
   const router = useRouter()
@@ -16,6 +16,7 @@ export default function EditArticlePage() {
   const [titleSk, setTitleSk] = useState('')
   const [textSk, setTextSk] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [isTopStory, setIsTopStory] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -23,6 +24,7 @@ export default function EditArticlePage() {
   const [posting, setPosting] = useState(false)
   const [posted, setPosted] = useState(false)
   const [igError, setIgError] = useState('')
+  const [settingTop, setSettingTop] = useState(false)
 
   useEffect(() => {
     getArticleById(id).then(a => {
@@ -30,10 +32,22 @@ export default function EditArticlePage() {
         setTitleSk(getTitle(a))
         setTextSk(getText(a) || '')
         setImageUrl(a.image_url || '')
+        setIsTopStory(!!a.top_story)
       }
       setLoading(false)
     })
   }, [id])
+
+  const setTopStory = async () => {
+    setSettingTop(true)
+    const res = await fetch(`/api/admin/articles/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ top_story: true }),
+    })
+    if (res.ok) setIsTopStory(true)
+    setSettingTop(false)
+  }
 
   const postInstagram = async () => {
     setPosting(true)
@@ -43,6 +57,13 @@ export default function EditArticlePage() {
     const data = await res.json()
     if (res.ok) {
       setPosted(true)
+      // Auto-set as top story when posted to Instagram
+      await fetch(`/api/admin/articles/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ top_story: true }),
+      })
+      setIsTopStory(true)
       setTimeout(() => setPosted(false), 5000)
     } else {
       setIgError(data.error || 'Error posting to Instagram')
@@ -99,6 +120,24 @@ export default function EditArticlePage() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={setTopStory}
+            disabled={settingTop || isTopStory}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '10px 20px', borderRadius: 10,
+              border: `1px solid ${isTopStory ? 'rgba(255,193,7,0.6)' : 'rgba(255,193,7,0.3)'}`,
+              background: isTopStory ? 'rgba(255,193,7,0.25)' : 'rgba(255,193,7,0.08)',
+              color: '#FFC107',
+              fontWeight: 800, fontSize: 13,
+              cursor: (settingTop || isTopStory) ? 'default' : 'pointer',
+              opacity: settingTop ? 0.7 : 1,
+              letterSpacing: 1, textTransform: 'uppercase',
+            }}
+          >
+            <Star size={14} fill={isTopStory ? '#FFC107' : 'none'} />
+            {isTopStory ? 'Top Story' : settingTop ? 'Setting…' : 'Set Top Story'}
+          </button>
           <button
             onClick={postInstagram}
             disabled={posting}
