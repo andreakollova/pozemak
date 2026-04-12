@@ -247,10 +247,10 @@ export default function Home() {
         .art-row::-webkit-scrollbar { display: none; }
         .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
         @media (max-width: 640px) {
-          .page-wrap { padding: 10px 12px 80px !important; }
-          .hero-img { height: 240px !important; }
-          .hero-content { padding: 16px 14px !important; }
-          .hero-title { font-size: 18px !important; letter-spacing: -0.3px !important; margin-bottom: 8px !important; }
+          .page-wrap { padding: 10px 16px 80px !important; }
+          .hero-img { height: 360px !important; }
+          .hero-content { padding: 16px 16px !important; }
+          .hero-title { font-size: 20px !important; letter-spacing: -0.3px !important; margin-bottom: 8px !important; }
           .hero-text { display: none !important; }
           .hero-read-btn { margin-top: 12px !important; }
           .trending-grid { grid-template-columns: 1fr !important; }
@@ -465,7 +465,7 @@ function FeaturedCard({ article, trending }: { article: Article; trending?: bool
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 75%)' }} />
         <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 6 }}>
           {trending && <span style={{ background: 'var(--green)', color: '#000', fontSize: 9, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>🔥 Trending</span>}
-          <span style={{ background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>{source.flag} {source.country}</span>
+          <span style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontSize: 9, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 5 }}>{source.flag} {source.country}</span>
         </div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '22px 22px' }}>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>{timeAgo(article.scraped_at)}</div>

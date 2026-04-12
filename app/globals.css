@@ -34,6 +34,7 @@
   --green-text: #95ff03;
   --blue-glow: 0 0 32px rgba(0, 58, 208, 0.25);
   --pill-active-text: #003ad0;   /* blue text on green pill in dark mode */
+  --on-accent: #000000;          /* text on accent (green) bg in dark mode */
 }
 
 /* ── LIGHT MODE ───────────────────────────────────────────────── */
@@ -70,6 +71,7 @@
   --green-text: #003ad0;   /* dates/labels use blue in light mode */
   --blue-glow: 0 4px 24px rgba(0, 58, 208, 0.12);
   --pill-active-text: #ffffff;   /* white text on blue pill in light mode */
+  --on-accent: #ffffff;          /* text on accent (blue) bg in light mode */
 }
 
 /* ── BASE ─────────────────────────────────────────────────────── */

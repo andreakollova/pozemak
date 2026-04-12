@@ -30,10 +30,10 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       {/* Top bar */}
       <style>{`
         @media (max-width: 640px) {
-          .navbar-topbar { padding: 0 14px !important; height: 54px !important; }
+          .navbar-topbar { padding: 0 16px !important; height: 54px !important; }
           .navbar-logo { height: 28px !important; }
           .navbar-links { gap: 4px !important; }
-          .navbar-link-label { display: none; }
+          .navbar-nav-link { font-size: 10px !important; padding: 5px 8px !important; gap: 4px !important; }
         }
       `}</style>
       <div className="navbar-topbar" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -49,6 +49,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
         <div className="navbar-links" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
+            className="navbar-nav-link"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
@@ -57,6 +58,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
           </Link>
 
           <Link href="/competition"
+            className="navbar-nav-link"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
