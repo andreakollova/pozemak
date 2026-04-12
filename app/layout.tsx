@@ -14,9 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (saved) {
       setDark(saved === 'dark')
     } else {
-      // Default: dark on mobile, light on desktop
-      const isMobile = window.innerWidth < 640
-      setDark(isMobile)
+      setDark(false) // Default: light mode
     }
   }, [])
 
