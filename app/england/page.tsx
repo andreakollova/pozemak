@@ -76,7 +76,6 @@ export default function EnglandPage() {
           <span style={{ fontSize: 36 }}>🇬🇧</span>
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>Great Britain Hockey</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>Latest news from Great Britain field hockey</p>
           </div>
         </div>
 

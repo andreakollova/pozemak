@@ -80,7 +80,6 @@ export default function CountryPage({ config }: { config: CountryConfig }) {
           <span style={{ fontSize: 36 }}>{config.flag}</span>
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>{config.name}</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>{config.description}</p>
           </div>
         </div>
 
