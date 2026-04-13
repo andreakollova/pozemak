@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import ScrollToTop from '@/components/ScrollToTop'
 import { Analytics } from '@vercel/analytics/react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         {children}
         <Footer />
+        <ScrollToTop />
         <CookieBanner />
         <Analytics />
       </body>
