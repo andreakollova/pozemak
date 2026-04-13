@@ -40,10 +40,10 @@ async function uploadToStorage(imageBuffer: Buffer): Promise<string> {
   const db = getSupabaseAdmin()
   const filename = `ig-${Date.now()}.jpg`
   const { error } = await db.storage
-    .from('instagram')
+    .from('instagram-images')
     .upload(filename, imageBuffer, { contentType: 'image/jpeg', upsert: true })
   if (error) throw new Error(`Storage upload failed: ${error.message}`)
-  const { data } = db.storage.from('instagram').getPublicUrl(filename)
+  const { data } = db.storage.from('instagram-images').getPublicUrl(filename)
   return data.publicUrl
 }
 
