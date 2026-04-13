@@ -12,8 +12,10 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
+  const [isLight, setIsLight] = useState(false)
 
   useEffect(() => {
+    setIsLight(document.body.classList.contains('light'))
     getArticles(50).then(data => { setArticles(data); setLoading(false) })
   }, [])
 
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40 }}>
         <div>
           <h1 style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.5px' }}>
-            Admin <span style={{ color: 'var(--green)' }}>panel</span>
+            Admin <span style={{ color: isLight ? 'var(--blue)' : 'var(--green)' }}>panel</span>
           </h1>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
