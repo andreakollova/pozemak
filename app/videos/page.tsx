@@ -3,9 +3,8 @@
 export const dynamic = 'force-dynamic'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { getVideos, Video, getVideoTitle } from '@/lib/supabase'
-import { Play, ArrowLeft } from 'lucide-react'
+import { Play } from 'lucide-react'
 
 type Category = 'all' | 'dames' | 'heren' | 'fih' | 'fih-mens' | 'fih-womens'
 
@@ -25,18 +24,15 @@ export default function VideosPage() {
     { key: 'all',       label: 'All' },
     { key: 'dames',     label: 'Hoofdklasse Dames' },
     { key: 'heren',     label: 'Hoofdklasse Heren' },
-    { key: 'fih',       label: '🌍 FIH' },
-    { key: 'fih-mens',  label: '🌍 FIH Mens' },
-    { key: 'fih-womens',label: '🌍 FIH Womens' },
+    { key: 'fih',       label: 'FIH' },
+    { key: 'fih-mens',  label: 'FIH Mens' },
+    { key: 'fih-womens',label: 'FIH Womens' },
   ]
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px 80px' }}>
       {/* Header */}
       <div style={{ marginBottom: 40 }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 13, marginBottom: 24 }}>
-          <ArrowLeft size={14} /> Back to articles
-        </Link>
         <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
           Video<span style={{ color: 'var(--green)' }}>s</span>
         </h1>
