@@ -123,3 +123,18 @@ body {
   border-radius: 16px;
   padding: 24px;
 }
+
+/* ── MOBILE ───────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrap { padding: 10px 16px 80px !important; }
+  .hero-img { height: 400px !important; }
+  .hero-content { padding: 16px 16px !important; }
+  .hero-title { font-size: 20px !important; letter-spacing: -0.3px !important; margin-bottom: 8px !important; }
+  .hero-text { display: none !important; }
+  .hero-read-btn { margin-top: 12px !important; }
+  .trending-grid { grid-template-columns: 1fr !important; }
+  .side-by-side { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .news-grid-3 { grid-template-columns: 1fr !important; }
+  .carousel-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+  .carousel-hdr-controls { flex-wrap: wrap !important; gap: 4px !important; }
+}

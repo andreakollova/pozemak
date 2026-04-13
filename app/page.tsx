@@ -280,16 +280,28 @@ export default function Home() {
           </div>
         )}
 
-        {/* 🏑 FIH Hockey news articles — 3 columns */}
-        <NewsGrid3Section flag="🏑" name="FIH Hockey" articles={fihArticles} />
+        {/* 🌍 Latest News from the World — FIH + EuroHockey combined */}
+        {(fihArticles.length > 0 || euroArticles.length > 0) && (
+          <WorldNewsSection fihArticles={fihArticles} euroArticles={euroArticles} />
+        )}
 
-        {/* 🇪🇺 EuroHockey news articles — 3 columns */}
-        <NewsGrid3Section flag="🇪🇺" name="EuroHockey" articles={euroArticles} />
-
-        {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} />}
-        {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} />}
-        {fihVideos.length > 0    && <VideoCarousel label="🌍 FIH Hockey" videos={fihVideos} />}
       </div>
+
+      {/* ── Latest Highlights ── */}
+      {(damesVideos.length > 0 || herenVideos.length > 0 || fihVideos.length > 0) && (
+        <div style={{ background: '#0d0d0d', padding: '56px 0 64px' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>Video</p>
+            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 900, color: '#ffffff', margin: '0 0 12px', letterSpacing: '-0.5px' }}>Latest Highlights</h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 40px' }}>
+              Watch the best moments from the Dutch Hoofdklasse, international FIH tournaments and more. Fresh clips added every day so you never miss the action.
+            </p>
+            {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} dark />}
+            {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} dark />}
+            {fihVideos.length > 0    && <VideoCarousel label="🌍 FIH Hockey" videos={fihVideos} dark />}
+          </div>
+        </div>
+      )}
     </>
   )
 }
@@ -360,7 +372,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
   const list = articles.slice(1, 5)
   if (!featured) return null
   return (
-    <div style={{ marginTop: 20, marginBottom: 48 }}>
+    <div style={{ marginTop: 30, marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
         <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
@@ -477,6 +489,30 @@ function Grid3Card({ article }: { article: Article }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+/* ─── Latest News from the World (FIH + EuroHockey combined) ────────────── */
+function WorldNewsSection({ fihArticles, euroArticles }: { fihArticles: Article[]; euroArticles: Article[] }) {
+  // interleave: fih[0], euro[0], fih[1], euro[1], fih[2], euro[2], then fill remaining
+  const combined: Article[] = []
+  const maxLen = Math.max(fihArticles.length, euroArticles.length)
+  for (let i = 0; i < maxLen && combined.length < 6; i++) {
+    if (fihArticles[i]) combined.push(fihArticles[i])
+    if (euroArticles[i] && combined.length < 6) combined.push(euroArticles[i])
+  }
+  if (!combined.length) return null
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>🌍</span>
+        <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3 }}>Latest News from the World</span>
+        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+      </div>
+      <div className="news-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        {combined.map(a => <NewsGrid3Card key={a.id} article={a} />)}
+      </div>
+    </div>
   )
 }
 
@@ -1614,22 +1650,25 @@ function TeamLogo({ logo, name, small }: { logo: string | null; name: string; sm
 
 
 /* ─── Video carousel ─────────────────────────────────────────────────────── */
-function VideoCarousel({ label, videos }: { label: string; videos: Video[] }) {
+function VideoCarousel({ label, videos, dark }: { label: string; videos: Video[]; dark?: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const scroll = (d: 'left' | 'right') => ref.current?.scrollBy({ left: d === 'left' ? -270 : 270, behavior: 'smooth' })
+  const textColor = dark ? 'rgba(255,255,255,0.9)' : 'var(--text-primary)'
+  const borderColor = dark ? 'rgba(255,255,255,0.12)' : 'var(--border)'
+  const mutedColor = dark ? 'rgba(255,255,255,0.35)' : 'var(--text-secondary)'
   return (
     <div style={{ marginBottom: 52 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{label}</span>
-          <div style={{ height: 1, background: 'var(--border)', width: 40 }} />
+          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: textColor }}>{label}</span>
+          <div style={{ height: 1, background: borderColor, width: 40 }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/videos" style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>All →</Link>
+          <Link href="/videos" style={{ fontSize: 11, fontWeight: 700, color: 'var(--green)', textDecoration: 'none', letterSpacing: 1 }}>All →</Link>
           {(['left', 'right'] as const).map(d => (
-            <button key={d} onClick={() => scroll(d)} style={{ width: 28, height: 28, border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color .2s, color .2s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
+            <button key={d} onClick={() => scroll(d)} style={{ width: 28, height: 28, border: `1px solid ${borderColor}`, borderRadius: 6, background: 'transparent', color: mutedColor, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color .2s, color .2s' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--green)'; e.currentTarget.style.color = 'var(--green)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = borderColor; e.currentTarget.style.color = mutedColor }}
             >
               {d === 'left' ? <ChevronLeft size={13} /> : <ChevronRight size={13} />}
             </button>
