@@ -53,7 +53,7 @@ async function postToInstagram(imageUrl: string, caption: string): Promise<strin
   const accountId = process.env.INSTAGRAM_ACCOUNT_ID
   if (!token || !accountId) throw new Error('Instagram credentials not set')
 
-  const base = `https://graph.facebook.com/v18.0/${accountId}`
+  const base = `https://graph.facebook.com/v21.0/${accountId}`
 
   // 1. Create media container
   const createRes = await fetch(
@@ -68,7 +68,7 @@ async function postToInstagram(imageUrl: string, caption: string): Promise<strin
   for (let i = 0; i < 12; i++) {
     await new Promise(r => setTimeout(r, 3000))
     const statusRes = await fetch(
-      `https://graph.facebook.com/v18.0/${containerId}?fields=status_code&access_token=${token}`
+      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code&access_token=${token}`
     )
     const { status_code } = await statusRes.json()
     if (status_code === 'FINISHED') break
