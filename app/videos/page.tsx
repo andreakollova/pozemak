@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { getVideos, Video, getVideoTitle } from '@/lib/supabase'
 import { Play } from 'lucide-react'
 
-type Category = 'all' | 'dames' | 'heren' | 'fih' | 'fih-mens' | 'fih-womens'
+type Category = 'all' | 'dames' | 'heren' | 'fih'
 
 export default function VideosPage() {
   const [videos, setVideos] = useState<Video[]>([])
@@ -21,12 +21,10 @@ export default function VideosPage() {
   }, [category])
 
   const tabs: { key: Category; label: string }[] = [
-    { key: 'all',       label: 'All' },
-    { key: 'dames',     label: 'Hoofdklasse Women' },
-    { key: 'heren',     label: 'Hoofdklasse Men' },
-    { key: 'fih',       label: 'FIH' },
-    { key: 'fih-mens',  label: 'FIH Men' },
-    { key: 'fih-womens',label: 'FIH Women' },
+    { key: 'all',   label: 'All' },
+    { key: 'dames', label: 'Hoofdklasse Women' },
+    { key: 'heren', label: 'Hoofdklasse Men' },
+    { key: 'fih',   label: 'FIH' },
   ]
 
   return (
@@ -34,10 +32,10 @@ export default function VideosPage() {
       {/* Header */}
       <div style={{ marginBottom: 40 }}>
         <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
-          Video<span style={{ color: 'var(--green)' }}>s</span>
+          Videos
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
-          Latest videos from the Dutch Hoofdklasse
+          Discover top plays and unforgettable moments from field hockey matches around the world.
         </p>
       </div>
 
