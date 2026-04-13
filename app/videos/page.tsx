@@ -97,8 +97,6 @@ function VideoCard({ video }: { video: Video }) {
       <div style={{
         borderRadius: 14, overflow: 'hidden',
         background: 'var(--bg-card)', border: '1px solid var(--border)',
-        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-        transition: 'transform 0.2s',
         cursor: 'pointer',
       }}>
         {/* Thumbnail */}
@@ -140,8 +138,8 @@ function VideoCard({ video }: { video: Video }) {
         {/* Info */}
         <div style={{ padding: '14px 16px' }}>
           <p style={{
-            fontSize: 14, fontWeight: 700, color: 'var(--text-primary)',
-            lineHeight: 1.4,
+            fontSize: 14, fontWeight: 700, color: hovered ? 'var(--accent)' : 'var(--text-primary)',
+            lineHeight: 1.4, transition: 'color 0.2s',
             display: '-webkit-box', WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical', overflow: 'hidden',
           }}>
