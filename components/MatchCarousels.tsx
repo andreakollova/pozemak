@@ -507,9 +507,6 @@ export function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
           <div style={{ display: 'flex', gap: 6 }}>
             <TabPill active={tab === 'matches'}     onClick={() => setTab('matches')}     label="Matches" />
             <TabPill active={tab === 'tournaments'} onClick={() => setTab('tournaments')} label="Tournaments" />
-            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
-            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
-            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <ScrollBtn dir="left"  onClick={() => scroll('left')}  />
             <ScrollBtn dir="right" onClick={() => scroll('right')} />
           </div>
