@@ -30,7 +30,7 @@ export default function VideosPage() {
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px 80px' }}>
       {/* Header */}
-      <div style={{ marginBottom: 40 }}>
+      <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
           Videos
         </h1>
