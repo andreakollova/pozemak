@@ -295,8 +295,8 @@ export default function Home() {
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 40px' }}>
               Latest videos from the Dutch Hoofdklasse.
             </p>
-            {damesVideos.length > 0 && <VideoCarousel label="Hoofdklasse Dames · Netherlands Women's" videos={damesVideos} dark />}
-            {herenVideos.length > 0  && <VideoCarousel label="Hoofdklasse Heren · Netherlands Men's" videos={herenVideos} dark />}
+            {damesVideos.length > 0 && <VideoCarousel label="Hoofdklasse Women · Netherlands Women's" videos={damesVideos} dark />}
+            {herenVideos.length > 0  && <VideoCarousel label="Hoofdklasse Men · Netherlands Men's" videos={herenVideos} dark />}
             {fihVideos.length > 0    && <VideoCarousel label="FIH" videos={fihVideos} dark />}
           </div>
         </div>

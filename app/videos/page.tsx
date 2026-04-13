@@ -22,11 +22,11 @@ export default function VideosPage() {
 
   const tabs: { key: Category; label: string }[] = [
     { key: 'all',       label: 'All' },
-    { key: 'dames',     label: 'Hoofdklasse Dames' },
-    { key: 'heren',     label: 'Hoofdklasse Heren' },
+    { key: 'dames',     label: 'Hoofdklasse Women' },
+    { key: 'heren',     label: 'Hoofdklasse Men' },
     { key: 'fih',       label: 'FIH' },
-    { key: 'fih-mens',  label: 'FIH Mens' },
-    { key: 'fih-womens',label: 'FIH Womens' },
+    { key: 'fih-mens',  label: 'FIH Men' },
+    { key: 'fih-womens',label: 'FIH Women' },
   ]
 
   return (
@@ -131,7 +131,7 @@ function VideoCard({ video }: { video: Video }) {
             fontSize: 11, fontWeight: 700, color: 'var(--green)',
             letterSpacing: 0.5, textTransform: 'uppercase',
           }}>
-            {video.category === 'dames' ? 'Dames' : video.category === 'heren' ? 'Heren' : video.category === 'fih-mens' ? 'FIH Mens' : video.category === 'fih-womens' ? 'FIH Womens' : 'FIH'}
+            {video.category === 'dames' ? 'Women' : video.category === 'heren' ? 'Men' : video.category === 'fih-mens' ? 'FIH Men' : video.category === 'fih-womens' ? 'FIH Women' : 'FIH'}
           </div>
         </div>
 
