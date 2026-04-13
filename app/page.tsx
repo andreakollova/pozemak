@@ -360,7 +360,7 @@ function TrendingSection({ articles }: { articles: Article[] }) {
   const list = articles.slice(1, 5)
   if (!featured) return null
   return (
-    <div style={{ marginBottom: 48 }}>
+    <div style={{ marginTop: 20, marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
         <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>🔥 Trending News</span>
         <div style={{ height: 1, background: 'var(--border)', flex: 1 }} />
