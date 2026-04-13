@@ -408,9 +408,6 @@ export function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData
       <CarouselHeader title="⚡ Coming Up" href="https://www.fih.hockey/schedule-fixtures-results" hrefLabel="FIH"
         controls={
           <div style={{ display: 'flex', gap: 6 }}>
-            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="All" />
-            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
-            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <TabPill active={tab === 'upcoming'} onClick={() => setTab('upcoming')} label="Upcoming" />
             <ScrollBtn dir="left"  onClick={() => scroll('left')}  />
             <ScrollBtn dir="right" onClick={() => scroll('right')} />
@@ -461,9 +458,6 @@ export function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihDat
             <TabPill active={source === 'intl'} onClick={() => setSource('intl')} label="Intl" />
             <TabPill active={source === 'pro'}  onClick={() => setSource('pro')}  label="Pro League" />
             <TabPill active={source === 'wc'}   onClick={() => setSource('wc')}   label="World Cup" />
-            <TabPill active={gender === 'all'} onClick={() => setGender('all')} label="Men+Women" />
-            <TabPill active={gender === 'M'}   onClick={() => setGender('M')}   label="Men" />
-            <TabPill active={gender === 'F'}   onClick={() => setGender('F')}   label="Women" />
             <ScrollBtn dir="left"  onClick={() => scroll('left')}  />
             <ScrollBtn dir="right" onClick={() => scroll('right')} />
           </div>
