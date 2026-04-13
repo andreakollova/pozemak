@@ -113,8 +113,23 @@ export async function POST(
   const textSk  = article.text_sk  || article.text
 
   try {
-    // Load template.png from /public
-    const templatePath = path.join(process.cwd(), 'public', 'template.png')
+    // Pick the right template based on article source URL
+    const sourceUrl = article.url || ''
+    const templateFile = (() => {
+      if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return 'template-gbr.png'
+      if (sourceUrl.includes('hockey.ie'))          return 'template-ireland.png'
+      if (sourceUrl.includes('scottish-hockey'))    return 'template-scotland.png'
+      if (sourceUrl.includes('hockey.org.au'))      return 'template-australia.png'
+      if (sourceUrl.includes('eshockey.es'))        return 'template-spain.png'
+      if (sourceUrl.includes('cahockey.org.ar'))    return 'template-argentina.png'
+      if (sourceUrl.includes('hockey.de'))          return 'template-germany.png'
+      if (sourceUrl.includes('hockey.be'))          return 'template-belgium.png'
+      if (sourceUrl.includes('hockeyindia'))        return 'template-india.png'
+      if (sourceUrl.includes('eurohockey.org'))     return 'template-worldwide.png'
+      if (sourceUrl.includes('fih.hockey'))         return 'template-worldwide.png'
+      return 'template.png'
+    })()
+    const templatePath = path.join(process.cwd(), 'public', templateFile)
     const templateBuffer = fs.readFileSync(templatePath)
 
     // Create composite: article thumbnail as background, template overlay on top
