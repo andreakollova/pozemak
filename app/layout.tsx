@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
+import CookieBanner from '@/components/CookieBanner'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false)
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         {children}
         <Footer />
+        <CookieBanner />
       </body>
     </html>
   )
