@@ -289,16 +289,16 @@ export default function Home() {
 
       {/* ── Latest Highlights ── */}
       {(damesVideos.length > 0 || herenVideos.length > 0 || fihVideos.length > 0) && (
-        <div style={{ background: '#0d0d0d', padding: '56px 0 64px' }}>
+        <div style={{ background: '#0d0d0d', padding: '56px 0 64px', marginTop: -32 }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>Video</p>
-            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 900, color: '#ffffff', margin: '0 0 12px', letterSpacing: '-0.5px' }}>Latest Highlights</h2>
+            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 900, color: '#ffffff', margin: '0 0 12px', letterSpacing: '-0.5px' }}>🎥 Latest Highlights</h2>
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 40px' }}>
               Watch the best moments from the Dutch Hoofdklasse, international FIH tournaments and more. Fresh clips added every day so you never miss the action.
             </p>
-            {damesVideos.length > 0 && <VideoCarousel label="🏑 Hoofdklasse Dames" videos={damesVideos} dark />}
-            {herenVideos.length > 0  && <VideoCarousel label="🏑 Hoofdklasse Heren" videos={herenVideos} dark />}
-            {fihVideos.length > 0    && <VideoCarousel label="🌍 FIH Hockey" videos={fihVideos} dark />}
+            {damesVideos.length > 0 && <VideoCarousel label="Hoofdklasse Dames" videos={damesVideos} dark />}
+            {herenVideos.length > 0  && <VideoCarousel label="Hoofdklasse Heren" videos={herenVideos} dark />}
+            {fihVideos.length > 0    && <VideoCarousel label="FIH Hockey" videos={fihVideos} dark />}
           </div>
         </div>
       )}
@@ -503,7 +503,7 @@ function WorldNewsSection({ fihArticles, euroArticles }: { fihArticles: Article[
   }
   if (!combined.length) return null
   return (
-    <div style={{ marginBottom: 56 }}>
+    <div style={{ marginBottom: 20 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <span style={{ fontSize: 20 }}>🌍</span>
         <span style={{ fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 900, letterSpacing: 0.3 }}>Latest News from the World</span>
