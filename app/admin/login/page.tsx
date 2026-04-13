@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [isLight, setIsLight] = useState(false)
 
   useEffect(() => {
-    setIsLight(document.documentElement.classList.contains('light'))
+    setIsLight(document.body.classList.contains('light'))
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,12 +35,12 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'var(--bg-dark)',
+      minHeight: '100vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+      paddingTop: '8vh', background: 'var(--bg-dark)',
     }}>
       <div className="glass" style={{ padding: 48, borderRadius: 20, width: '100%', maxWidth: 400 }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={isLight ? '/logo-light.png' : '/logo-dark.png'} alt="Pozemak" style={{ height: 40, width: 'auto', marginBottom: 12 }} />
+        <img src={isLight ? '/logo-dark.png' : '/logo-light.png'} alt="Pozemak" style={{ height: 40, width: 'auto', marginBottom: 12 }} />
         <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 32 }}>Admin panel</p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
