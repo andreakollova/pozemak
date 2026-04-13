@@ -454,7 +454,7 @@ export function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihDat
 
   return (
     <div style={{ marginBottom: 40 }}>
-      <CarouselHeader title="🌍 FIH International" href="https://www.fih.hockey/schedule-fixtures-results" hrefLabel="FIH"
+      <CarouselHeader title="🌍 International" href="https://www.fih.hockey/schedule-fixtures-results" hrefLabel="FIH"
         controls={
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <TabPill active={source === 'all'}  onClick={() => setSource('all')}  label="All" />
@@ -502,7 +502,7 @@ export function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
 
   return (
     <div style={{ marginBottom: 40 }}>
-      <CarouselHeader title="🇪🇺 EuroHockey" href="https://eurohockey.org/calendar" hrefLabel="Calendar"
+      <CarouselHeader title="🏑 Europe" href="https://eurohockey.org/calendar" hrefLabel="Calendar"
         controls={
           <div style={{ display: 'flex', gap: 6 }}>
             <TabPill active={tab === 'matches'}     onClick={() => setTab('matches')}     label="Matches" />
