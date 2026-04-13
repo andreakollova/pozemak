@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false)
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <CookieBanner />
+        <Analytics />
       </body>
     </html>
   )
