@@ -30,7 +30,6 @@ export default function AdminDashboard() {
           <h1 style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.5px' }}>
             Admin <span style={{ color: 'var(--green)' }}>panel</span>
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>Article management</p>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <Link href="/admin/article/new" style={{ textDecoration: 'none' }}>

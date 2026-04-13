@@ -35,19 +35,16 @@ async function fetchBuffer(url: string): Promise<Buffer> {
   return Buffer.from(await res.arrayBuffer())
 }
 
-// Upload image bytes to ImgBB and return the public URL
-async function uploadToImgBB(imageBuffer: Buffer): Promise<string> {
-  const key = process.env.IMGBB_API_KEY
-  if (!key) throw new Error('IMGBB_API_KEY not set')
-
-  const form = new FormData()
-  form.append('key', key)
-  form.append('image', imageBuffer.toString('base64'))
-
-  const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: form })
-  const data = await res.json()
-  if (!res.ok || !data?.data?.url) throw new Error(`ImgBB upload failed: ${JSON.stringify(data)}`)
-  return data.data.url
+// Upload image bytes to Supabase Storage and return the public URL
+async function uploadToStorage(imageBuffer: Buffer): Promise<string> {
+  const db = getSupabaseAdmin()
+  const filename = `ig-${Date.now()}.jpg`
+  const { error } = await db.storage
+    .from('instagram')
+    .upload(filename, imageBuffer, { contentType: 'image/jpeg', upsert: true })
+  if (error) throw new Error(`Storage upload failed: ${error.message}`)
+  const { data } = db.storage.from('instagram').getPublicUrl(filename)
+  return data.publicUrl
 }
 
 // Post image to Instagram via Meta Graph API
@@ -141,7 +138,7 @@ export async function POST(
     }
 
     const caption    = buildCaption(titleSk, textSk)
-    const imageUrl   = await uploadToImgBB(compositeBuffer)
+    const imageUrl   = await uploadToStorage(compositeBuffer)
     const mediaId    = await postToInstagram(imageUrl, caption)
 
     return NextResponse.json({ success: true, mediaId })
