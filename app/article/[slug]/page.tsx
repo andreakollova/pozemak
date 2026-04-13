@@ -90,8 +90,6 @@ export default function ArticlePage() {
         .rec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         @media (max-width: 760px) { .rec-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 480px) { .rec-grid { grid-template-columns: 1fr; } }
-        .rec-card { transition: transform .22s ease, box-shadow .22s ease; }
-        .rec-card:hover { transform: translateY(-4px); box-shadow: 0 20px 56px rgba(0,0,0,.45); }
         .rec-card:hover .rec-title { color: var(--accent) !important; }
         .rec-img img { transition: transform .5s ease; }
         .rec-card:hover .rec-img img { transform: scale(1.05); }

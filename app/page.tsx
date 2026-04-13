@@ -510,7 +510,7 @@ function WorldNewsSection({ fihArticles, euroArticles }: { fihArticles: Article[
         <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
       </div>
       <div className="news-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-        {combined.map(a => <NewsGrid3Card key={a.id} article={a} />)}
+        {combined.map(a => <NewsGrid3Card key={a.id} article={a} worldwide />)}
       </div>
     </div>
   )
@@ -533,12 +533,13 @@ function NewsGrid3Section({ flag, name, articles }: { flag: string; name: string
   )
 }
 
-function NewsGrid3Card({ article }: { article: Article }) {
+function NewsGrid3Card({ article, worldwide }: { article: Article; worldwide?: boolean }) {
   const [hov, setHov] = useState(false)
   const slug = getSlug(article)
   const title = getTitle(article)
   const text = (getText(article) || '').slice(0, 100).trim() + '…'
   const source = getArticleSource(article)
+  const tagLabel = worldwide ? '🌍 Worldwide' : `${source.flag} ${source.name}`
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
       <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -548,7 +549,7 @@ function NewsGrid3Card({ article }: { article: Article }) {
             : <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)' }} />
           }
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)' }} />
-          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 9, fontWeight: 700, background: 'rgba(0,0,0,0.55)', color: '#fff', padding: '3px 7px', borderRadius: 5 }}>{source.flag} {source.name}</span>
+          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 9, fontWeight: 700, background: 'rgba(0,0,0,0.55)', color: '#fff', padding: '3px 7px', borderRadius: 5 }}>{tagLabel}</span>
         </div>
         <div style={{ padding: '12px 14px 16px', flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
           <div style={{ fontSize: 9, color: 'var(--text-secondary)' }}>{timeAgo(article.scraped_at)}</div>
@@ -1686,7 +1687,7 @@ function VideoCard({ video }: { video: Video }) {
   const [hov, setHov] = useState(false)
   return (
     <a href={video.youtube_url} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, width: 240, textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'transform .25s, box-shadow .25s', transform: hov ? 'translateY(-3px)' : 'none', boxShadow: hov ? '0 16px 40px rgba(0,0,0,.4)' : 'none' }}>
+      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)' }}>
         <div style={{ position: 'relative', height: 135, overflow: 'hidden', background: '#0a0a0a' }}>
           <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .4s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
           <div style={{ position: 'absolute', inset: 0, background: hov ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}>
