@@ -51,7 +51,9 @@ export default function CookieBanner() {
       `}</style>
 
       <div className="cookie-banner" style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9999,
+        position: 'fixed', bottom: 0, left: 0, zIndex: 9999,
+        width: '100vw',
+        transform: 'translateZ(0)',
         background: '#0d0d0d', borderTop: '1px solid rgba(255,255,255,0.1)',
         boxShadow: '0 -8px 40px rgba(0,0,0,0.4)',
       }}>
