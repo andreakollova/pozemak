@@ -2,13 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import webpush from 'web-push'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT!,
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!,
-)
-
 export async function POST(req: NextRequest) {
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT!,
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+    process.env.VAPID_PRIVATE_KEY!,
+  )
   // Require internal API key
   const apiKey = req.headers.get('x-api-key')
   if (apiKey !== process.env.PUBLISH_API_KEY) {
