@@ -5,9 +5,38 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
 
+function creditFor(sourceUrl: string): string {
+  if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return '📸 Credit: GB Hockey / Hockey England'
+  if (sourceUrl.includes('hockey.ie'))         return '📸 Credit: Hockey Ireland'
+  if (sourceUrl.includes('scottish-hockey'))   return '📸 Credit: Scottish Hockey'
+  if (sourceUrl.includes('hockey.org.au'))     return '📸 Credit: Hockey Australia'
+  if (sourceUrl.includes('eshockey.es'))       return '📸 Credit: Real Federación Española de Hockey'
+  if (sourceUrl.includes('cahockey.org.ar'))   return '📸 Credit: Confederación Argentina de Hockey'
+  if (sourceUrl.includes('hockey.de'))         return '📸 Credit: Deutscher Hockey-Bund'
+  if (sourceUrl.includes('hockey.be'))         return '📸 Credit: Royal Belgian Hockey Association'
+  if (sourceUrl.includes('hockeyindia'))       return '📸 Credit: Hockey India'
+  if (sourceUrl.includes('eurohockey.org'))    return '📸 Credit: EuroHockey'
+  if (sourceUrl.includes('fih.hockey'))        return '📸 Credit: FIH Hockey'
+  return '📸 Credit: HockeyNL'
+}
+
+function countryLabel(sourceUrl: string): string {
+  if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return '🇬🇧 Veľká Británia'
+  if (sourceUrl.includes('hockey.ie'))         return '🇮🇪 Írsko'
+  if (sourceUrl.includes('scottish-hockey'))   return '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Škótsko'
+  if (sourceUrl.includes('hockey.org.au'))     return '🇦🇺 Austrália'
+  if (sourceUrl.includes('eshockey.es'))       return '🇪🇸 Španielsko'
+  if (sourceUrl.includes('cahockey.org.ar'))   return '🇦🇷 Argentína'
+  if (sourceUrl.includes('hockey.de'))         return '🇩🇪 Nemecko'
+  if (sourceUrl.includes('hockey.be'))         return '🇧🇪 Belgicko'
+  if (sourceUrl.includes('hockeyindia'))       return '🇮🇳 India'
+  if (sourceUrl.includes('eurohockey.org'))    return '🌍 EuroHockey'
+  if (sourceUrl.includes('fih.hockey'))        return '🌍 FIH'
+  return '🇳🇱 Holandsko'
+}
+
 // Build the Instagram caption from article text
-function buildCaption(titleSk: string, textSk: string): string {
-  // Split into sentences
+function buildCaption(titleSk: string, textSk: string, sourceUrl: string): string {
   const sentences = textSk
     .replace(/\n+/g, ' ')
     .split(/(?<=[.!?])\s+/)
@@ -18,9 +47,9 @@ function buildCaption(titleSk: string, textSk: string): string {
   const rest  = sentences.slice(1, 6).join(' ')
 
   return [
-    `🇳🇱 Holandsko - ${first}`,
+    `${countryLabel(sourceUrl)} - ${first}`,
     rest,
-    'Originál článku / kredit: HockeyNL',
+    creditFor(sourceUrl),
     'Viac o novinkách zo sveta pozemného hokeja sa dočítate na pozemak.sk.',
     '#fieldhockey',
   ]
@@ -152,7 +181,7 @@ export async function POST(
         .toBuffer()
     }
 
-    const caption    = buildCaption(titleSk, textSk)
+    const caption    = buildCaption(titleSk, textSk, sourceUrl)
     const imageUrl   = await uploadToStorage(compositeBuffer)
     const mediaId    = await postToInstagram(imageUrl, caption)
 
