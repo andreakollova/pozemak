@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase, Article, getTitle, getText, getArticleSource, getArticles, getSlug } from '@/lib/supabase'
 import { ArrowLeft } from 'lucide-react'
+import PushSubscribe from '@/components/PushSubscribe'
 
 const WRITERS = [
   { id: 1, name: 'Adrian Smith',    img: '/writer-1.png' },
@@ -141,13 +142,14 @@ export default function ArticlePage() {
               </div>
             </>)})()}
           </div>
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
               <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Credit:</strong> {source.name}
             </span>
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
               <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Photo:</strong> {source.name}
             </span>
+            <PushSubscribe />
           </div>
         </div>
 
