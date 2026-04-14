@@ -65,15 +65,15 @@ export default function ContactPage() {
     <div style={{ maxWidth: 680, margin: '0 auto', padding: '48px 24px 80px' }}>
       {/* Header */}
       <div style={{ marginBottom: 40 }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '6px 14px', borderRadius: 20, background: 'rgba(149,255,3,0.1)', border: '1px solid rgba(149,255,3,0.2)' }}>
-          <Flag size={13} color="var(--green)" />
-          <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--green)', letterSpacing: 1, textTransform: 'uppercase' }}>Report Content</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '6px 14px', borderRadius: 20, background: 'rgba(0,58,208,0.1)', border: '1px solid rgba(0,58,208,0.25)' }}>
+          <Flag size={13} color="var(--blue)" />
+          <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--blue)', letterSpacing: 1, textTransform: 'uppercase' }}>Report Content</span>
         </div>
         <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 900, letterSpacing: '-0.5px', margin: '0 0 12px', color: 'var(--text-primary)' }}>
           Report inappropriate content
         </h1>
         <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7, margin: 0 }}>
-          Help us keep Hockey Refresh fair and respectful. Use this form to report racism, offensive language, copyright violations, or errors in articles.
+          Help us keep Hockey Refresh fair and respectful. Use this form to report racism, offensive language, copyright violations, or errors in articles and comments.
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function ContactPage() {
                 type="text"
                 value={form.name}
                 onChange={e => set('name', e.target.value)}
-                placeholder="John Smith"
+                placeholder=""
                 style={inputStyle}
                 onFocus={e => (e.target.style.borderColor = 'var(--green)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')}
@@ -110,7 +110,7 @@ export default function ContactPage() {
                 type="email"
                 value={form.email}
                 onChange={e => set('email', e.target.value)}
-                placeholder="john@example.com"
+                placeholder=""
                 style={inputStyle}
                 onFocus={e => (e.target.style.borderColor = 'var(--green)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')}
@@ -140,7 +140,7 @@ export default function ContactPage() {
             <textarea
               value={form.message}
               onChange={e => set('message', e.target.value)}
-              placeholder="Please describe the issue in detail — include a link to the content if possible."
+              placeholder=""
               rows={6}
               style={{ ...inputStyle, resize: 'vertical', minHeight: 140 }}
               onFocus={e => (e.target.style.borderColor = 'var(--green)')}
