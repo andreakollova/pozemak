@@ -5,16 +5,9 @@ import { useState } from 'react'
 import { Send, Flag, ArrowRight } from 'lucide-react'
 
 const QUICK_LINKS = [
-  { label: '🇳🇱 Netherlands', href: '/' },
-  { label: '🇬🇧 Great Britain', href: '/great-britain' },
-  { label: '🇮🇪 Ireland', href: '/ireland' },
-  { label: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland', href: '/scotland' },
-  { label: '🇦🇺 Australia', href: '/australia' },
-  { label: '🇩🇪 Germany', href: '/germany' },
-  { label: '🇧🇪 Belgium', href: '/belgium' },
-  { label: '🇪🇸 Spain', href: '/spain' },
-  { label: '🇦🇷 Argentina', href: '/argentina' },
-  { label: '🇮🇳 India',     href: '/india' },
+  { label: '📰 News', href: '/' },
+  { label: '▶️ Videos', href: '/videos' },
+  { label: '📊 Matches', href: '/competition' },
 ]
 
 const LEGAL_LINKS = [
