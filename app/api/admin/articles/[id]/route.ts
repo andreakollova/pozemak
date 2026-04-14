@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
+import webpush from 'web-push'
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   // Allow both admin session cookie and bot API key
@@ -28,7 +29,31 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
 
   const { error } = await db.from('articles').update(update).eq('id', id)
-
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Send push notification when article is published
+  if (body.published === true) {
+    try {
+      const { data: articleData } = await db.from('articles').select('title_sk, title, url').eq('id', id).single()
+      const title = articleData?.title_sk || articleData?.title || 'New article'
+      const slug = (articleData?.url || '').split('/').filter(Boolean).pop() || id
+
+      webpush.setVapidDetails(
+        process.env.VAPID_SUBJECT!,
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+        process.env.VAPID_PRIVATE_KEY!,
+      )
+      const { data: subs } = await db.from('push_subscriptions').select('subscription')
+      if (subs?.length) {
+        const payload = JSON.stringify({ title: '🏑 Hockey Refresh', body: title, url: `/article/${slug}` })
+        await Promise.all(subs.map(async (row) => {
+          try { await webpush.sendNotification(JSON.parse(row.subscription), payload) } catch {}
+        }))
+      }
+    } catch (e) {
+      console.error('Push notification failed:', e)
+    }
+  }
+
   return NextResponse.json({ ok: true })
 }
