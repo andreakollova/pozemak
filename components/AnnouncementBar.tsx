@@ -56,7 +56,7 @@ export default function AnnouncementBar() {
           letterSpacing: 0.3,
           transition: 'color .15s',
         }}
-          onMouseEnter={(e: any) => (e.currentTarget.style.color = 'var(--accent)')}
+          onMouseEnter={(e: any) => (e.currentTarget.style.color = '#95ff03')}
           onMouseLeave={(e: any) => (e.currentTarget.style.color = 'var(--announcement-text)')}
         >
           {title}
