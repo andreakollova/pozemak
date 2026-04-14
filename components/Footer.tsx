@@ -5,9 +5,9 @@ import { useState } from 'react'
 import { Send, Flag, ArrowRight } from 'lucide-react'
 
 const QUICK_LINKS = [
-  { label: '📰 News', href: '/' },
-  { label: '▶️ Videos', href: '/videos' },
-  { label: '📊 Matches', href: '/competition' },
+  { label: 'News', href: '/' },
+  { label: 'Videos', href: '/videos' },
+  { label: 'Matches', href: '/competition' },
 ]
 
 const LEGAL_LINKS = [
