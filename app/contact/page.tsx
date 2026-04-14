@@ -3,17 +3,8 @@
 import { useState } from 'react'
 import { Flag, Send } from 'lucide-react'
 
-const SUBJECTS = [
-  'Racism or discriminatory content',
-  'Offensive language or hate speech',
-  'Copyright violation',
-  'Factual error in article',
-  'Inappropriate content',
-  'Other',
-]
-
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', subject: SUBJECTS[0], message: '' })
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [state, setState] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
   const [errMsg, setErrMsg] = useState('')
 
@@ -122,15 +113,15 @@ export default function ContactPage() {
             <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.8 }}>
               Report Type
             </label>
-            <select
+            <input
+              type="text"
               value={form.subject}
               onChange={e => set('subject', e.target.value)}
-              style={{ ...inputStyle, cursor: 'pointer' }}
-              onFocus={e => (e.currentTarget.style.borderColor = 'var(--green)')}
-              onBlur={e => (e.currentTarget.style.borderColor = 'var(--border)')}
-            >
-              {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+              placeholder=""
+              style={inputStyle}
+              onFocus={e => (e.target.style.borderColor = 'var(--green)')}
+              onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+            />
           </div>
 
           <div>
