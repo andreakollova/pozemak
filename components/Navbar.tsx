@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Sun, Moon, Play, BarChart2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import PushSubscribe from './PushSubscribe'
 
 const NAV_ITEMS = [
   { label: 'Netherlands',   href: '/netherlands',  flag: '🇳🇱' },
@@ -66,8 +65,6 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
           >
             <BarChart2 size={12} /> Matches
           </Link>
-
-          <PushSubscribe />
 
           <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
 

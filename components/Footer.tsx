@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Send, Flag, ArrowRight } from 'lucide-react'
+import PushSubscribe from './PushSubscribe'
 
 const QUICK_LINKS = [
   { label: 'News', href: '/' },
@@ -213,6 +214,9 @@ export default function Footer() {
               </button>
               {subState === 'err' && <p style={{ fontSize: 11, color: '#e33', marginTop: 2 }}>Please enter a valid email address.</p>}
             </form>
+            <div style={{ marginTop: 12 }}>
+              <PushSubscribe />
+            </div>
           </div>
         </div>
 
