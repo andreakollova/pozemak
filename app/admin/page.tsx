@@ -38,7 +38,7 @@ export default function AdminDashboard() {
           <Link href="/admin/article/new" style={{ textDecoration: 'none' }}>
             <button style={{
               display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px', borderRadius: 10, border: 'none',
+              padding: '10px 20px', borderRadius: 5, border: 'none',
               background: 'var(--green)', color: '#000', fontWeight: 800,
               fontSize: 13, cursor: 'pointer', letterSpacing: 1, textTransform: 'uppercase',
             }}>
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
           </Link>
           <button onClick={logout} style={{
             display: 'flex', alignItems: 'center', gap: 8,
-            padding: '10px 16px', borderRadius: 10, border: '1px solid var(--border)',
+            padding: '10px 16px', borderRadius: 5, border: '1px solid var(--border)',
             background: 'transparent', color: 'var(--text-secondary)', fontSize: 13, cursor: 'pointer',
           }}>
             <LogOut size={14} /> Logout
@@ -65,11 +65,11 @@ export default function AdminDashboard() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {articles.map(a => (
             <div key={a.id} className="glass" style={{
-              borderRadius: 12, padding: '16px 20px',
+              borderRadius: 6, padding: '16px 20px',
               display: 'flex', alignItems: 'center', gap: 16,
             }}>
               {a.image_url && (
-                <img src={a.image_url} alt="" style={{ width: 64, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
+                <img src={a.image_url} alt="" style={{ width: 64, height: 44, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
               )}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
                 <Link href={`/admin/article/${a.id}`} style={{ textDecoration: 'none' }}>
                   <button style={{
                     display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)',
+                    padding: '7px 14px', borderRadius: 4, border: '1px solid var(--border)',
                     background: 'transparent', color: 'var(--text-primary)', fontSize: 12, cursor: 'pointer', fontWeight: 600,
                   }}>
                     <Pencil size={12} /> Edit
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                 <a href={`/article/${a.url.split('/').filter(Boolean).pop()}`} target="_blank" style={{ textDecoration: 'none' }}>
                   <button style={{
                     display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                    padding: '7px 12px', borderRadius: 4, border: '1px solid var(--border)',
                     background: 'transparent', color: 'var(--text-secondary)', fontSize: 12, cursor: 'pointer',
                   }}>
                     <ExternalLink size={12} />

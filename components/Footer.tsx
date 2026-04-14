@@ -79,7 +79,7 @@ export default function Footer() {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 style={{
-                  flex: 1, padding: '13px 16px', borderRadius: 8,
+                  flex: 1, padding: '13px 16px', borderRadius: 4,
                   border: '1px solid var(--border)',
                   background: 'var(--bg-dark)',
                   color: 'var(--text-primary)',
@@ -93,7 +93,7 @@ export default function Footer() {
                 type="submit"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 7,
-                  padding: '13px 22px', borderRadius: 8, border: 'none',
+                  padding: '13px 22px', borderRadius: 4, border: 'none',
                   background: 'var(--accent)', color: '#fff',
                   fontWeight: 800, fontSize: 12, letterSpacing: 1,
                   textTransform: 'uppercase', cursor: 'pointer',
@@ -122,7 +122,7 @@ export default function Footer() {
               onClick={() => setReported(true)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '13px 28px', borderRadius: 8,
+                padding: '13px 28px', borderRadius: 4,
                 background: reported ? 'var(--bg-card-2)' : 'var(--accent)',
                 color: '#fff',
                 fontWeight: 800, fontSize: 12, letterSpacing: 1,
@@ -155,7 +155,7 @@ export default function Footer() {
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
               {SOCIALS.map(({ svg, href, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  style={{ width: 36, height: 36, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', color: 'var(--text-secondary)', transition: 'all 0.15s', textDecoration: 'none' }}
+                  style={{ width: 36, height: 36, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)', color: 'var(--text-secondary)', transition: 'all 0.15s', textDecoration: 'none' }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--green)'; el.style.borderColor = 'var(--green)'; el.style.background = 'rgba(149,255,3,0.1)' }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--text-secondary)'; el.style.borderColor = 'var(--border)'; el.style.background = 'transparent' }}
                 >
@@ -201,12 +201,12 @@ export default function Footer() {
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 16 }}>Get the latest field hockey news straight to your inbox.</p>
             <form onSubmit={subscribe} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com"
-                style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg-dark)', color: 'var(--text-primary)', fontSize: 13, outline: 'none', transition: 'border-color 0.15s' }}
+                style={{ padding: '10px 14px', borderRadius: 4, border: '1px solid var(--border)', background: 'var(--bg-dark)', color: 'var(--text-primary)', fontSize: 13, outline: 'none', transition: 'border-color 0.15s' }}
                 onFocus={e => (e.target.style.borderColor = 'var(--green)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')}
               />
               <button type="submit"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--green)', color: 'var(--blue)', fontWeight: 800, fontSize: 12, letterSpacing: 0.8, textTransform: 'uppercase', cursor: 'pointer', transition: 'opacity 0.15s' }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '10px 16px', borderRadius: 4, border: 'none', background: 'var(--green)', color: 'var(--blue)', fontWeight: 800, fontSize: 12, letterSpacing: 0.8, textTransform: 'uppercase', cursor: 'pointer', transition: 'opacity 0.15s' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
               >

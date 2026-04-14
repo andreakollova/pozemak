@@ -25,7 +25,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           style={{
-            borderRadius: 20,
+            borderRadius: 4,
             overflow: 'hidden',
             cursor: 'pointer',
             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -116,7 +116,7 @@ export default function ArticleCard({ article, featured = false }: { article: Ar
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          borderRadius: 16,
+          borderRadius: 6,
           overflow: 'hidden',
           height: '100%',
           cursor: 'pointer',

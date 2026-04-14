@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* ── DARK MODE (default) ──────────────────────────────────────── */
+:root {
+  --green: #95ff03;
+  --green-dim: #78d600;
+  --blue: #003ad0;
+  --blue-dim: #002da8;
+  --blue-subtle: rgba(0, 58, 208, 0.14);
+  --accent: #95ff03;
+  --accent-2: #003ad0;
+
+  --bg-dark: #080808;
+  --border: rgba(255,255,255,0.07);
+  --text-primary: #ffffff;
+  --text-secondary: #8a8a8a;
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-2: rgba(255,255,255,0.02);
+  --navbar-bg: rgba(8,8,8,0.95);
+
+  /* Tags — blue bg, green text in dark mode */
+  --tag-text: #95ff03;
+  --tag-bg: rgba(0, 58, 208, 0.22);
+  --tag-border: rgba(0, 58, 208, 0.4);
+
+  /* Announcement bar */
+  --announcement-from: #003ad0;
+  --announcement-to: #003ad0;
+  --announcement-border: rgba(0, 58, 208, 0.45);
+  --announcement-text: #ffffff;
+
+  --card-shadow-hover: 0 20px 60px rgba(0,0,0,0.55);
+  --dot-bg: rgba(0, 58, 208, 0.1);
+  --green-text: #95ff03;
+  --blue-glow: 0 0 32px rgba(0, 58, 208, 0.25);
+}
+
+/* ── LIGHT MODE ───────────────────────────────────────────────── */
+.light {
+  --green: #95ff03;
+  --green-dim: #78d600;
+  --blue: #003ad0;
+  --blue-dim: #002da8;
+  --blue-subtle: rgba(0, 58, 208, 0.07);
+  --accent: #003ad0;       /* primary accent = blue in light */
+  --accent-2: #95ff03;     /* secondary accent = green in light */
+
+  --bg-dark: #f0f2f5;
+  --border: rgba(0,0,0,0.09);
+  --text-primary: #0d0d0d;
+  --text-secondary: #606060;
+  --bg-card: #ffffff;
+  --bg-card-2: #f8f9fb;
+  --navbar-bg: rgba(255,255,255,0.97);
+
+  /* Tags — green bg, blue text in light mode */
+  --tag-text: #003ad0;
+  --tag-bg: rgba(149, 255, 3, 0.18);
+  --tag-border: rgba(149, 255, 3, 0.5);
+
+  /* Announcement bar */
+  --announcement-from: #003ad0;
+  --announcement-to: #003ad0;
+  --announcement-border: rgba(0, 58, 208, 0.45);
+  --announcement-text: #ffffff;
+
+  --card-shadow-hover: 0 12px 40px rgba(0,58,208,0.12);
+  --dot-bg: rgba(0, 58, 208, 0.06);
+  --green-text: #003ad0;   /* dates/labels use blue in light mode */
+  --blue-glow: 0 4px 24px rgba(0, 58, 208, 0.12);
+}
+
+/* ── BASE ─────────────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--green); }
+::selection { background: var(--accent); color: #000; }
+
+/* ── GLASS ────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(0, 58, 208, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 58, 208, 0.18);
+}
+
+.light .glass {
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(0, 58, 208, 0.12);
+  box-shadow: 0 2px 16px rgba(0,58,208,0.06);
+}
+
+/* ── BLUE OVERLAY GRADIENT (dark mode) ───────────────────────── */
+.blue-overlay {
+  background: linear-gradient(135deg, rgba(0,58,208,0.18) 0%, transparent 60%);
+}
+
+/* ── CARD HOVER ───────────────────────────────────────────────── */
+.light .card-hover:hover {
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+/* ── PAGE SECTION ─────────────────────────────────────────────── */
+.light .page-section-bg {
+  background: #f8f9fb;
+  border-radius: 16px;
+  padding: 24px;
+}

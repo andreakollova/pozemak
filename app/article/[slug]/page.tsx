@@ -125,7 +125,7 @@ export default function ArticlePage() {
 
         {/* Hero image */}
         {article.image_url && (
-          <div style={{ borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ borderRadius: 6, overflow: 'hidden' }}>
             <img src={article.image_url} alt={title} style={{ width: '100%', maxHeight: 460, objectFit: 'cover', display: 'block' }} />
           </div>
         )}

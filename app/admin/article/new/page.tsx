@@ -48,7 +48,7 @@ export default function NewArticlePage() {
           <Link href="/admin" style={{ textDecoration: 'none' }}>
             <button style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)',
+              padding: '8px 14px', borderRadius: 4, border: '1px solid var(--border)',
               background: 'transparent', color: 'var(--text-secondary)', fontSize: 13,
               cursor: 'pointer',
             }}>
@@ -66,7 +66,7 @@ export default function NewArticlePage() {
           disabled={saving}
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
-            padding: '10px 20px', borderRadius: 10, border: 'none',
+            padding: '10px 20px', borderRadius: 5, border: 'none',
             background: 'var(--green)', color: '#000', fontWeight: 800, fontSize: 13,
             cursor: saving ? 'not-allowed' : 'pointer',
             opacity: saving ? 0.7 : 1,
@@ -78,7 +78,7 @@ export default function NewArticlePage() {
       </div>
 
       {error && (
-        <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 8, marginBottom: 24 }}>
+        <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 4, marginBottom: 24 }}>
           {error}
         </p>
       )}
@@ -94,7 +94,7 @@ export default function NewArticlePage() {
             onChange={e => setTitleSk(e.target.value)}
             placeholder="Article title"
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
@@ -113,7 +113,7 @@ export default function NewArticlePage() {
             onChange={e => setImageUrl(e.target.value)}
             placeholder="https://..."
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
@@ -121,7 +121,7 @@ export default function NewArticlePage() {
             onBlur={e => (e.target.style.borderColor = 'var(--border)')}
           />
           {imageUrl && (
-            <img src={imageUrl} alt="" style={{ marginTop: 12, height: 120, borderRadius: 8, objectFit: 'cover' }} />
+            <img src={imageUrl} alt="" style={{ marginTop: 12, height: 120, borderRadius: 4, objectFit: 'cover' }} />
           )}
         </div>
 
@@ -136,7 +136,7 @@ export default function NewArticlePage() {
             rows={20}
             placeholder="Article text…"
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 14,
               outline: 'none', boxSizing: 'border-box', resize: 'vertical', lineHeight: 1.7,
               fontFamily: 'inherit',

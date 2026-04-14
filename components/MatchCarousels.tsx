@@ -149,7 +149,7 @@ export function CarouselHeader({ title, href, hrefLabel, controls }: { title: st
 
 export function TabPill({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
   return (
-    <button onClick={onClick} style={{ padding: '5px 13px', border: 'none', borderRadius: 20, background: active ? 'var(--accent)' : 'var(--bg-card)', color: active ? 'var(--pill-active-text)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+    <button onClick={onClick} style={{ padding: '5px 13px', border: 'none', borderRadius: 4, background: active ? 'var(--accent)' : 'var(--bg-card)', color: active ? 'var(--pill-active-text)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
       {label}
     </button>
   )
@@ -205,7 +205,7 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const venueTime = 'venueTime' in m ? (m as FIHMatch).venueTime ?? null : null
   const myTime    = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={logo(m.home)} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
@@ -231,12 +231,12 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
         {watchUrl && (
-          <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>
             <Clapperboard size={11} strokeWidth={2.5} />{!isResult && <span>Watch</span>}
           </a>
         )}
         {moreUrl && (
-          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>More →</a>
+          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 5 }}>More →</a>
         )}
       </div>
     </div>
@@ -267,7 +267,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
   const venueTime  = m.venueTime ?? null
   const myTime     = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={m.home.logo} />
@@ -275,7 +275,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
             : isResult && m.eventUrl
-              ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 8, whiteSpace: 'nowrap' }}>Results →</a>
+              ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' }}>Results →</a>
               : isResult && m.home.score !== null && m.away.score !== null
                 ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
                 : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
@@ -295,9 +295,9 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
         {m.tourName && <span style={{ fontSize: 8, color: 'var(--text-secondary)', opacity: 0.55, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 156, marginTop: 1 }}>{m.tourName}</span>}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
-        {m.eventUrl && <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>Info →</a>}
-        {m.watchUrl && <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}><Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}</a>}
-        {m.moreUrl && <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>Info →</a>}
+        {m.eventUrl && <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>Info →</a>}
+        {m.watchUrl && <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 5 }}><Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}</a>}
+        {m.moreUrl && <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>Info →</a>}
       </div>
     </div>
   )
@@ -310,7 +310,7 @@ function WCMatchCard({ match: m, isResult }: { match: WCMatch; isResult: boolean
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
   const myTime  = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
       {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={null} />
@@ -345,7 +345,7 @@ function NLMatchCard({ match: m, isResult, gender }: { match: Match; isResult: b
   const gColor = gender === 'men' ? '#003ad0' : '#e0336c'
   const leagueLabel = gender === 'men' ? 'Hoofdklasse Heren' : 'Hoofdklasse Dames'
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 160 }}>{leagueLabel}</span>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
@@ -416,7 +416,7 @@ export function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 16, margin: '0 -24px', paddingLeft: 24, paddingRight: 24 }}>
         {!isLoaded
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--border)', opacity: 0.4 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 4, background: 'var(--border)', opacity: 0.4 }} />)
           : filtered.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : filtered.map(m => <CombinedMatchCard key={m.key} match={m} isResult={tab === 'results'} />)
@@ -465,7 +465,7 @@ export function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihDat
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {(!fihData && !proLeagueData && !wcData)
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <CombinedMatchCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -508,12 +508,12 @@ export function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : tab === 'matches'
             ? filtMatches.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches found</p>
                 : filtMatches.map(m => (
-                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${m.gender === 'M' ? '#003ad0' : '#e0336c'}`, padding: '7px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${m.gender === 'M' ? '#003ad0' : '#e0336c'}`, padding: '7px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
                       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
                         <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
@@ -537,14 +537,14 @@ export function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
             : filtTours.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming tournaments</p>
                 : filtTours.map(e => (
-                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 8, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 4, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
                       <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
                       <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'} · {e.location}</span>
                       <span style={{ fontSize: 9, color: 'var(--text-secondary)', opacity: 0.7 }}>{fmtDateRange(e.startDate, e.endDate)}</span>
                       <div style={{ display: 'flex', gap: 5, marginTop: 2 }}>
-                        <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 8 }}>Info →</a>
-                        <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 8 }}>Watch →</a>
+                        <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 4 }}>Info →</a>
+                        <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 4 }}>Watch →</a>
                       </div>
                     </div>
                   ))
@@ -585,7 +585,7 @@ export function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | 
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!menData && !womenData
-          ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : matches.map(m => <NLMatchCard key={m.id} match={m} gender={m._gender} isResult={tab === 'results'} />)

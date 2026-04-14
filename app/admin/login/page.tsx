@@ -38,7 +38,7 @@ export default function LoginPage() {
       minHeight: '100vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
       paddingTop: '8vh', background: 'var(--bg-dark)',
     }}>
-      <div className="glass" style={{ padding: 48, borderRadius: 20, width: '100%', maxWidth: 400 }}>
+      <div className="glass" style={{ padding: 48, borderRadius: 4, width: '100%', maxWidth: 400 }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={isLight ? '/logo-dark.png' : '/logo-light.png'} alt="Pozemak" style={{ height: 40, width: 'auto', marginBottom: 12 }} />
         <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 32 }}>Admin panel</p>
@@ -52,7 +52,7 @@ export default function LoginPage() {
               value={username} onChange={e => setUsername(e.target.value)}
               placeholder=""
               style={{
-                width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+                width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
                 background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15, outline: 'none',
               }}
               onFocus={e => (e.target.style.borderColor = 'var(--blue)')}
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <input
               type="password" value={password} onChange={e => setPassword(e.target.value)}
               style={{
-                width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+                width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
                 background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15, outline: 'none',
               }}
               onFocus={e => (e.target.style.borderColor = 'var(--blue)')}
@@ -75,7 +75,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 8 }}>
+            <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 4 }}>
               {error}
             </p>
           )}
@@ -83,7 +83,7 @@ export default function LoginPage() {
           <button
             type="submit" disabled={loading}
             style={{
-              marginTop: 8, padding: '14px', borderRadius: 10, border: 'none',
+              marginTop: 8, padding: '14px', borderRadius: 5, border: 'none',
               background: 'var(--blue)', color: '#fff', fontWeight: 800, fontSize: 14,
               letterSpacing: 1, textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
               opacity: loading ? 0.7 : 1, transition: 'opacity 0.2s',

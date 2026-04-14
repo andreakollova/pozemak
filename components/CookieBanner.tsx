@@ -37,7 +37,7 @@ export default function CookieBanner() {
         .cookie-banner { padding: ${expanded ? '28px 24px' : '20px 24px'}; }
         .cookie-compact { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
         .cookie-buttons { display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
-        .cookie-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 14px 18px; gap: 12px; }
+        .cookie-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border-radius: 5px; padding: 14px 18px; gap: 12px; }
         .cookie-save-row { display: flex; gap: 10px; flex-wrap: wrap; }
         @media (max-width: 600px) {
           .cookie-banner { padding: 16px !important; }
@@ -69,21 +69,21 @@ export default function CookieBanner() {
               </p>
               <div className="cookie-buttons">
                 <button onClick={() => setExpanded(true)}
-                  style={{ padding: '10px 18px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, letterSpacing: 0.5, cursor: 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, letterSpacing: 0.5, cursor: 'pointer' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#95ff03'; e.currentTarget.style.color = '#95ff03' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
                 >
                   Manage preferences
                 </button>
                 <button onClick={rejectAll}
-                  style={{ padding: '10px 18px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, letterSpacing: 0.5, cursor: 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, letterSpacing: 0.5, cursor: 'pointer' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; e.currentTarget.style.color = '#fff' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
                 >
                   Reject all
                 </button>
                 <button onClick={acceptAll}
-                  style={{ padding: '10px 22px', borderRadius: 8, border: 'none', background: '#95ff03', color: '#000', fontSize: 12, fontWeight: 800, letterSpacing: 0.5, cursor: 'pointer' }}
+                  style={{ padding: '10px 22px', borderRadius: 4, border: 'none', background: '#95ff03', color: '#000', fontSize: 12, fontWeight: 800, letterSpacing: 0.5, cursor: 'pointer' }}
                   onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
                   onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                 >
@@ -109,7 +109,7 @@ export default function CookieBanner() {
                     <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', margin: '0 0 2px' }}>Essential cookies</p>
                     <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', margin: 0 }}>Required for the site to work (theme preference, session). Cannot be disabled.</p>
                   </div>
-                  <div style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 20, background: 'rgba(149,255,3,0.15)', color: '#95ff03', fontSize: 11, fontWeight: 800, letterSpacing: 0.5 }}>
+                  <div style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 4, background: 'rgba(149,255,3,0.15)', color: '#95ff03', fontSize: 11, fontWeight: 800, letterSpacing: 0.5 }}>
                     Always on
                   </div>
                 </div>
@@ -165,17 +165,17 @@ export default function CookieBanner() {
 
               <div className="cookie-save-row">
                 <button onClick={rejectAll}
-                  style={{ padding: '10px 18px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
                 >
                   Reject all
                 </button>
                 <button onClick={saveCustom}
-                  style={{ padding: '10px 18px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
                 >
                   Save preferences
                 </button>
                 <button onClick={acceptAll}
-                  style={{ padding: '10px 22px', borderRadius: 8, border: 'none', background: '#95ff03', color: '#000', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}
+                  style={{ padding: '10px 22px', borderRadius: 4, border: 'none', background: '#95ff03', color: '#000', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}
                 >
                   Accept all
                 </button>

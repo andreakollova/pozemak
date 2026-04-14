@@ -16,11 +16,11 @@ export default function CookiePolicy() {
           <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10 }}>2. How we use cookies</h2>
           <p>Hockey Refresh uses cookies for the following purposes:</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 16 }}>
-            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px' }}>
+            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 5, padding: '16px 20px' }}>
               <p style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>Essential cookies</p>
               <p>These are required for the website to function correctly. They include cookies that remember your display preference (dark or light mode). You cannot opt out of these cookies as the site will not function properly without them.</p>
             </div>
-            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px' }}>
+            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 5, padding: '16px 20px' }}>
               <p style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>Analytics cookies</p>
               <p>We may use analytics tools (such as Vercel Analytics or similar) to understand how visitors use our site. These tools may set cookies to collect anonymous information about page views, session duration, and traffic sources. This helps us improve the website.</p>
             </div>

@@ -106,7 +106,7 @@ export default function EditArticlePage() {
           <Link href="/admin" style={{ textDecoration: 'none' }}>
             <button style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)',
+              padding: '8px 14px', borderRadius: 4, border: '1px solid var(--border)',
               background: 'transparent', color: 'var(--text-secondary)', fontSize: 13,
               cursor: 'pointer',
             }}>
@@ -125,7 +125,7 @@ export default function EditArticlePage() {
             disabled={settingTop || isTopStory}
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px', borderRadius: 10,
+              padding: '10px 20px', borderRadius: 5,
               border: `1px solid ${isTopStory ? 'rgba(255,193,7,0.6)' : 'rgba(255,193,7,0.3)'}`,
               background: isTopStory ? 'rgba(255,193,7,0.25)' : 'rgba(255,193,7,0.08)',
               color: '#FFC107',
@@ -143,7 +143,7 @@ export default function EditArticlePage() {
             disabled={posting}
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px', borderRadius: 10,
+              padding: '10px 20px', borderRadius: 5,
               border: '1px solid rgba(225,48,108,0.4)',
               background: posted ? '#E1306C' : 'rgba(225,48,108,0.15)',
               color: posted ? '#fff' : '#E1306C',
@@ -160,7 +160,7 @@ export default function EditArticlePage() {
             disabled={saving}
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px', borderRadius: 10, border: 'none',
+              padding: '10px 20px', borderRadius: 5, border: 'none',
               background: 'var(--blue)',
               color: '#fff', fontWeight: 800, fontSize: 13,
               cursor: saving ? 'not-allowed' : 'pointer',
@@ -174,12 +174,12 @@ export default function EditArticlePage() {
       </div>
 
       {error && (
-        <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 8, marginBottom: 24 }}>
+        <p style={{ color: '#ff4d4d', fontSize: 13, padding: '10px 14px', background: 'rgba(255,77,77,0.1)', borderRadius: 4, marginBottom: 24 }}>
           {error}
         </p>
       )}
       {igError && (
-        <p style={{ color: '#E1306C', fontSize: 13, padding: '10px 14px', background: 'rgba(225,48,108,0.1)', borderRadius: 8, marginBottom: 24 }}>
+        <p style={{ color: '#E1306C', fontSize: 13, padding: '10px 14px', background: 'rgba(225,48,108,0.1)', borderRadius: 4, marginBottom: 24 }}>
           Instagram: {igError}
         </p>
       )}
@@ -194,7 +194,7 @@ export default function EditArticlePage() {
             value={titleSk}
             onChange={e => setTitleSk(e.target.value)}
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
@@ -212,7 +212,7 @@ export default function EditArticlePage() {
             value={imageUrl}
             onChange={e => setImageUrl(e.target.value)}
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 15,
               outline: 'none', boxSizing: 'border-box',
             }}
@@ -220,7 +220,7 @@ export default function EditArticlePage() {
             onBlur={e => (e.target.style.borderColor = 'var(--border)')}
           />
           {imageUrl && (
-            <img src={imageUrl} alt="" style={{ marginTop: 12, height: 120, borderRadius: 8, objectFit: 'cover' }} />
+            <img src={imageUrl} alt="" style={{ marginTop: 12, height: 120, borderRadius: 4, objectFit: 'cover' }} />
           )}
         </div>
 
@@ -234,7 +234,7 @@ export default function EditArticlePage() {
             onChange={e => setTextSk(e.target.value)}
             rows={20}
             style={{
-              width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)',
+              width: '100%', padding: '12px 16px', borderRadius: 5, border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 14,
               outline: 'none', boxSizing: 'border-box', resize: 'vertical', lineHeight: 1.7,
               fontFamily: 'inherit',

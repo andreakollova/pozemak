@@ -117,10 +117,10 @@ function HeroCard({ article, flag, name }: { article: Article; flag: string; nam
   const text  = (getText(article) || '').slice(0, 180).trim() + '…'
 
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 16, borderRadius: 20, overflow: 'hidden' }}
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 16, borderRadius: 4, overflow: 'hidden' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      <div style={{ position: 'relative', height: 520, overflow: 'hidden', borderRadius: 20, cursor: 'pointer' }}>
+      <div style={{ position: 'relative', height: 520, overflow: 'hidden', borderRadius: 4, cursor: 'pointer' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s ease', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -141,7 +141,7 @@ function HeroCard({ article, flag, name }: { article: Article; flag: string; nam
             {title}
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 640 }}>{text}</p>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 20, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 18px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 20, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 6, padding: '8px 18px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>
             Read article →
           </div>
         </div>
@@ -156,7 +156,7 @@ function SecondaryCard({ article, flag, name }: { article: Article; flag: string
 
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
-      <div className="cp-card cp-img" style={{ borderRadius: 16, overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+      <div className="cp-card cp-img" style={{ borderRadius: 6, overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)', cursor: 'pointer' }}>
         <div style={{ height: 190, overflow: 'hidden', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -185,7 +185,7 @@ function GridCard({ article, flag }: { article: Article; flag: string }) {
 
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }}>
-      <div className="cp-card cp-img" style={{ borderRadius: 14, overflow: 'hidden', background: 'var(--bg-card-2)', border: '1px solid var(--border)', cursor: 'pointer' }}>
+      <div className="cp-card cp-img" style={{ borderRadius: 6, overflow: 'hidden', background: 'var(--bg-card-2)', border: '1px solid var(--border)', cursor: 'pointer' }}>
         <div style={{ height: 165, overflow: 'hidden', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />

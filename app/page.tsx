@@ -220,7 +220,7 @@ export default function Home() {
         .page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 24px 100px; animation: fadeUp .4s ease; }
         .art-row   { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .art-row::-webkit-scrollbar { display: none; }
-        .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
+        .match-tab { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: all .15s; }
       `}</style>
 
       <div className="page-wrap">
@@ -345,7 +345,7 @@ function HeroCard({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 200).trim() + '…'
   const source = getArticleSource(article)
   return (
-    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 0, borderRadius: 12, overflow: 'hidden' }}
+    <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 0, borderRadius: 6, overflow: 'hidden' }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
       <div className="hero-img" style={{ position: 'relative', height: 500, overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
@@ -365,7 +365,7 @@ function HeroCard({ article }: { article: Article }) {
           </div>
           <h1 className="hero-title" style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', color: hov ? 'var(--green)' : '#fff', marginBottom: 14, maxWidth: 920, transition: 'color .2s' }}>{title}</h1>
           <p className="hero-text" style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 820 }}>{text}</p>
-          <div className="hero-read-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 100, padding: '8px 20px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>Read article →</div>
+          <div className="hero-read-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 6, padding: '8px 20px', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: 1 }}>Read article →</div>
         </div>
       </div>
     </Link>
@@ -421,7 +421,7 @@ function FeaturedCard({ article, trending }: { article: Article; trending?: bool
   const source = getArticleSource(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: '100%', minHeight: 300, borderRadius: 10, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: '100%', minHeight: 300, borderRadius: 5, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .7s', transform: hov ? 'scale(1.04)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -448,7 +448,7 @@ function ListCard({ article }: { article: Article }) {
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
       <div style={{ display: 'flex', gap: 12, padding: '11px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'stretch' }}>
-        <div style={{ width: 76, minHeight: 56, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: '#111', position: 'relative', alignSelf: 'stretch' }}>
+        <div style={{ width: 76, minHeight: 56, borderRadius: 4, overflow: 'hidden', flexShrink: 0, background: '#111', position: 'relative', alignSelf: 'stretch' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.08)' : 'scale(1)' }} />}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -480,7 +480,7 @@ function Grid3Card({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 100).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 340 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
+      <div style={{ borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height: 200, overflow: 'hidden', background: '#111', position: 'relative' }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
@@ -548,7 +548,7 @@ function NewsGrid3Card({ article, worldwide }: { article: Article; worldwide?: b
   const tagLabel = worldwide ? '🌍 Worldwide' : `${source.flag} ${source.name}`
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 180, overflow: 'hidden', background: '#111', position: 'relative', flexShrink: 0 }}>
           {article.image_url
             ? <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
@@ -586,7 +586,7 @@ function MiniCard({ article, height }: { article: Article; height: number }) {
   const title = getTitle(article)
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 190 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
+      <div style={{ borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)', transition: 'border-color .2s' }}>
         <div style={{ height, overflow: 'hidden', background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .5s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />}
         </div>
@@ -619,7 +619,7 @@ function CompactRow({ article }: { article: Article }) {
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
       <div style={{ display: 'flex', gap: 16, padding: '14px 16px', borderRadius: 7, border: '1px solid var(--border)', background: hov ? 'var(--bg-card)' : 'transparent', transition: 'all .2s', alignItems: 'center' }}>
-        <div style={{ width: 100, height: 68, borderRadius: 10, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
+        <div style={{ width: 100, height: 68, borderRadius: 5, overflow: 'hidden', flexShrink: 0, background: '#111' }}>
           {article.image_url && <img src={article.image_url} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .4s', transform: hov ? 'scale(1.07)' : 'scale(1)' }} />}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -651,7 +651,7 @@ function Grid2Card({ article }: { article: Article }) {
   const text = (getText(article) || '').slice(0, 120).trim() + '…'
   return (
     <Link href={`/article/${slug}`} style={{ textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ position: 'relative', height: 280, borderRadius: 10, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 280, borderRadius: 5, overflow: 'hidden' }}>
         {article.image_url
           ? <img src={article.image_url} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s', transform: hov ? 'scale(1.05)' : 'scale(1)' }} />
           : <div style={{ position: 'absolute', inset: 0, background: '#111' }} />
@@ -686,7 +686,7 @@ function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; h
 
 function TabPill({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
   return (
-    <button onClick={onClick} style={{ padding: '5px 13px', border: 'none', borderRadius: 20, background: active ? 'var(--accent)' : 'var(--bg-card)', color: active ? 'var(--pill-active-text)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+    <button onClick={onClick} style={{ padding: '5px 13px', border: 'none', borderRadius: 4, background: active ? 'var(--accent)' : 'var(--bg-card)', color: active ? 'var(--pill-active-text)' : 'var(--text-secondary)', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
       {label}
     </button>
   )
@@ -723,7 +723,7 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
   const venueTime = 'venueTime' in m ? (m as FIHMatch).venueTime ?? null : null
   const myTime    = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={logo(m.home)} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, minWidth: 44 }}>
@@ -749,13 +749,13 @@ function MatchCarouselCard({ match: m, isResult }: { match: FIHMatch | ProLeague
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
         {watchUrl && (
-          <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={watchUrl} target="_blank" rel="noopener noreferrer" title="Watch live" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>
             <Clapperboard size={11} strokeWidth={2.5} />
             {!isResult && <span>Watch</span>}
           </a>
         )}
         {moreUrl && (
-          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 5 }}>
             More →
           </a>
         )}
@@ -834,7 +834,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
   const venueTime  = m.venueTime ?? null
   const myTime     = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={m.home.logo} />
@@ -842,7 +842,7 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
           {isLive
             ? <span style={{ fontSize: 9, fontWeight: 800, color: '#e33', letterSpacing: 1 }}>● LIVE</span>
             : isResult && m.eventUrl
-              ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 8, whiteSpace: 'nowrap' }}>Results →</a>
+              ? <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' }}>Results →</a>
               : isResult && m.home.score !== null && m.away.score !== null
                 ? <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: 1 }}>{m.home.score}-{m.away.score}</span>
                 : <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>vs</span>
@@ -863,17 +863,17 @@ function CombinedMatchCard({ match: m, isResult }: { match: NormMatch; isResult:
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
         {m.eventUrl && (
-          <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={m.eventUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>
             Info →
           </a>
         )}
         {m.watchUrl && (
-          <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={m.watchUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: 5 }}>
             <Clapperboard size={11} strokeWidth={2.5} /> {!isResult && <span>Watch</span>}
           </a>
         )}
         {m.moreUrl && (
-          <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 10 }}>
+          <a href={m.moreUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 10px', borderRadius: 5 }}>
             Info →
           </a>
         )}
@@ -944,7 +944,7 @@ function ComingUpCarousel({ fihData, proLeagueData, euroData }: { fihData: FIHDa
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 16, margin: '0 -24px', paddingLeft: 24, paddingRight: 24 }}>
         {!isLoaded
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--border)', opacity: 0.4 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 4, background: 'var(--border)', opacity: 0.4 }} />)
           : filtered.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : filtered.map(m => <CombinedMatchCard key={m.key} match={m} isResult={tab === 'results'} />)
@@ -1007,7 +1007,7 @@ function FIHCombinedCarousel({ fihData, proLeagueData, wcData }: { fihData: FIHD
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {(!fihData && !proLeagueData && !wcData)
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <CombinedMatchCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -1053,7 +1053,7 @@ function FIHWorldCupCarousel({ data }: { data: WCData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming matches</p>
             : matches.map((m, i) => <WCMatchCard key={i} match={m} isResult={false} />)
@@ -1070,7 +1070,7 @@ function WCMatchCard({ match: m, isResult }: { match: WCMatch; isResult: boolean
   const genderColor = m.gender === 'M' ? '#003ad0' : '#e0336c'
   const myTime  = fmtLocalTime(m.date)
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${genderColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
       {m.pool && <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.7, letterSpacing: 0.5, textTransform: 'uppercase' }}>{m.pool}</span>}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <TeamCell short={m.home.short} name={m.home.name} won={homeWon} logo={null} />
@@ -1135,7 +1135,7 @@ function FIHIntlCarousel({ data }: { data: FIHData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -1182,7 +1182,7 @@ function FIHProLeagueCarousel({ data }: { data: ProLeagueData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(7)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 176, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <MatchCarouselCard key={i} match={m} isResult={tab === 'recent'} />)
@@ -1237,12 +1237,12 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!data
-          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(5)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 130, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : tab === 'matches'
             ? filtMatches.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No matches found</p>
                 : filtMatches.map(m => (
-                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${m.gender === 'M' ? '#003ad0' : '#e0336c'}`, padding: '7px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                    <div key={m.id} style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${m.gender === 'M' ? '#003ad0' : '#e0336c'}`, padding: '7px 12px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160 }}>{m.tournamentName}</span>
                       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
                         <TeamCell short={m.home.code} name={m.home.name} won={m.status === 'completed' && (m.home.score ?? 0) > (m.away.score ?? 0)} logo={m.home.logo} />
@@ -1266,14 +1266,14 @@ function EuroHockeyCarousel({ data }: { data: EuroData | null }) {
             : filtTours.length === 0
                 ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No upcoming tournaments</p>
                 : filtTours.map(e => (
-                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 8, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div key={e.id} style={{ flexShrink: 0, width: 196, borderRadius: 4, background: e.status === 'ongoing' ? 'rgba(255,160,50,0.08)' : 'var(--bg-card)', border: `1px solid ${e.status === 'ongoing' ? 'rgba(255,160,50,0.35)' : 'var(--border)'}`, padding: '14px 14px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {e.status === 'ongoing' && <span style={{ fontSize: 8, fontWeight: 800, color: '#e07000', letterSpacing: 1.5, textTransform: 'uppercase' }}>● Live now</span>}
                       <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.name}</span>
                       <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>{e.gender === 'M' ? '♂ Men' : '♀ Women'} · {e.location}</span>
                       <span style={{ fontSize: 9, color: 'var(--text-secondary)', opacity: 0.7 }}>{fmtDateRange(e.startDate, e.endDate)}</span>
                       <div style={{ display: 'flex', gap: 5, marginTop: 2 }}>
-                        <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 8 }}>Info →</a>
-                        <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 8 }}>Watch →</a>
+                        <a href={e.eventUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', background: 'rgba(0,58,208,0.1)', padding: '4px 0', borderRadius: 4 }}>Info →</a>
+                        <a href={e.watchUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', padding: '4px 0', borderRadius: 4 }}>Watch →</a>
                       </div>
                     </div>
                   ))
@@ -1323,7 +1323,7 @@ function NLLeagueCarousel({ menData, womenData }: { menData: MatchData | null; w
       />
       <div ref={ref} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}>
         {!menData && !womenData
-          ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
+          ? [...Array(6)].map((_, i) => <div key={i} style={{ flexShrink: 0, width: 184, height: 120, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: 0.5 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '20px 0' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : matches.map(m => <NLMatchCard key={m.id} match={m} gender={m._gender} isResult={tab === 'results'} />)
@@ -1339,7 +1339,7 @@ function NLMatchCard({ match: m, isResult, gender }: { match: Match; isResult: b
   const gColor = gender === 'men' ? '#003ad0' : '#e0336c'
   const leagueLabel = gender === 'men' ? 'Hoofdklasse Heren' : 'Hoofdklasse Dames'
   return (
-    <div style={{ flexShrink: 0, width: 184, borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div style={{ flexShrink: 0, width: 184, borderRadius: 4, background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${gColor}`, padding: '11px 12px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
       <span style={{ fontSize: 8, fontWeight: 700, color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 160 }}>{leagueLabel}</span>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, minWidth: 0 }}>
@@ -1373,7 +1373,7 @@ function _unusedFIHIntlSection({ data }: { data: FIHData | null }) {
   const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
 
   return (
-    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 5, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🌍 FIH International</span>
         <a href="https://www.fih.hockey/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
@@ -1387,14 +1387,14 @@ function _unusedFIHIntlSection({ data }: { data: FIHData | null }) {
       </div>
       <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
         {(['recent', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 4, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {t === 'recent' ? 'Results' : 'Upcoming'}
           </button>
         ))}
       </div>
       <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
         {!data
-          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 5, background: '#f4f5f8', opacity: 0.6 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <FIHMatchRow key={i} match={m} isResult={tab === 'recent'} />)
@@ -1414,7 +1414,7 @@ function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
   const matches = gData ? (tab === 'recent' ? gData.recent : gData.upcoming) : []
 
   return (
-    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 5, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🏆 FIH Pro League</span>
         <a href="https://www.fih.hockey/events/fih-pro-league/schedule-fixtures-results" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>FIH →</a>
@@ -1428,14 +1428,14 @@ function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
       </div>
       <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
         {(['recent', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 4, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {t === 'recent' ? 'Results' : 'Upcoming'}
           </button>
         ))}
       </div>
       <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
         {!data
-          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 5, background: '#f4f5f8', opacity: 0.6 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No {tab === 'recent' ? 'results' : 'upcoming matches'}</p>
             : matches.map((m, i) => <FIHMatchRow key={i} match={m} isResult={tab === 'recent'} watchLiveUrl={tab === 'upcoming' ? m.watchLiveUrl : null} />)
@@ -1443,7 +1443,7 @@ function FIHProLeagueSection({ data }: { data: ProLeagueData | null }) {
       </div>
       {data?.watchLiveUrl && tab === 'upcoming' && (
         <div style={{ padding: '0 12px 12px' }}>
-          <a href={data.watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', fontSize: 11, fontWeight: 700, color: '#003ad0', background: '#f0f4ff', borderRadius: 10, padding: '9px', textDecoration: 'none', letterSpacing: 0.5 }}>
+          <a href={data.watchLiveUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', fontSize: 11, fontWeight: 700, color: '#003ad0', background: '#f0f4ff', borderRadius: 5, padding: '9px', textDecoration: 'none', letterSpacing: 0.5 }}>
             ▶ Watch Live
           </a>
         </div>
@@ -1469,7 +1469,7 @@ function _unusedEuroHockeySection({ data }: { data: EuroData | null }) {
   }
 
   return (
-    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 5, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#333' }}>🇪🇺 EuroHockey</span>
         <a href="https://eurohockey.org/calendar" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 600, color: '#999', textDecoration: 'none' }}>Calendar →</a>
@@ -1483,11 +1483,11 @@ function _unusedEuroHockeySection({ data }: { data: EuroData | null }) {
       </div>
       <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
         {!data
-          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 58, borderRadius: 10, background: '#f4f5f8', opacity: 0.6 }} />)
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 58, borderRadius: 5, background: '#f4f5f8', opacity: 0.6 }} />)
           : filtered.length === 0
             ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center', margin: 0 }}>No upcoming events</p>
             : filtered.slice(0, 6).map(e => (
-                <div key={e.id} style={{ borderRadius: 10, padding: '10px 12px', background: e.status === 'ongoing' ? '#fff8f0' : '#fafafa', border: `1px solid ${e.status === 'ongoing' ? '#ffd6a5' : '#eef0f4'}` }}>
+                <div key={e.id} style={{ borderRadius: 5, padding: '10px 12px', background: e.status === 'ongoing' ? '#fff8f0' : '#fafafa', border: `1px solid ${e.status === 'ongoing' ? '#ffd6a5' : '#eef0f4'}` }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
                     <div style={{ minWidth: 0 }}>
                       {e.status === 'ongoing' && <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, color: '#e07000', textTransform: 'uppercase', display: 'block', marginBottom: 2 }}>● Live now</span>}
@@ -1518,7 +1518,7 @@ function FIHMatchRow({ match: m, isResult, watchLiveUrl }: { match: FIHMatch | P
   const venueTime = 'venueTime' in m ? (m as FIHMatch).venueTime ?? null : null
   const myTime    = fmtLocalTime(m.date)
   return (
-    <div style={{ borderRadius: 10, padding: '10px 8px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid #f0f2f5' }}>
+    <div style={{ borderRadius: 5, padding: '10px 8px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid #f0f2f5' }}>
       <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
         <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px', fontSize: 11, fontWeight: 900, color: '#333' }}>{(m.home.short || m.home.name)[0]}</div>
         <span style={{ fontSize: 10, fontWeight: homeWon ? 700 : 400, color: homeWon ? '#111' : '#888', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.home.short || m.home.name}</span>
@@ -1568,7 +1568,7 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
   const matches = (data ? (tab === 'results' ? data.results : data.upcoming) : []).slice(0, 5)
 
   return (
-    <div style={{ borderRadius: 10, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
+    <div style={{ borderRadius: 5, overflow: 'hidden', background: '#ffffff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', border: '1px solid #eef0f4' }}>
 
       {/* Header */}
       <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid #eef0f4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1579,7 +1579,7 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
       {/* Country tabs */}
       <div style={{ display: 'flex', gap: 6, padding: '10px 12px', borderBottom: '1px solid #eef0f4', flexWrap: 'wrap' }}>
         {countries.map(c => (
-          <button key={c.key} onClick={() => setCountryKey(c.key)} style={{ padding: '5px 12px', border: 'none', borderRadius: 20, background: countryKey === c.key ? '#003ad0' : '#f0f2f5', color: countryKey === c.key ? '#fff' : '#555', fontSize: 11, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={c.key} onClick={() => setCountryKey(c.key)} style={{ padding: '5px 12px', border: 'none', borderRadius: 4, background: countryKey === c.key ? '#003ad0' : '#f0f2f5', color: countryKey === c.key ? '#fff' : '#555', fontSize: 11, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}>
             {c.flag} {c.label}
           </button>
         ))}
@@ -1597,7 +1597,7 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
       {/* Results / Upcoming tabs */}
       <div style={{ display: 'flex', padding: '8px 12px', gap: 6, borderBottom: '1px solid #eef0f4' }}>
         {(['results', 'upcoming'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 20, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '4px 12px', border: 'none', borderRadius: 4, background: tab === t ? '#f0f2f5' : 'transparent', color: tab === t ? '#333' : '#aaa', fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', cursor: 'pointer', transition: 'all .15s' }}>
             {t === 'results' ? 'Results' : 'Upcoming'}
           </button>
         ))}
@@ -1606,7 +1606,7 @@ function LeagueMatchSection({ countries }: { countries: LeagueCountry[] }) {
       {/* Match list */}
       <div style={{ padding: '8px 10px 12px', display: 'flex', flexDirection: 'column' }}>
         {!data
-          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 10, background: '#f4f5f8', margin: '2px 0', opacity: 0.6 }} />)
+          ? [...Array(3)].map((_, i) => <div key={i} style={{ height: 68, borderRadius: 5, background: '#f4f5f8', margin: '2px 0', opacity: 0.6 }} />)
           : matches.length === 0
             ? <p style={{ fontSize: 12, color: '#aaa', padding: '12px 0', textAlign: 'center' }}>No {tab === 'results' ? 'results' : 'upcoming matches'}</p>
             : matches.map(m => <MatchRow key={m.id} match={m} isResult={tab === 'results'} />)
@@ -1621,7 +1621,7 @@ function MatchRow({ match: m, isResult }: { match: Match; isResult: boolean }) {
   const homeWon = isResult && m.score ? m.score.home > m.score.away : false
   const awayWon = isResult && m.score ? m.score.away > m.score.home : false
   return (
-    <div style={{ borderRadius: 10, padding: '10px 10px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid #f0f2f5' }}>
+    <div style={{ borderRadius: 5, padding: '10px 10px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid #f0f2f5' }}>
       {/* Home */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
         <TeamLogo logo={m.home.logo} name={m.home.name} />
@@ -1693,7 +1693,7 @@ function VideoCard({ video }: { video: Video }) {
   const [hov, setHov] = useState(false)
   return (
     <a href={video.youtube_url} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, width: 240, textDecoration: 'none' }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)' }}>
+      <div style={{ borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-card)' }}>
         <div style={{ position: 'relative', height: 135, overflow: 'hidden', background: '#0a0a0a' }}>
           <img src={video.thumbnail_url} alt={getVideoTitle(video)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform .4s', transform: hov ? 'scale(1.06)' : 'scale(1)' }} />
           <div style={{ position: 'absolute', inset: 0, background: hov ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}>

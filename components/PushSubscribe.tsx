@@ -57,7 +57,7 @@ export default function PushSubscribe() {
         display: 'flex', alignItems: 'center', gap: 6,
         background: subscribed ? 'rgba(149,255,3,0.12)' : 'rgba(255,255,255,0.07)',
         border: `1px solid ${subscribed ? '#95ff03' : 'rgba(255,255,255,0.15)'}`,
-        borderRadius: 20, padding: '6px 14px',
+        borderRadius: 4, padding: '6px 14px',
         fontSize: 12, fontWeight: 700,
         color: subscribed ? '#95ff03' : 'rgba(255,255,255,0.7)',
         cursor: 'pointer', transition: 'all .2s',

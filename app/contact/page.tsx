@@ -45,7 +45,7 @@ export default function ContactPage() {
   }
 
   const inputStyle = {
-    width: '100%', padding: '12px 16px', borderRadius: 10,
+    width: '100%', padding: '12px 16px', borderRadius: 5,
     border: '1px solid var(--border)', background: 'var(--bg-card)',
     color: 'var(--text-primary)', fontSize: 14, outline: 'none',
     boxSizing: 'border-box' as const, transition: 'border-color 0.15s',
@@ -56,7 +56,7 @@ export default function ContactPage() {
     <div style={{ maxWidth: 680, margin: '0 auto', padding: '48px 24px 80px' }}>
       {/* Header */}
       <div style={{ marginBottom: 40 }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '6px 14px', borderRadius: 20, background: 'rgba(0,58,208,0.1)', border: '1px solid rgba(0,58,208,0.25)' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '6px 14px', borderRadius: 4, background: 'rgba(0,58,208,0.1)', border: '1px solid rgba(0,58,208,0.25)' }}>
           <Flag size={13} color="var(--blue)" />
           <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--blue)', letterSpacing: 1, textTransform: 'uppercase' }}>Report Content</span>
         </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
       </div>
 
       {state === 'ok' ? (
-        <div style={{ padding: '40px 32px', borderRadius: 16, background: 'rgba(149,255,3,0.08)', border: '1px solid rgba(149,255,3,0.25)', textAlign: 'center' }}>
+        <div style={{ padding: '40px 32px', borderRadius: 6, background: 'rgba(149,255,3,0.08)', border: '1px solid rgba(149,255,3,0.25)', textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
           <h2 style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 10px' }}>Report received</h2>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, margin: 0 }}>
@@ -148,7 +148,7 @@ export default function ContactPage() {
             disabled={state === 'sending'}
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              padding: '14px 32px', borderRadius: 10, border: 'none',
+              padding: '14px 32px', borderRadius: 5, border: 'none',
               background: state === 'sending' ? 'var(--border)' : 'var(--green)',
               color: '#000', fontWeight: 800, fontSize: 13, letterSpacing: 0.8,
               textTransform: 'uppercase', cursor: state === 'sending' ? 'default' : 'pointer',

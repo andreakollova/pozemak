@@ -50,7 +50,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
         <div className="navbar-links" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/videos"
             className="navbar-nav-link"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 4, border: '1px solid transparent', transition: 'all .15s' }}
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
@@ -59,7 +59,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
           <Link href="/competition"
             className="navbar-nav-link"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 8, border: '1px solid transparent', transition: 'all .15s' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 4, border: '1px solid transparent', transition: 'all .15s' }}
             onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '900'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
             onMouseLeave={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.fontWeight = '700'; e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
           >
@@ -69,7 +69,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
           <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
 
           <button onClick={onToggle}
-            style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', transition: 'all .15s' }}
+            style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 4, padding: '6px 10px', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', transition: 'all .15s' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--green)'; e.currentTarget.style.color = 'var(--green)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
           >
