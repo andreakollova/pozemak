@@ -208,8 +208,8 @@ export default function Footer() {
           <div style={{ height: 1, background: 'var(--border)' }} />
         </div>
 
-        {/* Bottom bar */}
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        {/* Bottom bar — extra bottom padding to clear cookie banner */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px 100px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
             © {new Date().getFullYear()} <strong style={{ color: 'var(--text-primary)' }}>Hockey Refresh</strong> — All rights reserved.
           </p>
