@@ -35,12 +35,25 @@ export default function Footer() {
   const [email, setEmail]         = useState('')
   const [subState, setSubState]   = useState<'idle' | 'ok' | 'err'>('idle')
   const [reported, setReported]   = useState(false)
-  const subscribe = (e: React.FormEvent) => {
+  const subscribe = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.includes('@')) { setSubState('err'); return }
-    setSubState('ok')
-    setEmail('')
-    setTimeout(() => setSubState('idle'), 4000)
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setSubState('ok')
+        setEmail('')
+        setTimeout(() => setSubState('idle'), 4000)
+      } else {
+        setSubState('err')
+      }
+    } catch {
+      setSubState('err')
+    }
   }
 
   return (
