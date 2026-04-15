@@ -17,11 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isNative, setIsNative] = useState(false)
 
   useEffect(() => {
-    import('@capacitor/core').then(({ Capacitor }) => {
-      const native = Capacitor.isNativePlatform()
-      setIsNative(native)
-      if (native) initCapacitorPush()
-    }).catch(() => {})
+    const native =
+      (window as any).__IS_NATIVE_APP__ === true ||
+      localStorage.getItem('hockeyrefresh-native') === '1'
+    setIsNative(native)
+    if (native) initCapacitorPush()
   }, [])
 
   useEffect(() => {
