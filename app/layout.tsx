@@ -17,9 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isNative, setIsNative] = useState(false)
 
   useEffect(() => {
-    const native = !!(window as any).Capacitor?.isNativePlatform?.()
-    setIsNative(native)
-    if (native) initCapacitorPush()
+    import('@capacitor/core').then(({ Capacitor }) => {
+      const native = Capacitor.isNativePlatform()
+      setIsNative(native)
+      if (native) initCapacitorPush()
+    }).catch(() => {})
   }, [])
 
   useEffect(() => {
