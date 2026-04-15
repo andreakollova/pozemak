@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Play, Calendar } from 'lucide-react'
+import { Home, Play, Calendar, Globe } from 'lucide-react'
 
 const ITEMS = [
-  { label: 'Videos',  href: '/videos',      Icon: Play },
-  { label: 'Home',    href: '/',             Icon: Home },
-  { label: 'Matches', href: '/competition',  Icon: Calendar },
+  { label: 'Videos',    href: '/videos',      Icon: Play },
+  { label: 'Home',      href: '/',             Icon: Home },
+  { label: 'Matches',   href: '/competition',  Icon: Calendar },
+  { label: 'Countries', href: '/countries',    Icon: Globe },
 ]
 
 export default function BottomNav({ dark }: { dark: boolean; onToggle: () => void }) {

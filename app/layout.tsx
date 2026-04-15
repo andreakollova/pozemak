@@ -62,8 +62,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {isNative ? (
           /* ── Native app header ── */
-          <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
-            {/* Blue status bar area (battery/wifi/time) */}
+          <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
+            {/* Blue status bar area (battery/wifi/time) — blocks any scroll-through */}
             <div style={{ height: 'env(safe-area-inset-top)', background: '#003ad0' }} />
             {/* Announcement bar */}
             <AnnouncementBar />
