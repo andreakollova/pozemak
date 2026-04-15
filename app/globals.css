@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* ── iOS WebView: prevent overscroll bounce showing empty bg ── */
+html {
+  background: #080808;
+  overscroll-behavior: none;
+}
+
 /* ── DARK MODE (default) ──────────────────────────────────────── */
 :root {
   --green: #95ff03;
