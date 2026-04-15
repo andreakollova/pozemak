@@ -8,9 +8,14 @@ import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
 import { Analytics } from '@vercel/analytics/react'
+import { initCapacitorPush } from '@/lib/capacitor-push'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false)
+
+  useEffect(() => {
+    initCapacitorPush()
+  }, [])
 
   useEffect(() => {
     const saved = localStorage.getItem('pozemak-theme')
