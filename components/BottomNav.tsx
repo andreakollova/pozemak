@@ -19,8 +19,8 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
   return (
     <>
       <style>{`
-        .bnav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: stretch; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); background: var(--navbar-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid var(--border); }
-        .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-decoration: none; padding: 10px 8px 8px; }
+        .bnav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: stretch; justify-content: space-around; background: var(--navbar-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid var(--border); }
+        .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-decoration: none; padding: 10px 8px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         .bnav-item:active { opacity: 0.6; }
         .bnav-icon { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 16px; }
         .bnav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2px; }
