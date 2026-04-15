@@ -3,6 +3,7 @@
 import './globals.css'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Globe, Sun, Moon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
@@ -60,12 +61,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh', ...(isNative ? { overscrollBehavior: 'none' } : {}) }}>
 
         {isNative ? (
-          /* ── Native app header: logo only, centered, sticky ── */
-          <div style={{ position: 'sticky', top: 0, zIndex: 100, background: 'var(--navbar-bg)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 56, paddingTop: 'env(safe-area-inset-top)' }}>
-            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={dark ? '/logo-dark.png' : '/logo-light.png'} alt="REFRESH" style={{ height: 30, width: 'auto', display: 'block' }} />
-            </Link>
+          /* ── Native app header: blue status bar + announcement + header ── */
+          <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
+            {/* Blue safe-area fill (status bar — battery/time area) */}
+            <div style={{ height: 'env(safe-area-inset-top)', background: '#003ad0' }} />
+            {/* Announcement bar */}
+            <AnnouncementBar />
+            {/* Header: Countries | Logo | Dark/Light */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 52, paddingLeft: 16, paddingRight: 16, background: '#003ad0' }}>
+              <Link href="/countries" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', padding: 8 }}>
+                <Globe size={22} color="rgba(255,255,255,0.85)" strokeWidth={1.8} />
+              </Link>
+              <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-dark.png" alt="REFRESH" style={{ height: 28, width: 'auto', display: 'block' }} />
+              </Link>
+              <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 8 }}>
+                {dark ? <Sun size={20} color="rgba(255,255,255,0.85)" strokeWidth={1.8} /> : <Moon size={20} color="rgba(255,255,255,0.85)" strokeWidth={1.8} />}
+              </button>
+            </div>
           </div>
         ) : (
           /* ── Web: announcement bar + full navbar, sticky ── */
