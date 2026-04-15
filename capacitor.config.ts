@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Hockey Refresh',
   webDir: 'out',
   server: {
-    url: 'https://www.hockeyrefresh.com/native-init.html',
+    url: 'https://www.hockeyrefresh.com/api/native-init',
     cleartext: false,
     allowNavigation: ['hockeyrefresh.com', '*.hockeyrefresh.com'],
   },
