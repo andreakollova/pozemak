@@ -10,7 +10,7 @@ const config: CapacitorConfig = {
     allowNavigation: ['hockeyrefresh.com', '*.hockeyrefresh.com'],
   },
   ios: {
-    contentInset: 'always',
+    contentInset: 'never',
   },
   plugins: {
     SplashScreen: {
