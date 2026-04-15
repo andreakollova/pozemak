@@ -7,9 +7,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Use custom view controller that injects native flag into WebView
-        let rootVC = MainViewController()
-        self.window?.rootViewController = rootVC
         return true
     }
 
