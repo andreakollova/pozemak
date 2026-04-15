@@ -17,11 +17,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isNative, setIsNative] = useState(false)
 
   useEffect(() => {
-    // Set native flag when loaded with ?app=1 (from Capacitor server.url)
-    if (new URLSearchParams(window.location.search).get('app') === '1') {
-      sessionStorage.setItem('hockeyrefresh-native', '1')
+    const params = new URLSearchParams(window.location.search)
+    const cap = (window as any).Capacitor
+    const isCapacitor = cap?.isNativePlatform?.() || cap?.getPlatform?.() === 'ios' || cap?.getPlatform?.() === 'android'
+
+    if (params.get('app') === '1' || isCapacitor) {
+      localStorage.setItem('hockeyrefresh-native', '1')
     }
-    const native = sessionStorage.getItem('hockeyrefresh-native') === '1'
+
+    const native = localStorage.getItem('hockeyrefresh-native') === '1'
     setIsNative(native)
     if (native) initCapacitorPush()
   }, [])
