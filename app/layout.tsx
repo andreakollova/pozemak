@@ -14,13 +14,14 @@ import { initCapacitorPush } from '@/lib/capacitor-push'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false)
-  const [isNative, setIsNative] = useState(false)
+  const [isNative] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem('hockeyrefresh-native') === '1'
+  })
 
   useEffect(() => {
-    const native = localStorage.getItem('hockeyrefresh-native') === '1'
-    setIsNative(native)
-    if (native) initCapacitorPush()
-  }, [])
+    if (isNative) initCapacitorPush()
+  }, [isNative])
 
   useEffect(() => {
     const saved = localStorage.getItem('pozemak-theme')
