@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import webpush from 'web-push'
+import apn from 'node-apn'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
+
+function getApnProvider(): apn.Provider | null {
+  const keyId = process.env.APNS_KEY_ID
+  const teamId = process.env.APNS_TEAM_ID
+  const key = process.env.APNS_PRIVATE_KEY // .p8 content
+  if (!keyId || !teamId || !key) return null
+  return new apn.Provider({
+    token: { key, keyId, teamId },
+    production: process.env.NODE_ENV === 'production',
+  })
+}
 
 export async function POST(req: NextRequest) {
   webpush.setVapidDetails(
@@ -17,24 +29,47 @@ export async function POST(req: NextRequest) {
   const { title, body, url } = await req.json()
 
   const db = getSupabaseAdmin()
-  const { data: subs } = await db.from('push_subscriptions').select('subscription')
+  const { data: subs } = await db.from('push_subscriptions').select('endpoint, subscription')
   if (!subs?.length) return NextResponse.json({ sent: 0 })
 
   const payload = JSON.stringify({ title, body, url })
   let sent = 0
   const dead: string[] = []
 
+  const apnProvider = getApnProvider()
+  const bundleId = process.env.APNS_BUNDLE_ID || 'com.hockeyrefresh.app'
+
   await Promise.all(subs.map(async (row) => {
+    const sub = JSON.parse(row.subscription)
+
+    // Native APNs token
+    if (sub.type === 'apns') {
+      if (!apnProvider) return
+      const note = new apn.Notification()
+      note.expiry = Math.floor(Date.now() / 1000) + 3600
+      note.badge = 1
+      note.sound = 'default'
+      note.alert = { title, body }
+      note.payload = { url }
+      note.topic = bundleId
+      const result = await apnProvider.send(note, sub.token)
+      if (result.sent.length) sent++
+      if (result.failed.length) dead.push(row.endpoint)
+      return
+    }
+
+    // Web push
     try {
-      const sub = JSON.parse(row.subscription)
       await webpush.sendNotification(sub, payload)
       sent++
     } catch (err: any) {
       if (err.statusCode === 410 || err.statusCode === 404) {
-        dead.push(JSON.parse(row.subscription).endpoint)
+        dead.push(row.endpoint)
       }
     }
   }))
+
+  if (apnProvider) apnProvider.shutdown()
 
   // Remove expired subscriptions
   if (dead.length) {
