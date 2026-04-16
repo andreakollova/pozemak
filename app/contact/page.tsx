@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Send, Globe, Smartphone, Instagram } from 'lucide-react'
+import { Star, Send, Globe, Smartphone, Share2 } from 'lucide-react'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -54,7 +54,7 @@ export default function ContactPage() {
 
   const PERKS = [
     { icon: <Globe size={18} />, title: 'Website & App', desc: 'Your news featured on hockeyrefresh.com and in the Hockey Refresh iOS app — reaching fans everywhere.' },
-    { icon: <Instagram size={18} />, title: 'Social Media', desc: 'We share featured content on our Instagram and other social channels to maximise your reach.' },
+    { icon: <Share2 size={18} />, title: 'Social Media', desc: 'We share featured content on our Instagram and other social channels to maximise your reach.' },
     { icon: <Smartphone size={18} />, title: 'Push Notifications', desc: 'Top stories are pushed directly to app users — your biggest news gets instant visibility.' },
   ]
 
