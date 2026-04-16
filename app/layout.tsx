@@ -79,7 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/logo-dark.png" type="image/png" media="(prefers-color-scheme: dark)" />
         <link rel="apple-touch-icon" href="/logo-light.png" />
       </head>
-      <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh', ...(isNative ? { overscrollBehavior: 'none' } : {}) }}>
+      <body className={dark ? '' : 'light'} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', minHeight: '100vh', overflowX: 'hidden', ...(isNative ? { overscrollBehavior: 'none' } : {}) }}>
+        <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw', position: 'relative' }}>
 
         {isNative ? (
           /* ── Native app header ── */
@@ -129,6 +130,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
 
         <Analytics />
+        </div>
       </body>
     </html>
   )
