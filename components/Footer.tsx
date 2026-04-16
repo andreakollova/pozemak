@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Send, Flag, ArrowRight } from 'lucide-react'
+import { Send, Star, ArrowRight } from 'lucide-react'
 import PushSubscribe from './PushSubscribe'
 
 const QUICK_LINKS = [
@@ -35,7 +35,6 @@ const SOCIALS = [
 export default function Footer() {
   const [email, setEmail]         = useState('')
   const [subState, setSubState]   = useState<'idle' | 'ok' | 'err'>('idle')
-  const [reported, setReported]   = useState(false)
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.includes('@')) { setSubState('err'); return }
@@ -108,22 +107,21 @@ export default function Footer() {
             {subState === 'err' && <p style={{ fontSize: 11, color: '#e33', marginTop: 8 }}>Please enter a valid email address.</p>}
           </div>
 
-          {/* Right — Report Content */}
+          {/* Right — Get Featured */}
           <div style={{ padding: '0 0 0 48px' }}>
-            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 20 }}>🚨 Report Content</p>
+            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 20 }}>🌍 Get Featured</p>
             <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900, lineHeight: 1.2, color: 'var(--text-primary)', margin: '0 0 12px' }}>
-              Report inappropriate content
+              Want to be featured on Hockey Refresh?
             </h3>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, margin: '0 0 28px', maxWidth: 420 }}>
-              Help us keep the community fair and respectful – report racism, offensive language, copyright violations, or errors in articles and comments.
+              We feature national federations, clubs, and organisations that publish field hockey news. Get your content in front of thousands of fans — on the website, app, and our social media channels.
             </p>
             <Link
               href="/contact"
-              onClick={() => setReported(true)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '13px 28px', borderRadius: 4,
-                background: reported ? 'var(--bg-card-2)' : 'var(--accent)',
+                background: 'var(--accent)',
                 color: '#fff',
                 fontWeight: 800, fontSize: 12, letterSpacing: 1,
                 textTransform: 'uppercase', textDecoration: 'none',
@@ -132,7 +130,7 @@ export default function Footer() {
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
             >
-              <Flag size={13} /> Report Content <ArrowRight size={13} />
+              <Star size={13} /> Get in touch <ArrowRight size={13} />
             </Link>
           </div>
         </div>
