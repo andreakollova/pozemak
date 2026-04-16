@@ -30,8 +30,8 @@ function countryLabel(sourceUrl: string): string {
   if (sourceUrl.includes('hockey.de'))         return '🇩🇪 Nemecko'
   if (sourceUrl.includes('hockey.be'))         return '🇧🇪 Belgicko'
   if (sourceUrl.includes('hockeyindia'))       return '🇮🇳 India'
-  if (sourceUrl.includes('eurohockey.org'))    return '🌍 EuroHockey'
-  if (sourceUrl.includes('fih.hockey'))        return '🌍 FIH'
+  if (sourceUrl.includes('eurohockey.org'))    return '🌍'
+  if (sourceUrl.includes('fih.hockey'))        return '🌍'
   return '🇳🇱 Holandsko'
 }
 
@@ -46,8 +46,11 @@ function buildCaption(titleSk: string, textSk: string, sourceUrl: string): strin
   const first = sentences[0] ?? titleSk
   const rest  = sentences.slice(1, 6).join(' ')
 
+  const label = countryLabel(sourceUrl)
+  const firstLine = label.includes(' ') ? `${label} - ${first}` : `${label} ${first}`
+
   return [
-    `${countryLabel(sourceUrl)} - ${first}`,
+    firstLine,
     rest,
     creditFor(sourceUrl),
     'Viac o novinkách zo sveta pozemného hokeja sa dočítate na pozemak.sk.',
