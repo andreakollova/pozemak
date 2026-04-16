@@ -1,7 +1,7 @@
 'use client'
 
 import './globals.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Globe, Sun, Moon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
@@ -20,8 +20,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return localStorage.getItem('hockeyrefresh-native') === '1'
   })
 
+  const webNavbarRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (isNative) initCapacitorPush()
+  }, [isNative])
+
+  // Keep --web-navbar-h in sync so fixed navbar offset is always correct
+  useEffect(() => {
+    if (isNative || !webNavbarRef.current) return
+    const el = webNavbarRef.current
+    const update = () => {
+      if (window.innerWidth <= 640) {
+        document.documentElement.style.setProperty('--web-navbar-h', el.offsetHeight + 'px')
+      } else {
+        document.documentElement.style.removeProperty('--web-navbar-h')
+      }
+    }
+    const obs = new ResizeObserver(update)
+    obs.observe(el)
+    window.addEventListener('resize', update)
+    update()
+    return () => { obs.disconnect(); window.removeEventListener('resize', update) }
   }, [isNative])
 
   useEffect(() => {
@@ -84,15 +104,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         ) : (
-          /* ── Web: announcement bar + full navbar, sticky ── */
-          <div style={{ position: 'sticky', top: 0, zIndex: 100, willChange: 'transform' }}>
+          /* ── Web: announcement bar + full navbar, fixed on mobile ── */
+          <div ref={webNavbarRef} className="web-navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
             <AnnouncementBar />
             <Navbar dark={dark} onToggle={toggle} />
           </div>
         )}
 
         {/* Page content — extra bottom padding in native for BottomNav */}
-        <div style={isNative ? { paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
+        <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
           {children}
         </div>
 

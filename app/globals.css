@@ -144,4 +144,16 @@ body {
   .news-grid-3 { grid-template-columns: 1fr !important; }
   .carousel-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
   .carousel-hdr-controls { flex-wrap: wrap !important; gap: 4px !important; }
+
+  /* Fix web navbar so it stays fixed during touch scroll */
+  .web-navbar-wrapper {
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
+    width: 100%;
+    z-index: 100;
+  }
+  /* Push content below the fixed navbar (height set dynamically via CSS var) */
+  .web-content {
+    padding-top: var(--web-navbar-h, 131px);
+  }
 }

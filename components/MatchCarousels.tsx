@@ -134,14 +134,14 @@ export function getUpcomingMatches(matches: Match[], limit = 5): Match[] {
 
 export function CarouselHeader({ title, href, hrefLabel, controls }: { title: string; href: string; hrefLabel: string; controls: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+    <div className="carousel-hdr" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: 'var(--text-primary)' }}>{title}</span>
         <div style={{ height: 1, background: 'var(--border)', width: 32 }} />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        {controls}
         <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: 1 }}>{hrefLabel} →</a>
+      </div>
+      <div className="carousel-hdr-controls" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        {controls}
       </div>
     </div>
   )
