@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           /* ── Native app header ── */
           <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
             {/* Blue status bar area — at least 80px so announcement bar clears time/wifi/battery */}
-            <div style={{ height: 'max(80px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
+            <div style={{ height: 'max(47px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
             {/* Announcement bar */}
             <div style={{ marginBottom: 8 }}>
               <AnnouncementBar />

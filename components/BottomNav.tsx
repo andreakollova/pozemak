@@ -23,8 +23,8 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
         .bnav {
           position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
           display: flex; align-items: stretch; justify-content: center;
-          gap: 4px;
-          padding: 10px max(20px, env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-right));
+          gap: 2px;
+          padding: 10px max(32px, env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-right));
           background: var(--navbar-bg);
           backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
           border-top: 1px solid rgba(0,0,0,0.08);
@@ -44,7 +44,7 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
           border-radius: 14px;
         }
         .bnav-label {
-          font-size: 9px; font-weight: 700;
+          font-size: 8px; font-weight: 700;
           letter-spacing: 0.2px; margin-top: 3px;
         }
       `}</style>
@@ -62,7 +62,7 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
           return (
             <Link key={href} href={href} className="bnav-item">
               <div className="bnav-icon" style={{ background: iconBg }}>
-                <Icon size={24} color={iconColor} strokeWidth={active ? 2.5 : 1.8} />
+                <Icon size={23} color={iconColor} strokeWidth={active ? 2.5 : 1.8} />
               </div>
               <span className="bnav-label" style={{ color: labelColor }}>{label}</span>
             </Link>
