@@ -63,20 +63,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {isNative ? (
           /* ── Native app header ── */
           <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
-            {/* Blue status bar area (battery/wifi/time) — blocks any scroll-through */}
-            <div style={{ height: 'env(safe-area-inset-top)', background: '#003ad0' }} />
+            {/* Blue status bar area + 16px breathing room */}
+            <div style={{ height: 'calc(env(safe-area-inset-top) + 16px)', background: '#003ad0' }} />
             {/* Announcement bar */}
-            <AnnouncementBar />
-            {/* White/dark header: Countries | Logo | Dark/Light */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 52, paddingLeft: 16, paddingRight: 16, background: 'var(--navbar-bg)', borderBottom: '1px solid var(--border)' }}>
-              <Link href="/countries" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', padding: 8 }}>
+            <div style={{ marginBottom: 8 }}>
+              <AnnouncementBar />
+            </div>
+            {/* Header: Countries | Logo | Dark/Light */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--navbar-bg)', borderBottom: '1px solid var(--border)' }}>
+              <Link href="/countries" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
                 <Globe size={22} color="var(--text-secondary)" strokeWidth={1.8} />
               </Link>
               <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={dark ? '/logo-dark.png' : '/logo-light.png'} alt="REFRESH" style={{ height: 28, width: 'auto', display: 'block' }} />
               </Link>
-              <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 8 }}>
+              <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
                 {dark ? <Sun size={20} color="var(--text-secondary)" strokeWidth={1.8} /> : <Moon size={20} color="var(--text-secondary)" strokeWidth={1.8} />}
               </button>
             </div>
@@ -90,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
 
         {/* Page content — extra bottom padding in native for BottomNav */}
-        <div style={isNative ? { paddingBottom: 'calc(80px + env(safe-area-inset-bottom))' } : undefined}>
+        <div style={isNative ? { paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
           {children}
         </div>
 
