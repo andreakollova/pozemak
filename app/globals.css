@@ -4,6 +4,8 @@
 html {
   background: #080808;
   overscroll-behavior: none;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* ── DARK MODE (default) ──────────────────────────────────────── */
@@ -90,7 +92,8 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
   min-height: 100vh;
-  overflow-x: clip;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 
