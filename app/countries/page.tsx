@@ -17,7 +17,7 @@ const COUNTRIES = [
 
 export default function CountriesPage() {
   return (
-    <main style={{ maxWidth: 600, margin: '0 auto', padding: '40px 24px 120px' }}>
+    <main style={{ maxWidth: 600, margin: '0 auto', padding: '36px 24px 120px' }}>
       <h1 style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)', marginBottom: 8 }}>Countries</h1>
       <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 32 }}>Browse field hockey news by national team.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>

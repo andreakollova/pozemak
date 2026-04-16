@@ -4,7 +4,6 @@ import { getSession } from '@/lib/session'
 import * as fs from 'fs'
 import * as path from 'path'
 import { getSupabaseAdmin } from '@/lib/supabase-admin'
-import webpush from 'web-push'
 
 function creditFor(sourceUrl: string): string {
   if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return '📸 Credit: GB Hockey / Hockey England'
@@ -186,25 +185,18 @@ export async function POST(
     const imageUrl   = await uploadToStorage(compositeBuffer)
     const mediaId    = await postToInstagram(imageUrl, caption)
 
-    // Send push notification to subscribers
+    // Send push notification (web + native APNs) via unified send endpoint
     try {
-      webpush.setVapidDetails(
-        process.env.VAPID_SUBJECT!,
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-        process.env.VAPID_PRIVATE_KEY!,
-      )
-      const { data: subs } = await db.from('push_subscriptions').select('subscription')
-      if (subs?.length) {
-        const slug = (article.url || '').split('/').filter(Boolean).pop() || id
-        const payload = JSON.stringify({
-          title: '🏑 Hockey Refresh',
+      const slug = (article.url || '').split('/').filter(Boolean).pop() || id
+      await fetch('https://www.hockeyrefresh.com/api/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.PUBLISH_API_KEY! },
+        body: JSON.stringify({
+          title: '🏑 New Top Story',
           body: titleSk || article.title || 'New article',
           url: `/article/${slug}`,
-        })
-        await Promise.all(subs.map(async (row) => {
-          try { await webpush.sendNotification(JSON.parse(row.subscription), payload) } catch {}
-        }))
-      }
+        }),
+      })
     } catch (e) {
       console.error('Push notification failed:', e)
     }

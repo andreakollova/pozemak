@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Blue status bar area — at least 80px so announcement bar clears time/wifi/battery */}
             <div style={{ height: 'max(47px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
             {/* Announcement bar */}
-            <div style={{ marginBottom: 8 }}>
+            <div style={{ paddingTop: 10, marginBottom: 8 }}>
               <AnnouncementBar />
             </div>
             {/* Header: Countries | Logo | Dark/Light */}

@@ -23,7 +23,7 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
         .bnav {
           position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
           display: flex; align-items: stretch; justify-content: center;
-          gap: 2px;
+          gap: 0px;
           padding: 10px max(32px, env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-right));
           background: var(--navbar-bg);
           backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);

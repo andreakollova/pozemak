@@ -132,6 +132,7 @@ body {
 
 /* ── MOBILE ───────────────────────────────────────────────────── */
 @media (max-width: 640px) {
+  .scroll-btn-desktop { display: none !important; }
   .page-wrap { padding: 10px 16px 80px !important; }
   .hero-img { height: 400px !important; }
   .hero-content { padding: 16px 16px !important; }
