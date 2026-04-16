@@ -27,7 +27,7 @@ export default function CompetitionPage() {
   }, [])
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px' }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '18px 24px' }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 28, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>Matches</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 6 }}>
