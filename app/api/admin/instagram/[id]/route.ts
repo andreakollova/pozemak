@@ -37,23 +37,27 @@ function countryLabel(sourceUrl: string): string {
 
 // Build the Instagram caption from article text
 function buildCaption(titleSk: string, textSk: string, sourceUrl: string): string {
-  const sentences = textSk
-    .replace(/\n+/g, ' ')
-    .split(/(?<=[.!?])\s+/)
-    .map(s => s.trim())
-    .filter(Boolean)
-
-  const first = sentences[0] ?? titleSk
-  const rest  = sentences.slice(1, 6).join(' ')
+  // First paragraph = first block of text (split by double newline or first 3 sentences)
+  const firstPara = (() => {
+    const paras = textSk.split(/\n\n+/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean)
+    if (paras.length > 0) return paras[0]
+    // fallback: first 3 sentences
+    const sentences = textSk
+      .replace(/\n+/g, ' ')
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .filter(Boolean)
+    return sentences.slice(0, 3).join(' ') || titleSk
+  })()
 
   const label = countryLabel(sourceUrl)
-  const firstLine = label.includes(' ') ? `${label} - ${first}` : `${label} ${first}`
+  const firstLine = label.includes(' ') ? `${label} - ${titleSk}` : `${label} ${titleSk}`
 
   return [
     firstLine,
-    rest,
+    firstPara,
     creditFor(sourceUrl),
-    'Viac o novinkách zo sveta pozemného hokeja sa dočítate na pozemak.sk.',
+    '📖 Read the full article and explore more hockey news at hockeyrefresh.com',
     '#fieldhockey',
   ]
     .filter(Boolean)
