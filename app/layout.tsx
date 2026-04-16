@@ -10,6 +10,7 @@ import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
 import BottomNav from '@/components/BottomNav'
+import NativeFooter from '@/components/NativeFooter'
 import { Analytics } from '@vercel/analytics/react'
 import { initCapacitorPush } from '@/lib/capacitor-push'
 
@@ -114,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Page content — extra bottom padding in native for BottomNav */}
         <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
           {children}
+          {isNative && <NativeFooter />}
         </div>
 
         {isNative ? (
