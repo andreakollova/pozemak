@@ -169,6 +169,7 @@ export default function Home() {
   const [euroArticles,    setEuroArticles]    = useState<Article[]>([])
   const [fihArticles,     setFihArticles]     = useState<Article[]>([])
   const [auArticles,      setAuArticles]      = useState<Article[]>([])
+  const [argArticles,     setArgArticles]     = useState<Article[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -179,7 +180,8 @@ export default function Home() {
       getArticlesByDomain('eurohockey.org', 3),
       getArticlesByDomain('fih.hockey', 3),
       getArticlesByDomain('hockey.org.au', 6),
-    ]).then(([arts, dames, heren, fih, euro, fihNews, au]) => {
+      getArticlesByDomain('cahockey.org.ar', 20),
+    ]).then(([arts, dames, heren, fih, euro, fihNews, au, arg]) => {
       setArticles(arts)
       setDamesVideos(dames)
       setHerenVideos(heren)
@@ -187,6 +189,7 @@ export default function Home() {
       setEuroArticles(euro)
       setFihArticles(fihNews)
       setAuArticles(au)
+      setArgArticles(arg)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -208,6 +211,10 @@ export default function Home() {
   // Ensure Australia always shows even if articles are older than top 120
   if (auArticles.length > 0) {
     byCountry['Australia'] = auArticles
+  }
+  // Ensure Argentina always shows all fetched articles
+  if (argArticles.length > 0) {
+    byCountry['Argentina'] = argArticles
   }
 
   const hero = articles[0]
