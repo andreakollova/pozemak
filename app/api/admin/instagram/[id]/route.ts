@@ -21,18 +21,18 @@ function creditFor(sourceUrl: string): string {
 }
 
 function countryLabel(sourceUrl: string): string {
-  if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return '🇬🇧 Veľká Británia'
-  if (sourceUrl.includes('hockey.ie'))         return '🇮🇪 Írsko'
-  if (sourceUrl.includes('scottish-hockey'))   return '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Škótsko'
-  if (sourceUrl.includes('hockey.org.au'))     return '🇦🇺 Austrália'
-  if (sourceUrl.includes('eshockey.es'))       return '🇪🇸 Španielsko'
-  if (sourceUrl.includes('cahockey.org.ar'))   return '🇦🇷 Argentína'
-  if (sourceUrl.includes('hockey.de'))         return '🇩🇪 Nemecko'
-  if (sourceUrl.includes('hockey.be'))         return '🇧🇪 Belgicko'
+  if (sourceUrl.includes('greatbritainhockey') || sourceUrl.includes('hockeyengland')) return '🇬🇧 Great Britain'
+  if (sourceUrl.includes('hockey.ie'))         return '🇮🇪 Ireland'
+  if (sourceUrl.includes('scottish-hockey'))   return '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland'
+  if (sourceUrl.includes('hockey.org.au'))     return '🇦🇺 Australia'
+  if (sourceUrl.includes('eshockey.es'))       return '🇪🇸 Spain'
+  if (sourceUrl.includes('cahockey.org.ar'))   return '🇦🇷 Argentina'
+  if (sourceUrl.includes('hockey.de'))         return '🇩🇪 Germany'
+  if (sourceUrl.includes('hockey.be'))         return '🇧🇪 Belgium'
   if (sourceUrl.includes('hockeyindia'))       return '🇮🇳 India'
   if (sourceUrl.includes('eurohockey.org'))    return '🌍'
   if (sourceUrl.includes('fih.hockey'))        return '🌍'
-  return '🇳🇱 Holandsko'
+  return '🇳🇱 Netherlands'
 }
 
 // Build the Instagram caption from article text
@@ -145,8 +145,8 @@ export async function POST(
     return NextResponse.json({ error: 'Article not found' }, { status: 404 })
   }
 
-  const titleSk = article.title_sk || article.title
-  const textSk  = article.text_sk  || article.text
+  const titleSk = article.title || article.title_sk
+  const textSk  = article.text  || article.text_sk
 
   try {
     // Pick the right template based on article source URL
