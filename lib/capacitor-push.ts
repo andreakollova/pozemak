@@ -1,11 +1,9 @@
 /**
  * Capacitor push notification setup for iOS native app.
- * Call initCapacitorPush() once on app start.
+ * Call initCapacitorPush() once on app start (only when isNative is true).
  */
-export async function initCapacitorPush(siteUrl = 'https://hockeyrefresh.com') {
-  // Only run in Capacitor native context
+export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com') {
   if (typeof window === 'undefined') return
-  if (!(window as any).Capacitor?.isNativePlatform?.()) return
 
   try {
     const { PushNotifications } = await import('@capacitor/push-notifications')
