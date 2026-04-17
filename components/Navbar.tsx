@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Sun, Moon, Play, BarChart2 } from 'lucide-react'
+import { Sun, Moon, Play, BarChart2, Gamepad2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
@@ -65,6 +65,15 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
           >
             <BarChart2 size={12} /> Matches
           </Link>
+
+          <a href="/game/"
+            className="navbar-nav-link"
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--green)', letterSpacing: 0.5, padding: '6px 12px', borderRadius: 4, border: '1px solid transparent', transition: 'all .15s' }}
+            onMouseEnter={(e: any) => { e.currentTarget.style.borderColor = 'var(--green)'; e.currentTarget.style.background = 'var(--bg-card)' }}
+            onMouseLeave={(e: any) => { e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.background = 'transparent' }}
+          >
+            <Gamepad2 size={12} /> Games
+          </a>
 
           <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
 

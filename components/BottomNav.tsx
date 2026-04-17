@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Play, Calendar, Globe } from 'lucide-react'
+import { Home, Play, Calendar, Globe, Gamepad2 } from 'lucide-react'
 
 const ITEMS = [
   { label: 'Videos',    href: '/videos',      Icon: Play },
   { label: 'Home',      href: '/',             Icon: Home },
   { label: 'Matches',   href: '/competition',  Icon: Calendar },
   { label: 'Countries', href: '/countries',    Icon: Globe },
+  { label: 'Games',     href: '/game/',        Icon: Gamepad2, external: true },
 ]
 
 export default function BottomNav({ dark }: { dark: boolean; onToggle: () => void }) {
@@ -50,23 +51,27 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
       `}</style>
 
       <nav className="bnav">
-        {ITEMS.map(({ label, href, Icon }) => {
+        {ITEMS.map(({ label, href, Icon, external }) => {
           const active = isActive(href)
           const lightActive = !dark && active
           const darkActive  =  dark && active
 
-          const iconColor = lightActive ? '#fff' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
-          const labelColor = lightActive ? 'var(--blue)' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
+          const iconColor = external ? 'var(--green)' : lightActive ? '#fff' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
+          const labelColor = external ? 'var(--green)' : lightActive ? 'var(--blue)' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
           const iconBg = lightActive ? 'var(--blue)' : 'transparent'
 
-          return (
-            <Link key={href} href={href} className="bnav-item">
+          const content = (
+            <>
               <div className="bnav-icon" style={{ background: iconBg }}>
                 <Icon size={23} color={iconColor} strokeWidth={active ? 2.5 : 1.8} />
               </div>
               <span className="bnav-label" style={{ color: labelColor }}>{label}</span>
-            </Link>
+            </>
           )
+
+          return external
+            ? <a key={href} href={href} className="bnav-item">{content}</a>
+            : <Link key={href} href={href} className="bnav-item">{content}</Link>
         })}
       </nav>
     </>
