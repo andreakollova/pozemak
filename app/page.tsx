@@ -307,10 +307,10 @@ export default function Home() {
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 900, color: '#ffffff', margin: '0 0 12px', letterSpacing: '-0.5px' }}>🎥 Latest Highlights</h2>
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 40px' }}>
-              Latest videos from the Dutch Hoofdklasse.
+              Discover top plays and unforgettable moments from field hockey matches around the world.
             </p>
-            {damesVideos.length > 0 && <VideoCarousel label="Hoofdklasse Women · Netherlands Women's" videos={damesVideos} dark />}
-            {herenVideos.length > 0  && <VideoCarousel label="Hoofdklasse Men · Netherlands Men's" videos={herenVideos} dark />}
+            {damesVideos.length > 0 && <VideoCarousel label="🇳🇱 Hoofdklasse Women" videos={damesVideos} dark />}
+            {herenVideos.length > 0  && <VideoCarousel label="🇳🇱 Hoofdklasse Men" videos={herenVideos} dark />}
             {fihVideos.length > 0    && <VideoCarousel label="FIH" videos={fihVideos} dark />}
           </div>
         </div>
@@ -1672,13 +1672,13 @@ function VideoCarousel({ label, videos, dark }: { label: string; videos: Video[]
   const mutedColor = dark ? 'rgba(255,255,255,0.35)' : 'var(--text-secondary)'
   return (
     <div style={{ marginBottom: 52 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: textColor }}>{label}</span>
-          <div style={{ height: 1, background: borderColor, width: 40 }} />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 8, flexWrap: 'nowrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1 }}>
+          <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.3, color: textColor, whiteSpace: 'nowrap' }}>{label}</span>
+          <div style={{ height: 1, background: borderColor, flex: 1, minWidth: 16 }} />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/videos" style={{ fontSize: 11, fontWeight: 700, color: 'var(--green)', textDecoration: 'none', letterSpacing: 1 }}>All →</Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <Link href="/videos" style={{ fontSize: 11, fontWeight: 700, color: 'var(--green)', textDecoration: 'none', letterSpacing: 1, whiteSpace: 'nowrap' }}>All →</Link>
           {(['left', 'right'] as const).map(d => (
             <button key={d} onClick={() => scroll(d)} style={{ width: 28, height: 28, border: `1px solid ${borderColor}`, borderRadius: 6, background: 'transparent', color: mutedColor, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color .2s, color .2s' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--green)'; e.currentTarget.style.color = 'var(--green)' }}
