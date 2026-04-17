@@ -56,8 +56,8 @@ export default function BottomNav({ dark }: { dark: boolean; onToggle: () => voi
           const lightActive = !dark && active
           const darkActive  =  dark && active
 
-          const iconColor = external ? 'var(--green)' : lightActive ? '#fff' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
-          const labelColor = external ? 'var(--green)' : lightActive ? 'var(--blue)' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
+          const iconColor = lightActive ? '#fff' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
+          const labelColor = lightActive ? 'var(--blue)' : darkActive ? 'var(--accent)' : 'var(--text-secondary)'
           const iconBg = lightActive ? 'var(--blue)' : 'transparent'
 
           const content = (
