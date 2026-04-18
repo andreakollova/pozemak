@@ -35,33 +35,64 @@ function countryLabel(sourceUrl: string): string {
   return '🇳🇱 Netherlands'
 }
 
-// Build the Instagram caption from article text
+const PARA_EMOJIS = ['🏑', '⚡', '💪', '🔥', '🎯', '🌍', '🏆', '💥', '🚀', '👊']
+const SUBHEAD_EMOJI_RE = /^[\u{1F300}-\u{1FAFF}]\s*(.{1,80})$/u
+
+function igLen(s: string): number {
+  let n = 0
+  for (const c of s) n += c.codePointAt(0)! > 0xFFFF ? 2 : 1
+  return n
+}
+
+// Build the Instagram caption from article text — same structure as the Discord bot
 function buildCaption(titleSk: string, textSk: string, sourceUrl: string): string {
-  // First paragraph = first block of text (split by double newline or first 3 sentences)
-  const firstPara = (() => {
-    const paras = textSk.split(/\n\n+/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean)
-    if (paras.length > 0) return paras[0]
-    // fallback: first 3 sentences
-    const sentences = textSk
-      .replace(/\n+/g, ' ')
-      .split(/(?<=[.!?])\s+/)
-      .map(s => s.trim())
-      .filter(Boolean)
-    return sentences.slice(0, 3).join(' ') || titleSk
-  })()
-
   const label = countryLabel(sourceUrl)
-  const firstLine = label.includes(' ') ? `${label} - ${titleSk}` : `${label} ${titleSk}`
+  const header = `${label} ${titleSk}`
+  const credit = creditFor(sourceUrl)
+  const footer = `${credit}\n\n👀 For more hockey news check out hockeyrefresh.com`
+  const IG_LIMIT = 2190
 
-  return [
-    firstLine,
-    firstPara,
-    creditFor(sourceUrl),
-    '📖 Read the full article and explore more hockey news at hockeyrefresh.com',
-    '#fieldhockey',
-  ]
-    .filter(Boolean)
-    .join('\n\n')
+  // Convert emoji-prefixed subheadings to "Heading -" then flatten
+  const markedBody = textSk.split('\n\n').map(para => {
+    const p = para.trim()
+    const m = p.match(SUBHEAD_EMOJI_RE)
+    if (m && !p.includes('.') && !p.includes('!') && !p.includes('?')) {
+      return (m[1] || '').trim() + ' -'
+    }
+    return para
+  }).join('\n\n')
+
+  const flat = markedBody
+    .replace(/[\u{1F300}-\u{1FAFF}]\s*/gu, '')
+    .replace(/\n/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  const sentences = flat.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean).slice(0, 10)
+  if (!sentences.length) sentences.push(titleSk)
+
+  const chunks = []
+  for (let i = 0; i < sentences.length; i += 4) {
+    chunks.push(`${PARA_EMOJIS[chunks.length % PARA_EMOJIS.length]} ${sentences.slice(i, i + 4).join(' ')}`)
+  }
+
+  const parts: string[] = [header]
+  let used = igLen(header) + 2 + igLen(footer)
+  for (const chunk of chunks) {
+    const extra = igLen('\n\n' + chunk)
+    if (used + extra > IG_LIMIT) break
+    parts.push(chunk)
+    used += extra
+  }
+  parts.push(footer)
+
+  // Hard safety trim
+  let caption = parts.join('\n\n')
+  while (igLen(caption) > IG_LIMIT && parts.length > 2) {
+    parts.splice(-2, 1)
+    caption = parts.join('\n\n')
+  }
+  return caption
 }
 
 // Download a URL and return a Buffer
@@ -145,8 +176,8 @@ export async function POST(
     return NextResponse.json({ error: 'Article not found' }, { status: 404 })
   }
 
-  const titleSk = article.title || article.title_sk
-  const textSk  = article.text  || article.text_sk
+  const titleSk = article.title_sk || article.title
+  const textSk  = article.text_sk  || article.text
 
   try {
     // Pick the right template based on article source URL
