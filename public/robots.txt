@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.hockeyrefresh.com/sitemap.xml
+
+# Block admin pages from indexing
+User-agent: *
+Disallow: /admin/

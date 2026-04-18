@@ -1,0 +1,27 @@
+# Hockey Refresh
+
+> Hockey Refresh is a field hockey news and information platform covering international and national league competitions worldwide.
+
+## What we cover
+
+- **FIH International** — World Cup, FIH Pro League, Champions Trophy, and all major international tournaments
+- **EuroHockey** — European Championships and club competitions
+- **National leagues** — Netherlands (Hoofdklasse), Great Britain, Australia, Germany, Belgium, Spain, Argentina, Ireland, Scotland, India
+- **Live scores and fixtures** — results and upcoming matches from FIH, EuroHockey, and national leagues
+- **Video highlights** — Hoofdklasse (men and women) and FIH match highlights
+
+## Key pages
+
+- Homepage with latest news, scores and highlights: https://www.hockeyrefresh.com
+- All articles: https://www.hockeyrefresh.com/sitemap.xml
+- Video highlights: https://www.hockeyrefresh.com/videos
+- Competition results and fixtures: https://www.hockeyrefresh.com/competition
+- Country pages: /netherlands, /great-britain, /australia, /germany, /belgium, /spain, /argentina, /ireland, /scotland, /india
+
+## Content
+
+All articles are original, professionally written English field hockey journalism sourced from national federations and rewritten for an international audience. Articles include structured data (NewsArticle schema).
+
+## Contact
+
+Website: https://www.hockeyrefresh.com
