@@ -7,6 +7,7 @@ export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com
 
   try {
     const { PushNotifications } = await import('@capacitor/push-notifications')
+    const { App } = await import('@capacitor/app')
 
     // Request permission
     const perm = await PushNotifications.requestPermissions()
@@ -24,10 +25,21 @@ export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com
       }).catch(console.error)
     })
 
+    // Notification received while app is open — reload to show new content
+    PushNotifications.addListener('pushNotificationReceived', () => {
+      window.location.reload()
+    })
+
     // Handle notification tap — navigate to article
     PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
       const url = action.notification.data?.url
-      if (url) window.location.href = url
+      if (url) window.location.href = siteUrl + url
+      else window.location.reload()
+    })
+
+    // Reload when app comes back to foreground so content is always fresh
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive) window.location.reload()
     })
   } catch (e) {
     console.error('Capacitor push init failed:', e)
