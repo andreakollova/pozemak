@@ -171,10 +171,17 @@ export default function Home() {
   const [auArticles,      setAuArticles]      = useState<Article[]>([])
   const [argArticles,     setArgArticles]     = useState<Article[]>([])
   const [deArticles,      setDeArticles]      = useState<Article[]>([])
+  const [gbArticles,      setGbArticles]      = useState<Article[]>([])
+  const [ieArticles,      setIeArticles]      = useState<Article[]>([])
+  const [scotArticles,    setScoArticles]     = useState<Article[]>([])
+  const [esArticles,      setEsArticles]      = useState<Article[]>([])
+  const [beArticles,      setBeArticles]      = useState<Article[]>([])
+  const [inArticles,      setInArticles]      = useState<Article[]>([])
+  const [nlArticles,      setNlArticles]      = useState<Article[]>([])
 
   useEffect(() => {
     Promise.all([
-      getArticles(120),
+      getArticles(30),
       getVideos('dames', 10),
       getVideos('heren', 10),
       getVideos('fih', 10),
@@ -183,7 +190,14 @@ export default function Home() {
       getArticlesByDomain('hockey.org.au', 6),
       getArticlesByDomain('cahockey.org.ar', 20),
       getArticlesByDomain('hockey.de', 6),
-    ]).then(([arts, dames, heren, fih, euro, fihNews, au, arg, de]) => {
+      getArticlesByDomain('greatbritainhockey', 10),
+      getArticlesByDomain('hockey.ie', 6),
+      getArticlesByDomain('scottish-hockey', 6),
+      getArticlesByDomain('eshockey.es', 10),
+      getArticlesByDomain('hockey.be', 6),
+      getArticlesByDomain('hockeyindia', 6),
+      getArticlesByDomain('hockey.nl', 10),
+    ]).then(([arts, dames, heren, fih, euro, fihNews, au, arg, de, gb, ie, sco, es, be, ind, nl]) => {
       setArticles(arts)
       setDamesVideos(dames)
       setHerenVideos(heren)
@@ -193,6 +207,13 @@ export default function Home() {
       setAuArticles(au)
       setArgArticles(arg)
       setDeArticles(de)
+      setGbArticles(gb)
+      setIeArticles(ie)
+      setScoArticles(sco)
+      setEsArticles(es)
+      setBeArticles(be)
+      setInArticles(ind)
+      setNlArticles(nl)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -211,10 +232,17 @@ export default function Home() {
     if (!byCountry[country]) byCountry[country] = []
     byCountry[country].push(a)
   }
-  // Ensure these always show even if articles are older than top 120
-  if (auArticles.length > 0)  byCountry['Australia'] = auArticles
-  if (argArticles.length > 0) byCountry['Argentina'] = argArticles
-  if (deArticles.length > 0)  byCountry['Germany']   = deArticles
+  // Ensure all countries always show their latest articles
+  if (nlArticles.length > 0)   byCountry['Netherlands'] = nlArticles
+  if (gbArticles.length > 0)   byCountry['Great Britain'] = gbArticles
+  if (auArticles.length > 0)   byCountry['Australia']   = auArticles
+  if (argArticles.length > 0)  byCountry['Argentina']   = argArticles
+  if (deArticles.length > 0)   byCountry['Germany']     = deArticles
+  if (ieArticles.length > 0)   byCountry['Ireland']     = ieArticles
+  if (scotArticles.length > 0) byCountry['Scotland']    = scotArticles
+  if (esArticles.length > 0)   byCountry['Spain']       = esArticles
+  if (beArticles.length > 0)   byCountry['Belgium']     = beArticles
+  if (inArticles.length > 0)   byCountry['India']       = inArticles
 
   const hero = articles[0]
 
