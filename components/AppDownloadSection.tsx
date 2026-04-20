@@ -45,9 +45,9 @@ export default function AppDownloadSection() {
 
   const features = [
     { icon: '🔔', text: 'Breaking news push notifications' },
-    { icon: '🏆', text: 'Live scores — FIH, EuroHockey & national leagues' },
-    { icon: '🎥', text: 'Video highlights from Hoofdklasse & FIH' },
-    { icon: '🎮', text: 'Mini games built right into the app' },
+    { icon: '🏆', text: 'Live scores from top competitions' },
+    { icon: '🎥', text: 'Video highlights on demand' },
+    { icon: '🎮', text: 'Mini games built into the app' },
     { icon: '🌍', text: 'Coverage from 10+ countries worldwide' },
   ]
 
