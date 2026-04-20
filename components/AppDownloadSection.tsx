@@ -52,10 +52,11 @@ export default function AppDownloadSection() {
   ]
 
   return (
-    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #001a7a 0%, #003ad0 60%, #0052ff 100%)', padding: '60px 0 70px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #000d3d 0%, #002da8 50%, #003ad0 100%)', padding: '60px 0 70px', overflow: 'hidden' }}>
       {/* Background glow blobs */}
-      <div style={{ position: 'absolute', top: -80, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'rgba(149,255,3,0.06)', filter: 'blur(80px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: -100, right: '10%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(149,255,3,0.07)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: -80, left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'rgba(0,82,255,0.2)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '40%', left: '40%', width: 200, height: 200, borderRadius: '50%', background: 'rgba(149,255,3,0.04)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', gap: 80, flexWrap: 'wrap', justifyContent: 'center' }}>
 
@@ -81,9 +82,9 @@ export default function AppDownloadSection() {
           {/* Features — 2 per row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 36 }}>
             {features.map(({ icon, text }) => (
-              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '10px 12px' }}>
+              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '11px 13px', backdropFilter: 'blur(10px)' }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>{icon}</span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', fontWeight: 600, lineHeight: 1.3 }}>{text}</span>
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', fontWeight: 600, lineHeight: 1.3 }}>{text}</span>
               </div>
             ))}
           </div>
@@ -93,9 +94,9 @@ export default function AppDownloadSection() {
             href="https://apps.apple.com/hu/app/hockeyrefresh/id6762254165"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#ffffff', color: '#000000', borderRadius: 16, padding: '14px 26px', textDecoration: 'none', fontWeight: 800, fontSize: 15, boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)', transition: 'transform .15s, box-shadow .15s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 48px rgba(0,0,0,0.4)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#95ff03', color: '#000000', borderRadius: 16, padding: '14px 26px', textDecoration: 'none', fontWeight: 800, fontSize: 15, boxShadow: '0 8px 32px rgba(149,255,3,0.25)', transition: 'transform .15s, box-shadow .15s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 48px rgba(149,255,3,0.35)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(149,255,3,0.25)' }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
             Download on the App Store
