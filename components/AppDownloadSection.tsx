@@ -65,7 +65,7 @@ export default function AppDownloadSection() {
   ]
 
   return (
-    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #000d3d 0%, #002da8 50%, #003ad0 100%)', padding: '45px 0 55px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #000d3d 0%, #002da8 50%, #003ad0 100%)', padding: '60px 0 70px', overflow: 'hidden' }}>
       {/* Background glow blobs */}
       <div style={{ position: 'absolute', top: -100, right: '10%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(149,255,3,0.07)', filter: 'blur(100px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: -80, left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'rgba(0,82,255,0.2)', filter: 'blur(80px)', pointerEvents: 'none' }} />
@@ -97,7 +97,7 @@ export default function AppDownloadSection() {
           {/* Features — 2 per row */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
             {features.map(({ icon, text }) => (
-              <div key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '6px 8px', backdropFilter: 'blur(10px)' }}>
+              <div key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '6px 14px 6px 8px', backdropFilter: 'blur(10px)' }}>
                 <span style={{ fontSize: 16, flexShrink: 0 }}>{icon}</span>
                 <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.9)', fontWeight: 600, lineHeight: 1.3 }}>{text}</span>
               </div>
