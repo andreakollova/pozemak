@@ -95,7 +95,7 @@ export default function AppDownloadSection() {
           </p>
 
           {/* Features — 2 per row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 32 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: 8, marginBottom: 32 }}>
             {features.map(({ icon, text }) => (
               <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '6px 8px', backdropFilter: 'blur(10px)' }}>
                 <span style={{ fontSize: 16, flexShrink: 0 }}>{icon}</span>
