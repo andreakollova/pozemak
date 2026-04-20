@@ -109,7 +109,7 @@ export default function AppDownloadSection() {
             {/* Outer glow ring */}
             <div style={{ padding: 3, borderRadius: 48, background: 'linear-gradient(135deg, rgba(149,255,3,0.3), rgba(255,255,255,0.05))', boxShadow: '0 40px 100px rgba(0,0,0,0.5)' }}>
               {/* iPhone 15 Pro frame — 393×852 ratio ≈ 1:2.17 */}
-              <div style={{ width: 200, height: 434, background: '#1c1c1e', borderRadius: 46, overflow: 'hidden', position: 'relative', padding: 9, border: '1px solid #2a2a2a' }}>
+              <div style={{ width: 200, height: 410, background: '#1c1c1e', borderRadius: 46, overflow: 'hidden', position: 'relative', padding: 9, border: '1px solid #2a2a2a' }}>
                 {/* Dynamic Island */}
                 <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 80, height: 26, background: '#000', borderRadius: 18, zIndex: 10 }} />
                 {/* Screen */}
