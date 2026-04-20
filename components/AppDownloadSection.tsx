@@ -28,12 +28,12 @@ export default function AppDownloadSection() {
   if (isNative) return null
 
   return (
-    <div style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111827 100%)', padding: '80px 0 90px', overflow: 'hidden' }}>
+    <div style={{ background: 'linear-gradient(135deg, #002da8 0%, #003ad0 50%, #0047ff 100%)', padding: '80px 0 90px', overflow: 'hidden' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: 64, flexWrap: 'wrap', justifyContent: 'center' }}>
 
         {/* Left — text */}
         <div style={{ flex: '1 1 340px', minWidth: 280 }}>
-          <div style={{ display: 'inline-block', background: 'rgba(0,150,100,0.15)', border: '1px solid rgba(0,150,100,0.3)', borderRadius: 20, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#00c87a', textTransform: 'uppercase', marginBottom: 20 }}>
+          <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 20, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#ffffff', textTransform: 'uppercase', marginBottom: 20 }}>
             Now on App Store
           </div>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 900, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1, letterSpacing: '-1px' }}>
@@ -83,7 +83,7 @@ export default function AppDownloadSection() {
               width: 220, height: 440,
               background: '#1a1a1a',
               borderRadius: 38,
-              boxShadow: '0 0 0 2px #333, 0 0 0 4px #111, 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(0,150,100,0.15)',
+              boxShadow: '0 0 0 2px #1a3a8f, 0 0 0 4px #001a6e, 0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(255,255,255,0.1)',
               position: 'relative',
               overflow: 'hidden',
               padding: 8,
