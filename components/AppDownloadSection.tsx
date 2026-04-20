@@ -52,7 +52,7 @@ export default function AppDownloadSection() {
   ]
 
   return (
-    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #000d3d 0%, #002da8 50%, #003ad0 100%)', padding: '60px 0 70px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #000d3d 0%, #002da8 50%, #003ad0 100%)', padding: '45px 0 55px', overflow: 'hidden' }}>
       {/* Background glow blobs */}
       <div style={{ position: 'absolute', top: -100, right: '10%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(149,255,3,0.07)', filter: 'blur(100px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: -80, left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'rgba(0,82,255,0.2)', filter: 'blur(80px)', pointerEvents: 'none' }} />
