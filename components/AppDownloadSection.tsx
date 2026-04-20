@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 
-const SCROLL_DURATION = 5000
+const SCROLL_DURATION = 8000
 
 export default function AppDownloadSection() {
   const [isNative, setIsNative] = useState(true)
@@ -136,7 +136,7 @@ export default function AppDownloadSection() {
                   <img
                     src="/hockeyrefresh.png"
                     alt="HockeyRefresh app"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 0%', display: 'block', animation: showVideo ? 'none' : 'phoneScroll 5s ease-in-out', opacity: showVideo ? 0 : 1, transition: 'opacity 0.4s ease' }}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 0%', display: 'block', animation: showVideo ? 'none' : 'phoneScroll 8s ease-in-out', opacity: showVideo ? 0 : 1, transition: 'opacity 0.4s ease' }}
                   />
                   <video
                     ref={videoRef}
