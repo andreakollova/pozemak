@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { getArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle, getArticleSource, getArticlesByDomain } from '@/lib/supabase'
+import AppDownloadSection from '@/components/AppDownloadSection'
 import { Play, ChevronLeft, ChevronRight, Clock, Clapperboard } from 'lucide-react'
 import type { Match, Poule } from '@/lib/hockey-api'
 
@@ -342,6 +343,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <AppDownloadSection />
     </>
   )
 }
