@@ -109,11 +109,11 @@ export default function AppDownloadSection() {
             {/* Outer glow ring */}
             <div style={{ padding: 3, borderRadius: 48, background: 'linear-gradient(135deg, rgba(149,255,3,0.3), rgba(255,255,255,0.05))', boxShadow: '0 40px 100px rgba(0,0,0,0.5)' }}>
               {/* iPhone 15 Pro frame — 393×852 ratio ≈ 1:2.17 */}
-              <div style={{ width: 220, height: 476, background: '#1c1c1e', borderRadius: 50, overflow: 'hidden', position: 'relative', padding: 10, border: '1px solid #2a2a2a' }}>
+              <div style={{ width: 200, height: 434, background: '#1c1c1e', borderRadius: 46, overflow: 'hidden', position: 'relative', padding: 9, border: '1px solid #2a2a2a' }}>
                 {/* Dynamic Island */}
-                <div style={{ position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)', width: 90, height: 30, background: '#000', borderRadius: 20, zIndex: 10 }} />
+                <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 80, height: 26, background: '#000', borderRadius: 18, zIndex: 10 }} />
                 {/* Screen */}
-                <div style={{ width: '100%', height: '100%', borderRadius: 40, overflow: 'hidden', background: '#000' }}>
+                <div style={{ width: '100%', height: '100%', borderRadius: 37, overflow: 'hidden', background: '#000' }}>
                   <style>{`
                     @keyframes phoneScroll {
                       0%   { object-position: center 0%; }
@@ -139,12 +139,12 @@ export default function AppDownloadSection() {
                   )}
                 </div>
                 {/* Side button (right) */}
-                <div style={{ position: 'absolute', right: -3, top: 110, width: 3, height: 64, background: '#333', borderRadius: '0 3px 3px 0' }} />
+                <div style={{ position: 'absolute', right: -3, top: 100, width: 3, height: 58, background: '#333', borderRadius: '0 3px 3px 0' }} />
                 {/* Volume (left) */}
-                <div style={{ position: 'absolute', left: -3, top: 90, width: 3, height: 36, background: '#333', borderRadius: '3px 0 0 3px' }} />
-                <div style={{ position: 'absolute', left: -3, top: 136, width: 3, height: 36, background: '#333', borderRadius: '3px 0 0 3px' }} />
+                <div style={{ position: 'absolute', left: -3, top: 82, width: 3, height: 32, background: '#333', borderRadius: '3px 0 0 3px' }} />
+                <div style={{ position: 'absolute', left: -3, top: 124, width: 3, height: 32, background: '#333', borderRadius: '3px 0 0 3px' }} />
                 {/* Mute switch */}
-                <div style={{ position: 'absolute', left: -3, top: 60, width: 3, height: 20, background: '#333', borderRadius: '3px 0 0 3px' }} />
+                <div style={{ position: 'absolute', left: -3, top: 54, width: 3, height: 18, background: '#333', borderRadius: '3px 0 0 3px' }} />
               </div>
             </div>
           </div>
