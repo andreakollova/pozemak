@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 
-const SCROLL_DURATION = 8000 // ms — one PNG scroll loop
+const SCROLL_DURATION = 3000 // ms before switching to video
 
 export default function AppDownloadSection() {
   const [isNative, setIsNative] = useState(true)
@@ -23,7 +23,7 @@ export default function AppDownloadSection() {
 
   const onVideoEnded = () => {
     setShowVideo(false)
-    timerRef.current = setTimeout(() => setShowVideo(true), SCROLL_DURATION)
+    timerRef.current = setTimeout(() => setShowVideo(true), 3000)
   }
 
   // 3D tilt effect
@@ -113,8 +113,7 @@ export default function AppDownloadSection() {
                 <style>{`
                   @keyframes phoneScroll {
                     0%   { transform: translateY(0); }
-                    45%  { transform: translateY(-35%); }
-                    55%  { transform: translateY(-35%); }
+                    50%  { transform: translateY(-30%); }
                     100% { transform: translateY(0); }
                   }
                 `}</style>
@@ -132,7 +131,7 @@ export default function AppDownloadSection() {
                   <img
                     src="/hockeyrefresh.png"
                     alt="HockeyRefresh app"
-                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 8s ease-in-out forwards' }}
+                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 3s ease-in-out' }}
                     onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
                   />
                 )}
