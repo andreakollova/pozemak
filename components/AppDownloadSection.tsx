@@ -20,6 +20,19 @@ export default function AppDownloadSection() {
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [isNative])
 
+  // Control video playback — play from start when shown, reset when hidden
+  useEffect(() => {
+    const vid = videoRef.current
+    if (!vid) return
+    if (showVideo) {
+      vid.currentTime = 0
+      vid.play().catch(() => {})
+    } else {
+      vid.pause()
+      vid.currentTime = 0
+    }
+  }, [showVideo])
+
   const onVideoEnded = () => {
     setShowVideo(false)
     timerRef.current = setTimeout(() => setShowVideo(true), SCROLL_DURATION)
@@ -121,22 +134,19 @@ export default function AppDownloadSection() {
                       100% { object-position: center 0%; }
                     }
                   `}</style>
-                  {showVideo ? (
-                    <video
-                      ref={videoRef}
-                      src="/hockeyrefresh.mp4"
-                      autoPlay muted playsInline
-                      onEnded={onVideoEnded}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
-                  ) : (
-                    <img
-                      src="/hockeyrefresh.png"
-                      alt="HockeyRefresh app"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 0%', display: 'block', animation: 'phoneScroll 5s ease-in-out' }}
-                      onError={e => { (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
-                    />
-                  )}
+                  {/* Always render both — crossfade with opacity to avoid black flash */}
+                  <img
+                    src="/hockeyrefresh.png"
+                    alt="HockeyRefresh app"
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 0%', display: 'block', animation: showVideo ? 'none' : 'phoneScroll 5s ease-in-out', opacity: showVideo ? 0 : 1, transition: 'opacity 0.4s ease' }}
+                  />
+                  <video
+                    ref={videoRef}
+                    src="/hockeyrefresh.mp4"
+                    muted playsInline
+                    onEnded={onVideoEnded}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: showVideo ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                  />
                 </div>
                 {/* Side button (right) */}
                 <div style={{ position: 'absolute', right: -3, top: 100, width: 3, height: 58, background: '#333', borderRadius: '0 3px 3px 0' }} />
