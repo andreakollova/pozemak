@@ -112,9 +112,9 @@ export default function AppDownloadSection() {
               <div style={{ width: '100%', height: '100%', borderRadius: 30, overflow: 'hidden', background: '#000' }}>
                 <style>{`
                   @keyframes phoneScroll {
-                    0%   { transform: translateY(0); }
-                    50%  { transform: translateY(-30%); }
-                    100% { transform: translateY(0); }
+                    0%   { object-position: center 0%; }
+                    50%  { object-position: center 100%; }
+                    100% { object-position: center 0%; }
                   }
                 `}</style>
                 {showVideo ? (
@@ -125,14 +125,14 @@ export default function AppDownloadSection() {
                     muted
                     playsInline
                     onEnded={onVideoEnded}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   />
                 ) : (
                   <img
                     src="/hockeyrefresh.png"
                     alt="HockeyRefresh app"
-                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 5s ease-in-out' }}
-                    onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 0%', display: 'block', animation: 'phoneScroll 5s ease-in-out' }}
+                    onError={e => { (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
                   />
                 )}
               </div>
