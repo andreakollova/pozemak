@@ -49,6 +49,7 @@ export default function AppDownloadSection() {
               { icon: '🔔', text: 'Push notifications for breaking news' },
               { icon: '🏆', text: 'Live scores from FIH, EuroHockey & national leagues' },
               { icon: '🎥', text: 'Video highlights from Hoofdklasse & FIH' },
+              { icon: '🎮', text: 'Mini games built right into the app' },
               { icon: '🌍', text: 'Coverage from 10+ countries worldwide' },
             ].map(({ icon, text }) => (
               <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -92,11 +93,19 @@ export default function AppDownloadSection() {
               <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', width: 80, height: 26, background: '#000', borderRadius: 20, zIndex: 10 }} />
               {/* Screen */}
               <div style={{ width: '100%', height: '100%', borderRadius: 30, overflow: 'hidden', background: '#000' }}>
+                <style>{`
+                  @keyframes phoneScroll {
+                    0%   { transform: translateY(0); }
+                    45%  { transform: translateY(-35%); }
+                    55%  { transform: translateY(-35%); }
+                    100% { transform: translateY(0); }
+                  }
+                `}</style>
                 <img
                   src="/hockeyrefresh.png"
                   alt="HockeyRefresh app"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-                  onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px'; (e.currentTarget as HTMLImageElement).style.background = '#111' }}
+                  style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 8s ease-in-out infinite' }}
+                  onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
                 />
               </div>
               {/* Side button */}
