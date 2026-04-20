@@ -37,7 +37,7 @@ export default function AppDownloadSection() {
             Now on App Store
           </div>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 900, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1, letterSpacing: '-1px' }}>
-            Field hockey in your pocket
+            Field hockey <span style={{ color: '#95ff03' }}>in your pocket</span>
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, margin: '0 0 32px', maxWidth: 420 }}>
             Get the latest field hockey news, live scores and match highlights — all in one app. Never miss a goal.
