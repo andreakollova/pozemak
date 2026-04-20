@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 
-const SCROLL_DURATION = 3000 // ms before switching to video
+const SCROLL_DURATION = 5000 // ms before switching to video
 
 export default function AppDownloadSection() {
   const [isNative, setIsNative] = useState(true)
@@ -23,7 +23,7 @@ export default function AppDownloadSection() {
 
   const onVideoEnded = () => {
     setShowVideo(false)
-    timerRef.current = setTimeout(() => setShowVideo(true), 3000)
+    timerRef.current = setTimeout(() => setShowVideo(true), 5000)
   }
 
   // 3D tilt effect
@@ -125,13 +125,13 @@ export default function AppDownloadSection() {
                     muted
                     playsInline
                     onEnded={onVideoEnded}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
                   />
                 ) : (
                   <img
                     src="/hockeyrefresh.png"
                     alt="HockeyRefresh app"
-                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 3s ease-in-out' }}
+                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 5s ease-in-out' }}
                     onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
                   />
                 )}
