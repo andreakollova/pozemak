@@ -1,13 +1,30 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 
+const SCROLL_DURATION = 8000 // ms — one PNG scroll loop
+
 export default function AppDownloadSection() {
-  const [isNative, setIsNative] = useState(true) // default true = hidden until confirmed web
+  const [isNative, setIsNative] = useState(true)
+  const [showVideo, setShowVideo] = useState(false)
   const frameRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     setIsNative(localStorage.getItem('hockeyrefresh-native') === '1')
   }, [])
+
+  // Alternate: 8s PNG scroll → video → repeat
+  useEffect(() => {
+    if (isNative) return
+    timerRef.current = setTimeout(() => setShowVideo(true), SCROLL_DURATION)
+    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
+  }, [isNative])
+
+  const onVideoEnded = () => {
+    setShowVideo(false)
+    timerRef.current = setTimeout(() => setShowVideo(true), SCROLL_DURATION)
+  }
 
   // 3D tilt effect
   useEffect(() => {
@@ -101,12 +118,24 @@ export default function AppDownloadSection() {
                     100% { transform: translateY(0); }
                   }
                 `}</style>
-                <img
-                  src="/hockeyrefresh.png"
-                  alt="HockeyRefresh app"
-                  style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 8s ease-in-out infinite' }}
-                  onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
-                />
+                {showVideo ? (
+                  <video
+                    ref={videoRef}
+                    src="/hockeyrefresh.mp4"
+                    autoPlay
+                    muted
+                    playsInline
+                    onEnded={onVideoEnded}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                ) : (
+                  <img
+                    src="/hockeyrefresh.png"
+                    alt="HockeyRefresh app"
+                    style={{ width: '100%', height: 'auto', display: 'block', animation: 'phoneScroll 8s ease-in-out forwards' }}
+                    onError={e => { (e.currentTarget as HTMLImageElement).src = '/logo-dark.png'; (e.currentTarget as HTMLImageElement).style.height = '100%'; (e.currentTarget as HTMLImageElement).style.objectFit = 'contain'; (e.currentTarget as HTMLImageElement).style.padding = '40px' }}
+                  />
+                )}
               </div>
               {/* Side button */}
               <div style={{ position: 'absolute', right: -3, top: 80, width: 3, height: 60, background: '#2a2a2a', borderRadius: '0 3px 3px 0' }} />
