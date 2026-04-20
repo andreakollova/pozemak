@@ -52,7 +52,7 @@ export default function AppDownloadSection() {
   ]
 
   return (
-    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #001a7a 0%, #003ad0 60%, #0052ff 100%)', padding: '90px 0 100px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', background: 'linear-gradient(135deg, #001a7a 0%, #003ad0 60%, #0052ff 100%)', padding: '60px 0 70px', overflow: 'hidden' }}>
       {/* Background glow blobs */}
       <div style={{ position: 'absolute', top: -80, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'rgba(149,255,3,0.06)', filter: 'blur(80px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', filter: 'blur(60px)', pointerEvents: 'none' }} />
@@ -68,22 +68,22 @@ export default function AppDownloadSection() {
           </div>
 
           {/* Headline */}
-          <h2 style={{ fontSize: 'clamp(32px, 4.5vw, 52px)', fontWeight: 900, color: '#ffffff', margin: '0 0 8px', lineHeight: 1.05, letterSpacing: '-1.5px' }}>
+          <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 900, color: '#ffffff', margin: '0 0 4px', lineHeight: 1.05, letterSpacing: '-1px' }}>
             Field hockey
           </h2>
-          <h2 style={{ fontSize: 'clamp(32px, 4.5vw, 52px)', fontWeight: 900, color: '#95ff03', margin: '0 0 20px', lineHeight: 1.05, letterSpacing: '-1.5px' }}>
+          <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 900, color: '#95ff03', margin: '0 0 16px', lineHeight: 1.05, letterSpacing: '-1px' }}>
             in your pocket.
           </h2>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, margin: '0 0 36px', maxWidth: 400 }}>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, margin: '0 0 28px', maxWidth: 400 }}>
             The only app you need for international and national field hockey — news, scores, highlights and more.
           </p>
 
-          {/* Features */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 44 }}>
+          {/* Features — 2 per row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 36 }}>
             {features.map(({ icon, text }) => (
-              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{icon}</div>
-                <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>{text}</span>
+              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '10px 12px' }}>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>{icon}</span>
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', fontWeight: 600, lineHeight: 1.3 }}>{text}</span>
               </div>
             ))}
           </div>
