@@ -92,12 +92,12 @@ export default function AppDownloadSection() {
             The only app you need for international and national field hockey — news, scores, highlights and more.
           </p>
 
-          {/* Features — 2 per row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 36 }}>
+          {/* Features */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
             {features.map(({ icon, text }) => (
-              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '11px 13px', backdropFilter: 'blur(10px)' }}>
-                <span style={{ fontSize: 18, flexShrink: 0 }}>{icon}</span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', fontWeight: 600, lineHeight: 1.3 }}>{text}</span>
+              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 17, flexShrink: 0, width: 26, textAlign: 'center' }}>{icon}</span>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', fontWeight: 500, lineHeight: 1.4 }}>{text}</span>
               </div>
             ))}
           </div>
@@ -107,9 +107,9 @@ export default function AppDownloadSection() {
             href="https://apps.apple.com/hu/app/hockeyrefresh/id6762254165"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#ffffff', color: '#000000', borderRadius: 16, padding: '14px 26px', textDecoration: 'none', fontWeight: 800, fontSize: 15, boxShadow: '0 8px 32px rgba(0,0,0,0.25)', transition: 'transform .15s, box-shadow .15s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 48px rgba(0,0,0,0.35)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#ffffff', color: '#000000', borderRadius: 16, padding: '14px 26px', textDecoration: 'none', fontWeight: 800, fontSize: 15, transition: 'transform .15s, opacity .15s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.opacity = '0.92' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.opacity = '1' }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
             Download on the App Store
@@ -121,8 +121,8 @@ export default function AppDownloadSection() {
           <div ref={frameRef} style={{ transition: 'transform .12s ease-out', willChange: 'transform' }}>
             {/* Outer glow ring */}
             <div style={{ padding: 3, borderRadius: 48, background: 'linear-gradient(135deg, rgba(149,255,3,0.3), rgba(255,255,255,0.05))', boxShadow: '0 40px 100px rgba(0,0,0,0.5)' }}>
-              {/* iPhone 15 Pro frame — 393×852 ratio ≈ 1:2.17 */}
-              <div style={{ width: 200, height: 410, background: '#1c1c1e', borderRadius: 46, overflow: 'hidden', position: 'relative', padding: 9, border: '1px solid #2a2a2a' }}>
+              {/* iPhone 15 Pro frame — 393×852 ratio = 200×434 */}
+              <div style={{ width: 200, height: 434, background: '#1c1c1e', borderRadius: 46, overflow: 'hidden', position: 'relative', padding: 9, border: '1px solid #2a2a2a' }}>
                 {/* Dynamic Island */}
                 <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 80, height: 26, background: '#000', borderRadius: 18, zIndex: 10 }} />
                 {/* Screen */}
@@ -149,12 +149,12 @@ export default function AppDownloadSection() {
                   />
                 </div>
                 {/* Side button (right) */}
-                <div style={{ position: 'absolute', right: -3, top: 100, width: 3, height: 58, background: '#333', borderRadius: '0 3px 3px 0' }} />
+                <div style={{ position: 'absolute', right: -3, top: 106, width: 3, height: 62, background: '#3a3a3a', borderRadius: '0 3px 3px 0' }} />
                 {/* Volume (left) */}
-                <div style={{ position: 'absolute', left: -3, top: 82, width: 3, height: 32, background: '#333', borderRadius: '3px 0 0 3px' }} />
-                <div style={{ position: 'absolute', left: -3, top: 124, width: 3, height: 32, background: '#333', borderRadius: '3px 0 0 3px' }} />
-                {/* Mute switch */}
-                <div style={{ position: 'absolute', left: -3, top: 54, width: 3, height: 18, background: '#333', borderRadius: '3px 0 0 3px' }} />
+                <div style={{ position: 'absolute', left: -3, top: 87, width: 3, height: 34, background: '#3a3a3a', borderRadius: '3px 0 0 3px' }} />
+                <div style={{ position: 'absolute', left: -3, top: 131, width: 3, height: 34, background: '#3a3a3a', borderRadius: '3px 0 0 3px' }} />
+                {/* Action button (left, replaces mute switch on 15 Pro) */}
+                <div style={{ position: 'absolute', left: -3, top: 57, width: 3, height: 19, background: '#3a3a3a', borderRadius: '3px 0 0 3px' }} />
               </div>
             </div>
           </div>
