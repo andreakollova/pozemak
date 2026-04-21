@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Prevent flash of wrong theme — reads localStorage before React hydrates */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('pozemak-theme');if(t!=='dark')document.documentElement.classList.add('light-init')}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('pozemak-theme');if(t!=='dark')document.documentElement.classList.add('light')}catch(e){document.documentElement.classList.add('light')}})()`,
           }}
         />
         <link rel="icon" href="/logo-light.png" type="image/png" media="(prefers-color-scheme: light)" />

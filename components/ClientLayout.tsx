@@ -51,8 +51,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (dark) {
       document.body.classList.remove('light')
+      document.documentElement.classList.remove('light')
     } else {
       document.body.classList.add('light')
+      document.documentElement.classList.add('light')
     }
   }, [dark])
 
