@@ -94,12 +94,14 @@ export default function ArticlePage() {
         .rec-card:hover .rec-title { color: var(--accent) !important; }
         .rec-img img { transition: transform .5s ease; }
         .rec-card:hover .rec-img img { transform: scale(1.05); }
+        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } }
       `}</style>
 
-      <main style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
+      <main className="article-main" style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
 
-        {/* Back */}
+        {/* Back — hidden on mobile */}
         <button
+          className="article-back"
           onClick={() => router.push('/')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 13, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 36, padding: 0, transition: 'color 0.2s' }}
           onMouseEnter={e => (e.currentTarget.style.color = 'var(--green)')}
