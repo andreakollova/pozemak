@@ -94,7 +94,7 @@ export default function ArticlePage() {
         .rec-card:hover .rec-title { color: var(--accent) !important; }
         .rec-img img { transition: transform .5s ease; }
         .rec-card:hover .rec-img img { transform: scale(1.05); }
-        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } .article-tag { font-size: 9px !important; } .article-date { font-size: 10px !important; } .article-byline { margin-bottom: 0 !important; } }
+        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } .article-tag { font-size: 9px !important; } .article-date { font-size: 10px !important; } .article-byline { margin-bottom: 13px !important; } }
       `}</style>
 
       <main className="article-main" style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
