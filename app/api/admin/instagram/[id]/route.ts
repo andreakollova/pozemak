@@ -119,8 +119,8 @@ async function uploadToStorage(imageBuffer: Buffer): Promise<string> {
 // Post image to Instagram via Meta Graph API
 async function postToInstagram(imageUrl: string, caption: string): Promise<string> {
   const token     = process.env.INSTAGRAM_ACCESS_TOKEN
-  const accountId = process.env.INSTAGRAM_ACCOUNT_ID
-  if (!token || !accountId) throw new Error('Instagram credentials not set')
+  const accountId = '17841413427897379' // hardcoded — never change this
+  if (!token) throw new Error('Instagram credentials not set')
 
   const base = `https://graph.facebook.com/v21.0/${accountId}`
 
