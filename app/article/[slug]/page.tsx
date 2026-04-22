@@ -94,7 +94,7 @@ export default function ArticlePage() {
         .rec-card:hover .rec-title { color: var(--accent) !important; }
         .rec-img img { transition: transform .5s ease; }
         .rec-card:hover .rec-img img { transform: scale(1.05); }
-        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } }
+        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } .article-tag { font-size: 9px !important; } .article-date { font-size: 10px !important; } }
       `}</style>
 
       <main className="article-main" style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
@@ -112,10 +112,10 @@ export default function ArticlePage() {
 
         {/* Tags + Date */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#003ad0', background: '#95ff03', border: 'none', padding: '4px 10px', borderRadius: 6 }}>
+          <span className="article-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#003ad0', background: '#95ff03', border: 'none', padding: '4px 10px', borderRadius: 6 }}>
             {source.flag} {source.country}
           </span>
-          <span style={{ fontSize: 12, color: 'var(--green-text)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>
+          <span className="article-date" style={{ fontSize: 12, color: 'var(--green-text)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>
             {formatDate(article.scraped_at)}
           </span>
         </div>
