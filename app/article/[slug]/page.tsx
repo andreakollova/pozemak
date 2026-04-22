@@ -99,16 +99,6 @@ export default function ArticlePage() {
 
       <main className="article-main" style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
 
-        {/* Back — hidden on mobile */}
-        <button
-          className="article-back"
-          onClick={() => router.push('/')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 13, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 36, padding: 0, transition: 'color 0.2s' }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--green)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}
-        >
-          <ArrowLeft size={14} /> Back
-        </button>
 
         {/* Tags + Date */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
