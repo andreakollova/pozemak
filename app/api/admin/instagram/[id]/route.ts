@@ -49,7 +49,7 @@ function buildCaption(titleSk: string, textSk: string, sourceUrl: string): strin
   const label = countryLabel(sourceUrl)
   const header = `${label} ${titleSk}`
   const credit = creditFor(sourceUrl)
-  const footer = `${credit}\n\n👀 For more hockey news check out hockeyrefresh.com\n\n#fieldhockey`
+  const footer = `${credit}\n\n👀 For more hockey news check out hockeyrefresh.com`
   const IG_LIMIT = 2190
 
   // Convert emoji-prefixed subheadings to "Heading -" then flatten
@@ -76,14 +76,16 @@ function buildCaption(titleSk: string, textSk: string, sourceUrl: string): strin
     chunks.push(`${PARA_EMOJIS[chunks.length % PARA_EMOJIS.length]} ${sentences.slice(i, i + 4).join(' ')}`)
   }
 
+  const hashtag = '#fieldhockey'
   const parts: string[] = [header]
-  let used = igLen(header) + 2 + igLen(footer)
+  let used = igLen(header) + 2 + igLen(hashtag) + 2 + igLen(footer)
   for (const chunk of chunks) {
     const extra = igLen('\n\n' + chunk)
     if (used + extra > IG_LIMIT) break
     parts.push(chunk)
     used += extra
   }
+  parts.push(hashtag)
   parts.push(footer)
 
   // Hard safety trim
