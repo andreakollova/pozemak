@@ -94,7 +94,7 @@ export default function ArticlePage() {
         .rec-card:hover .rec-title { color: var(--accent) !important; }
         .rec-img img { transition: transform .5s ease; }
         .rec-card:hover .rec-img img { transform: scale(1.05); }
-        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } .article-tag { font-size: 9px !important; } .article-date { font-size: 10px !important; } }
+        @media (max-width: 640px) { .article-back { display: none !important; } .article-main { padding-top: 16px !important; } .article-tag { font-size: 9px !important; } .article-date { font-size: 10px !important; } .article-byline { margin-bottom: 16px !important; } }
       `}</style>
 
       <main className="article-main" style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 80px' }}>
@@ -133,7 +133,7 @@ export default function ArticlePage() {
         )}
 
         {/* Byline — under image, above text */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, padding: '18px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 }}>
+        <div className="article-byline" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, padding: '18px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {(() => { const w = getWriter(article.id); return (<>
