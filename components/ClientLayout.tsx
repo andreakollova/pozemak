@@ -65,7 +65,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100%', position: 'relative' }}>
+    <div style={{ overflowX: 'clip', width: '100%', maxWidth: '100%', position: 'relative' }}>
       {isNative ? (
         <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
           <div style={{ height: 'max(47px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
