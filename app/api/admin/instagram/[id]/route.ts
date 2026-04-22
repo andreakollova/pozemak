@@ -49,7 +49,7 @@ function buildCaption(titleSk: string, textSk: string, sourceUrl: string): strin
   const label = countryLabel(sourceUrl)
   const header = `${label} ${titleSk}`
   const credit = creditFor(sourceUrl)
-  const footer = `${credit}\n\n👀 For more hockey news check out hockeyrefresh.com`
+  const footer = `${credit}\n\n👀 For more hockey news check out hockeyrefresh.com\n\n#fieldhockey`
   const IG_LIMIT = 2190
 
   // Convert emoji-prefixed subheadings to "Heading -" then flatten
