@@ -4,15 +4,20 @@ import Link from 'next/link'
 
 const COUNTRIES = [
   { label: 'Netherlands',   href: '/netherlands',   flag: '🇳🇱' },
+  { label: 'England',       href: '/england',       flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { label: 'Argentina',     href: '/argentina',     flag: '🇦🇷' },
+  { label: 'India',         href: '/india',         flag: '🇮🇳' },
   { label: 'Great Britain', href: '/great-britain', flag: '🇬🇧' },
+  { label: 'Wales',         href: '/wales',         flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
+  { label: 'Ireland',       href: '/ireland',       flag: '🇮🇪' },
   { label: 'Australia',     href: '/australia',     flag: '🇦🇺' },
   { label: 'Germany',       href: '/germany',       flag: '🇩🇪' },
   { label: 'Belgium',       href: '/belgium',       flag: '🇧🇪' },
   { label: 'Spain',         href: '/spain',         flag: '🇪🇸' },
-  { label: 'Argentina',     href: '/argentina',     flag: '🇦🇷' },
-  { label: 'Ireland',       href: '/ireland',       flag: '🇮🇪' },
   { label: 'Scotland',      href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
-  { label: 'India',         href: '/india',         flag: '🇮🇳' },
+  { label: 'Uruguay',       href: '/uruguay',       flag: '🇺🇾' },
+  { label: 'New Zealand',   href: '/new-zealand',   flag: '🇳🇿' },
+  { label: 'Canada',        href: '/canada',        flag: '🇨🇦' },
 ]
 
 export default function CountriesPage() {

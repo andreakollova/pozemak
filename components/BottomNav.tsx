@@ -6,8 +6,8 @@ import { Home, Play, Calendar, Globe, Gamepad2 } from 'lucide-react'
 
 const ITEMS = [
   { label: 'Videos',    href: '/videos',      Icon: Play },
-  { label: 'Home',      href: '/',             Icon: Home },
   { label: 'Matches',   href: '/competition',  Icon: Calendar },
+  { label: 'Home',      href: '/',             Icon: Home },
   { label: 'Countries', href: '/countries',    Icon: Globe },
   { label: 'Games',     href: '/game/',        Icon: Gamepad2, external: true },
 ]
