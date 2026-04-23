@@ -77,9 +77,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div style={{ overflowX: 'clip', width: '100%', maxWidth: '100%', position: 'relative' }}>
-      {isNative ? (
-        <div ref={nativeHeaderRef} style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#003ad0' }}>
+    <>
+      {/* Native fixed header — must live OUTSIDE the overflow:clip div */}
+      {isNative && (
+        <div ref={nativeHeaderRef} style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, background: '#003ad0' }}>
           <div style={{ height: 'max(47px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
           <div style={{ paddingTop: 10, marginBottom: 8 }}>
             <AnnouncementBar />
@@ -97,29 +98,33 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             </button>
           </div>
         </div>
-      ) : (
-        <div ref={webNavbarRef} className="web-navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
-          <AnnouncementBar />
-          <Navbar dark={dark} onToggle={toggle} />
-        </div>
       )}
 
-      <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingTop: nativeHeaderH || 120, paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
-        {children}
-        {isNative && <NativeFooter />}
+      <div style={{ overflowX: 'clip', width: '100%', maxWidth: '100%', position: 'relative' }}>
+        {!isNative && (
+          <div ref={webNavbarRef} className="web-navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+            <AnnouncementBar />
+            <Navbar dark={dark} onToggle={toggle} />
+          </div>
+        )}
+
+        <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingTop: nativeHeaderH || 120, paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
+          {children}
+          {isNative && <NativeFooter />}
+        </div>
+
+        {isNative ? (
+          <BottomNav dark={dark} onToggle={toggle} />
+        ) : (
+          <>
+            <Footer />
+            <ScrollToTop />
+            <CookieBanner />
+          </>
+        )}
       </div>
 
-      {isNative ? (
-        <BottomNav dark={dark} onToggle={toggle} />
-      ) : (
-        <>
-          <Footer />
-          <ScrollToTop />
-          <CookieBanner />
-        </>
-      )}
-
       <Analytics />
-    </div>
+    </>
   )
 }
