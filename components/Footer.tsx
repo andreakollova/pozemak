@@ -15,6 +15,7 @@ const LEGAL_LINKS = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Cookie Policy', href: '/cookies' },
   { label: 'Terms & Conditions', href: '/terms' },
+  { label: 'Credits & Disclaimer', href: '/credits' },
   { label: 'Contact', href: '/contact' },
 ]
 
