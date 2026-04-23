@@ -13,12 +13,12 @@ const NAV_ITEMS = [
   { label: 'Belgium',       href: '/belgium',       flag: '🇧🇪' },
   { label: 'Spain',         href: '/spain',         flag: '🇪🇸' },
   { label: 'Argentina',     href: '/argentina',     flag: '🇦🇷' },
-  { label: 'Ireland',       href: '/ireland',       flag: '🇮🇪' },
   { label: 'Scotland',      href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
   { label: 'India',         href: '/india',         flag: '🇮🇳' },
 ]
 
 const MORE_ITEMS = [
+  { label: 'Ireland',     href: '/ireland',     flag: '🇮🇪' },
   { label: 'England',     href: '/england',     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
   { label: 'Wales',       href: '/wales',       flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
   { label: 'New Zealand', href: '/new-zealand', flag: '🇳🇿' },
