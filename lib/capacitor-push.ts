@@ -7,17 +7,13 @@ export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com
 
   try {
     const { PushNotifications } = await import('@capacitor/push-notifications')
-    const { App } = await import('@capacitor/app')
+    const { App }               = await import('@capacitor/app')
 
-    // Request permission
     const perm = await PushNotifications.requestPermissions()
     if (perm.receive !== 'granted') return
 
-    // Register with APNs
-    await PushNotifications.register()
-
-    // Send token to our backend
-    PushNotifications.addListener('registration', async (token) => {
+    // ⚠️ Add listeners BEFORE calling register() — token event fires async
+    await PushNotifications.addListener('registration', async (token) => {
       localStorage.setItem('push-token', token.value)
       localStorage.setItem('push-enabled', '1')
       await fetch(`${siteUrl}/api/push/subscribe-native`, {
@@ -27,27 +23,29 @@ export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com
       }).catch(console.error)
     })
 
-    PushNotifications.addListener('registrationError', (err) => {
+    await PushNotifications.addListener('registrationError', (err) => {
       console.error('APNs registration error:', JSON.stringify(err))
+      localStorage.setItem('push-error', JSON.stringify(err))
     })
 
-    // Notification received while app is open — reload to show new content
-    PushNotifications.addListener('pushNotificationReceived', () => {
+    await PushNotifications.addListener('pushNotificationReceived', () => {
       window.location.reload()
     })
 
-    // Handle notification tap — navigate to article
-    PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+    await PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
       const url = action.notification.data?.url
       if (url) window.location.href = siteUrl + url
       else window.location.reload()
     })
 
-    // Reload when app comes back to foreground so content is always fresh
+    // Now register — listener is ready to catch the token
+    await PushNotifications.register()
+
     App.addListener('appStateChange', ({ isActive }) => {
       if (isActive) window.location.reload()
     })
   } catch (e) {
     console.error('Capacitor push init failed:', e)
+    localStorage.setItem('push-init-error', String(e))
   }
 }
