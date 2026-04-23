@@ -148,7 +148,9 @@ interface CountryCfg { flag: string; name: string; href: string }
 
 const COUNTRIES: CountryCfg[] = [
   { flag: '🇳🇱', name: 'Netherlands',   href: '/netherlands'   },
+  { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', name: 'England',       href: '/england'       },
   { flag: '🇬🇧', name: 'Great Britain', href: '/great-britain' },
+  { flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', name: 'Wales',         href: '/wales'         },
   { flag: '🇦🇺', name: 'Australia',     href: '/australia'     },
   { flag: '🇩🇪', name: 'Germany',       href: '/germany'       },
   { flag: '🇧🇪', name: 'Belgium',       href: '/belgium'       },
@@ -157,6 +159,9 @@ const COUNTRIES: CountryCfg[] = [
   { flag: '🇮🇪', name: 'Ireland',       href: '/ireland'       },
   { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', name: 'Scotland',     href: '/scotland'      },
   { flag: '🇮🇳', name: 'India',         href: '/india'         },
+  { flag: '🇳🇿', name: 'New Zealand',   href: '/new-zealand'   },
+  { flag: '🇺🇾', name: 'Uruguay',       href: '/uruguay'       },
+  { flag: '🇨🇦', name: 'Canada',        href: '/canada'        },
 ]
 
 interface MatchData { name: string; results: Match[]; upcoming: Match[]; gender: 'men' | 'women' }
@@ -179,6 +184,11 @@ export default function Home() {
   const [beArticles,      setBeArticles]      = useState<Article[]>([])
   const [inArticles,      setInArticles]      = useState<Article[]>([])
   const [nlArticles,      setNlArticles]      = useState<Article[]>([])
+  const [enArticles,      setEnArticles]      = useState<Article[]>([])
+  const [wlArticles,      setWlArticles]      = useState<Article[]>([])
+  const [nzArticles,      setNzArticles]      = useState<Article[]>([])
+  const [uyArticles,      setUyArticles]      = useState<Article[]>([])
+  const [caArticles,      setCaArticles]      = useState<Article[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -198,7 +208,12 @@ export default function Home() {
       getArticlesByDomain('hockey.be', 6),
       getArticlesByDomain('hockeyindia', 6),
       getArticlesByDomain('hockey.nl', 10),
-    ]).then(([arts, dames, heren, fih, euro, fihNews, au, arg, de, gb, ie, sco, es, be, ind, nl]) => {
+      getArticlesByDomain('englandhockey.co.uk', 10),
+      getArticlesByDomain('hockeywales.org.uk', 6),
+      getArticlesByDomain('hockeynz.co.nz', 10),
+      getArticlesByDomain('hockey.com.uy', 6),
+      getArticlesByDomain('fieldhockey.ca', 6),
+    ]).then(([arts, dames, heren, fih, euro, fihNews, au, arg, de, gb, ie, sco, es, be, ind, nl, en, wl, nz, uy, ca]) => {
       setArticles(arts)
       setDamesVideos(dames)
       setHerenVideos(heren)
@@ -215,6 +230,11 @@ export default function Home() {
       setBeArticles(be)
       setInArticles(ind)
       setNlArticles(nl)
+      setEnArticles(en)
+      setWlArticles(wl)
+      setNzArticles(nz)
+      setUyArticles(uy)
+      setCaArticles(ca)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -244,6 +264,11 @@ export default function Home() {
   if (esArticles.length > 0)   byCountry['Spain']       = esArticles
   if (beArticles.length > 0)   byCountry['Belgium']     = beArticles
   if (inArticles.length > 0)   byCountry['India']       = inArticles
+  if (enArticles.length > 0)   byCountry['England']     = enArticles
+  if (wlArticles.length > 0)   byCountry['Wales']       = wlArticles
+  if (nzArticles.length > 0)   byCountry['New Zealand'] = nzArticles
+  if (uyArticles.length > 0)   byCountry['Uruguay']     = uyArticles
+  if (caArticles.length > 0)   byCountry['Canada']      = caArticles
 
   const hero = articles[0]
 
@@ -271,26 +296,55 @@ export default function Home() {
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Netherlands')!} articles={byCountry['Netherlands'].slice(0, 10)} />
         )}
 
-        {/* Articles — GB + AU/DE */}
-        <div style={{ marginBottom: 56, display: 'flex', flexDirection: 'column', gap: 40 }}>
-          {(byCountry['Great Britain']?.length ?? 0) > 0 && (
-            <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 10)} noMargin />
-          )}
-          {((byCountry['Belgium']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
-            <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, minWidth: 0 }}>
-              {(byCountry['Belgium']?.length ?? 0) > 0 && (
-                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 5)} cardHeight={140} /></div>
-              )}
-              {(byCountry['Germany']?.length ?? 0) > 0 && (
-                <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
-              )}
-            </div>
-          )}
-        </div>
+        {/* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England — full width */}
+        {(byCountry['England']?.length ?? 0) > 0 && (
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'England')!} articles={byCountry['England'].slice(0, 10)} />
+        )}
+
+        {/* 🇬🇧 Great Britain + 🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales — side by side */}
+        {((byCountry['Great Britain']?.length ?? 0) > 0 || (byCountry['Wales']?.length ?? 0) > 0) && (
+          <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
+            {(byCountry['Great Britain']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Great Britain')!} articles={byCountry['Great Britain'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+            {(byCountry['Wales']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Wales')!} articles={byCountry['Wales'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+          </div>
+        )}
+
+        {/* 🇧🇪 Belgium + 🇩🇪 Germany — side by side */}
+        {((byCountry['Belgium']?.length ?? 0) > 0 || (byCountry['Germany']?.length ?? 0) > 0) && (
+          <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 56, minWidth: 0 }}>
+            {(byCountry['Belgium']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Belgium')!} articles={byCountry['Belgium'].slice(0, 5)} cardHeight={140} /></div>
+            )}
+            {(byCountry['Germany']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Germany')!} articles={byCountry['Germany'].slice(0, 5)} cardHeight={140} /></div>
+            )}
+          </div>
+        )}
 
         {/* 🇦🇷 Argentina — full width */}
         {(byCountry['Argentina']?.length ?? 0) > 0 && (
           <Grid3Section cfg={COUNTRIES.find(c => c.name === 'Argentina')!} articles={byCountry['Argentina'].slice(0, 10)} />
+        )}
+
+        {/* 🇳🇿 New Zealand — full width */}
+        {(byCountry['New Zealand']?.length ?? 0) > 0 && (
+          <Grid3Section cfg={COUNTRIES.find(c => c.name === 'New Zealand')!} articles={byCountry['New Zealand'].slice(0, 10)} />
+        )}
+
+        {/* 🇺🇾 Uruguay + 🇨🇦 Canada — side by side */}
+        {((byCountry['Uruguay']?.length ?? 0) > 0 || (byCountry['Canada']?.length ?? 0) > 0) && (
+          <div className="side-by-side" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 56, minWidth: 0 }}>
+            {(byCountry['Uruguay']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Uruguay')!} articles={byCountry['Uruguay'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+            {(byCountry['Canada']?.length ?? 0) > 0 && (
+              <div style={{ minWidth: 0 }}><ScrollSection cfg={COUNTRIES.find(c => c.name === 'Canada')!} articles={byCountry['Canada'].slice(0, 6)} cardHeight={130} /></div>
+            )}
+          </div>
         )}
 
         {/* 🇮🇳 India + 🇦🇺 Australia — side by side */}
