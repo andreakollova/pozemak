@@ -103,8 +103,13 @@ export default function NativePushToggle() {
         }
       }
 
-      showToast('Registering…')
-      const token = await registerAndStore()
+      // If initCapacitorPush already registered on app start, token is in localStorage
+      let token = localStorage.getItem('push-token')
+
+      if (!token) {
+        showToast('Registering…')
+        token = await registerAndStore()
+      }
 
       await fetch(`${SITE_URL}/api/push/subscribe-native`, {
         method: 'POST',
