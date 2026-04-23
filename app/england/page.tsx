@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
-import { getGBArticles, Article, getVideos, Video, getTitle, getText, getSlug, getVideoTitle } from '@/lib/supabase'
-import { Play, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
+import { getArticlesByDomain, Article, getTitle, getText, getSlug } from '@/lib/supabase'
+import { Clock } from 'lucide-react'
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -21,7 +21,7 @@ export default function EnglandPage() {
   const [loading, setLoading]   = useState(true)
 
   useEffect(() => {
-    getGBArticles(20)
+    getArticlesByDomain('englandhockey.co.uk', 20)
       .then(arts => { setArticles(arts); setLoading(false) })
       .catch(() => setLoading(false))
   }, [])
@@ -37,7 +37,7 @@ export default function EnglandPage() {
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
       <div style={{ fontSize: 48, marginBottom: 16 }}>🇬🇧</div>
       <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>No articles yet</h2>
-      <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Great Britain Hockey articles will appear here once the scraper runs.</p>
+      <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>England Hockey articles will appear here once the scraper runs.</p>
     </div>
   )
 
@@ -73,9 +73,9 @@ export default function EnglandPage() {
 
         {/* Country header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-          <span style={{ fontSize: 36 }}>🇬🇧</span>
+          <span style={{ fontSize: 36 }}>🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>Great Britain Hockey</h1>
+            <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: -0.5 }}>England Hockey</h1>
           </div>
         </div>
 
@@ -125,7 +125,7 @@ function GBHeroCard({ article }: { article: Article }) {
 
         <div style={{ position: 'absolute', top: 24, left: 24, display: 'flex', gap: 8 }}>
           <span style={{ background: 'var(--green)', color: '#000', fontSize: 10, fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 6 }}>Top Story</span>
-          <span style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>🇬🇧 Great Britain</span>
+          <span style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6 }}>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</span>
         </div>
 
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '32px 36px' }}>
@@ -162,7 +162,7 @@ function GBSecondaryCard({ article }: { article: Article }) {
         </div>
         <div style={{ padding: '16px 18px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '3px 7px', borderRadius: 4, border: '1px solid var(--border)' }}>🇬🇧 Great Britain</span>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '3px 7px', borderRadius: 4, border: '1px solid var(--border)' }}>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</span>
             <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
             <span style={{ fontSize: 10, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>
@@ -190,7 +190,7 @@ function GBGridCard({ article }: { article: Article }) {
         </div>
         <div style={{ padding: '13px 15px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border)' }}>🇬🇧 GB</span>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--tag-text)', background: 'var(--tag-bg)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border)' }}>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</span>
             <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--green-text)' }} />
             <span style={{ fontSize: 9, color: 'var(--green-text)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>{timeAgo(article.scraped_at)}</span>
           </div>
