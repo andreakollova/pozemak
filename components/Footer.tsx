@@ -115,7 +115,7 @@ export default function Footer() {
               We feature national federations, clubs, and organisations that publish field hockey news. Get your content in front of thousands of fans — on the website, app, and our social media channels.
             </p>
             <Link
-              href="/contact"
+              href="/get-featured"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '13px 28px', borderRadius: 4,
