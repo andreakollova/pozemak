@@ -18,11 +18,11 @@ const NAV_ITEMS = [
   { label: 'Argentina',   href: '/argentina',     flag: '🇦🇷' },
   { label: 'Scotland',    href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
   { label: 'India',       href: '/india',         flag: '🇮🇳' },
+  { label: 'Uruguay',     href: '/uruguay',       flag: '🇺🇾' },
 ]
 
 const MORE_ITEMS = [
   { label: 'New Zealand', href: '/new-zealand', flag: '🇳🇿' },
-  { label: 'Uruguay',     href: '/uruguay',     flag: '🇺🇾' },
   { label: 'Canada',      href: '/canada',      flag: '🇨🇦' },
 ]
 
