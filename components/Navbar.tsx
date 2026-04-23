@@ -160,10 +160,10 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                 <Link key={item.label} href={item.href}
                   style={{
                     textDecoration: 'none',
-                    display: 'flex', alignItems: 'center', gap: 5,
-                    padding: '9px 14px',
-                    fontSize: 11, fontWeight: isActive ? 800 : 600,
-                    letterSpacing: isActive ? 1.2 : 1,
+                    display: 'flex', alignItems: 'center', gap: 4,
+                    padding: '9px 10px',
+                    fontSize: 10, fontWeight: isActive ? 800 : 600,
+                    letterSpacing: isActive ? 1 : 0.8,
                     textTransform: 'uppercase',
                     color: isActive ? 'var(--accent)' : 'var(--text-primary)',
                     whiteSpace: 'nowrap',
