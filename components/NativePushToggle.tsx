@@ -88,31 +88,25 @@ export default function NativePushToggle() {
 
       // 3. Register to get a fresh token
       showToast('Registering…')
-      const token = await new Promise<string>((resolve, reject) => {
-        let done = false
 
-        const onToken = (t: any) => {
-          if (done) return
-          done = true
-          resolve(t.value)
-        }
-        const onError = (err: any) => {
-          if (done) return
-          done = true
-          reject(new Error(JSON.stringify(err)))
-        }
-
-        Push.addListener('registration', onToken)
-        Push.addListener('registrationError', onError)
-
-        setTimeout(() => {
-          if (done) return
-          done = true
-          reject(new Error('Timed out — check APNs / provisioning'))
-        }, 15000)
-
-        Push.register().catch(onError)
+      // Must await addListener (Capacitor 5+ is async) before calling register()
+      let resolveToken!: (v: string) => void
+      let rejectToken!: (e: Error) => void
+      const tokenPromise = new Promise<string>((res, rej) => {
+        resolveToken = res
+        rejectToken  = rej
       })
+
+      await Push.addListener('registration',      (t: any) => resolveToken(t.value))
+      await Push.addListener('registrationError', (e: any) => rejectToken(new Error(JSON.stringify(e))))
+
+      const timeoutId = setTimeout(() => {
+        rejectToken(new Error('Timed out — check APNs / provisioning'))
+      }, 15000)
+
+      await Push.register().catch((e: any) => rejectToken(e))
+      const token = await tokenPromise
+      clearTimeout(timeoutId)
 
       await fetch(`${SITE_URL}/api/push/subscribe-native`, {
         method: 'POST',
