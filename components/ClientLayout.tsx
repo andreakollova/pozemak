@@ -19,11 +19,23 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     if (typeof window === 'undefined') return false
     return localStorage.getItem('hockeyrefresh-native') === '1'
   })
+  const [nativeHeaderH, setNativeHeaderH] = useState(0)
 
   const webNavbarRef = useRef<HTMLDivElement>(null)
+  const nativeHeaderRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isNative) initCapacitorPush()
+  }, [isNative])
+
+  useEffect(() => {
+    if (!isNative || !nativeHeaderRef.current) return
+    const el = nativeHeaderRef.current
+    const update = () => setNativeHeaderH(el.offsetHeight)
+    const obs = new ResizeObserver(update)
+    obs.observe(el)
+    update()
+    return () => obs.disconnect()
   }, [isNative])
 
   useEffect(() => {
@@ -67,7 +79,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <div style={{ overflowX: 'clip', width: '100%', maxWidth: '100%', position: 'relative' }}>
       {isNative ? (
-        <div style={{ position: 'sticky', top: 0, zIndex: 100, background: '#003ad0' }}>
+        <div ref={nativeHeaderRef} style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#003ad0' }}>
           <div style={{ height: 'max(47px, calc(env(safe-area-inset-top) + 16px))', background: '#003ad0' }} />
           <div style={{ paddingTop: 10, marginBottom: 8 }}>
             <AnnouncementBar />
@@ -92,7 +104,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </div>
       )}
 
-      <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
+      <div className={!isNative ? 'web-content' : undefined} style={isNative ? { paddingTop: nativeHeaderH || 120, paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' } : undefined}>
         {children}
         {isNative && <NativeFooter />}
       </div>

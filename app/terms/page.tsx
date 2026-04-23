@@ -20,7 +20,7 @@ export default function TermsAndConditions() {
         <section>
           <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10 }}>3. Intellectual property</h2>
           <p>All original content produced by Hockey Refresh — including but not limited to written summaries, translations, design elements, and compiled data — is protected by copyright. You may not reproduce, distribute, or republish our original content without prior written permission.</p>
-          <p style={{ marginTop: 12 }}>Third-party content (including articles, images, and videos) remains the property of their respective owners. We make reasonable efforts to credit sources and link to originals. If you believe your content has been used improperly, please contact us at <strong style={{ color: 'var(--text-primary)' }}>info@hockeyrefresh.com</strong>.</p>
+          <p style={{ marginTop: 12 }}>Third-party content (including articles, images, and videos) remains the property of their respective owners. We make reasonable efforts to credit sources and link to originals. If you believe your content has been used improperly, please contact us at <strong style={{ color: 'var(--text-primary)' }}>studio@drixton.com</strong>.</p>
         </section>
 
         <section>
@@ -66,7 +66,7 @@ export default function TermsAndConditions() {
 
         <section>
           <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10 }}>11. Contact</h2>
-          <p>If you have any questions about these Terms & Conditions, please contact us at <strong style={{ color: 'var(--text-primary)' }}>info@hockeyrefresh.com</strong>.</p>
+          <p>If you have any questions about these Terms & Conditions, please contact us at <strong style={{ color: 'var(--text-primary)' }}>studio@drixton.com</strong>.</p>
         </section>
 
       </div>

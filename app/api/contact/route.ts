@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 export async function POST(req: NextRequest) {
   const { name, email, subject, message } = await req.json()
 
-  if (!name || !email || !subject || !message) {
+  if (!name || !email || !message) {
     return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
   }
 
@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
   try {
     await transporter.sendMail({
       from: `"Hockey Refresh" <${process.env.CONTACT_EMAIL_USER}>`,
-      to: 'andreakollova1@gmail.com',
+      to: 'studio@drixton.com',
       replyTo: email,
-      subject: `[Report] ${subject}`,
+      subject: `[Hockey Refresh] ${subject || 'New contact message'}`,
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px">

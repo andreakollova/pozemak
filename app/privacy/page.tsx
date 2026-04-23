@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
             <li>Object to or restrict processing.</li>
             <li>Withdraw consent at any time.</li>
           </ul>
-          <p style={{ marginTop: 12 }}>To exercise any of these rights, please contact us at <strong style={{ color: 'var(--text-primary)' }}>info@hockeyrefresh.com</strong>.</p>
+          <p style={{ marginTop: 12 }}>To exercise any of these rights, please contact us at <strong style={{ color: 'var(--text-primary)' }}>studio@drixton.com</strong>.</p>
         </section>
 
         <section>
