@@ -17,6 +17,11 @@ function creditFor(sourceUrl: string): string {
   if (sourceUrl.includes('hockeyindia'))       return '📸 Credit: Hockey India'
   if (sourceUrl.includes('eurohockey.org'))    return '📸 Credit: EuroHockey'
   if (sourceUrl.includes('fih.hockey'))        return '📸 Credit: FIH Hockey'
+  if (sourceUrl.includes('englandhockey.co.uk')) return '📸 Credit: England Hockey'
+  if (sourceUrl.includes('hockeywales.org.uk'))  return '📸 Credit: Hockey Wales'
+  if (sourceUrl.includes('hockey.com.uy'))       return '📸 Credit: Uruguay Hockey'
+  if (sourceUrl.includes('hockeynz.co.nz'))      return '📸 Credit: Hockey New Zealand'
+  if (sourceUrl.includes('fieldhockey.ca'))      return '📸 Credit: Field Hockey Canada'
   return '📸 Credit: HockeyNL'
 }
 
@@ -32,6 +37,11 @@ function countryLabel(sourceUrl: string): string {
   if (sourceUrl.includes('hockeyindia'))       return '🇮🇳 India'
   if (sourceUrl.includes('eurohockey.org'))    return '🌍'
   if (sourceUrl.includes('fih.hockey'))        return '🌍'
+  if (sourceUrl.includes('englandhockey.co.uk')) return '🏴󠁧󠁢󠁥󠁮󠁧󠁿 England'
+  if (sourceUrl.includes('hockeywales.org.uk'))  return '🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales'
+  if (sourceUrl.includes('hockey.com.uy'))       return '🇺🇾 Uruguay'
+  if (sourceUrl.includes('hockeynz.co.nz'))      return '🇳🇿 New Zealand'
+  if (sourceUrl.includes('fieldhockey.ca'))      return '🇨🇦 Canada'
   return '🇳🇱 Netherlands'
 }
 
@@ -194,8 +204,13 @@ export async function POST(
       if (sourceUrl.includes('hockey.de'))          return 'template-germany.png'
       if (sourceUrl.includes('hockey.be'))          return 'template-belgium.png'
       if (sourceUrl.includes('hockeyindia'))        return 'template-india.png'
-      if (sourceUrl.includes('eurohockey.org'))     return 'template-worldwide.png'
-      if (sourceUrl.includes('fih.hockey'))         return 'template-worldwide.png'
+      if (sourceUrl.includes('eurohockey.org'))       return 'template-worldwide.png'
+      if (sourceUrl.includes('fih.hockey'))           return 'template-worldwide.png'
+      if (sourceUrl.includes('englandhockey.co.uk'))  return 'template-england.png'
+      if (sourceUrl.includes('hockeywales.org.uk'))   return 'template-wales.png'
+      if (sourceUrl.includes('hockey.com.uy'))        return 'template-uruguay.png'
+      if (sourceUrl.includes('hockeynz.co.nz'))       return 'template-nz.png'
+      if (sourceUrl.includes('fieldhockey.ca'))       return 'template-canada.png'
       return 'template.png'
     })()
     const templatePath = path.join(process.cwd(), 'public', templateFile)
