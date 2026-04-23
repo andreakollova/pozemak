@@ -57,33 +57,34 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
         @media (max-width: 640px) {
           .navbar-topbar { padding: 0 16px !important; height: 54px !important; }
           .navbar-logo { height: 28px !important; }
-          .navbar-links { gap: 4px !important; }
-          .navbar-nav-link { font-size: 10px !important; padding: 5px 8px !important; gap: 4px !important; }
+          .navbar-links { gap: 2px !important; }
+          .navbar-nav-link { font-size: 10px !important; padding: 5px 6px !important; gap: 3px !important; }
+          .navbar-divider { display: none !important; }
         }
         .more-dropdown {
           position: absolute;
           top: calc(100% + 4px);
           right: 0;
-          min-width: 180px;
+          min-width: 160px;
           background: var(--navbar-bg);
           border: 1px solid var(--border);
           border-radius: 6px;
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-          padding: 6px;
+          padding: 4px;
           z-index: 200;
         }
         .more-dropdown a {
           display: flex;
           align-items: center;
-          gap: 8px;
-          padding: 9px 12px;
-          border-radius: 6px;
+          gap: 6px;
+          padding: 7px 10px;
+          border-radius: 4px;
           text-decoration: none;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 1px;
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.8px;
           text-transform: uppercase;
           color: var(--text-primary);
           white-space: nowrap;
@@ -138,7 +139,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
             <Gamepad2 size={12} /> Games
           </a>
 
-          <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
+          <div className="navbar-divider" style={{ width: 1, height: 20, background: 'var(--border)' }} />
 
           <button onClick={onToggle}
             style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 4, padding: '6px 10px', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', transition: 'all .15s' }}
@@ -204,7 +205,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
               onMouseEnter={(e: any) => { e.currentTarget.style.color = 'var(--text-primary)' }}
               onMouseLeave={(e: any) => { e.currentTarget.style.color = moreActive ? 'var(--accent)' : 'var(--text-secondary)' }}
             >
-              More
+              {isMobile ? 'ALL' : 'More'}
               <ChevronDown size={12} style={{ transform: moreOpen ? 'rotate(180deg)' : 'none', transition: 'transform .15s' }} />
             </button>
 
