@@ -66,7 +66,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
           min-width: 180px;
           background: var(--navbar-bg);
           border: 1px solid var(--border);
-          border-radius: 10px;
+          border-radius: 6px;
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           box-shadow: 0 8px 32px rgba(0,0,0,0.18);
