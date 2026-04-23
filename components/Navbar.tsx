@@ -154,7 +154,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
       <div style={{ borderTop: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center' }}>
           {/* Scrollable country links */}
-          <div style={{ flex: 1, overflowX: 'auto', overflowY: 'visible', display: 'flex', alignItems: 'center', scrollbarWidth: 'none' }}>
+          <div style={{ flex: 1, overflowX: 'auto', overflowY: 'visible', display: 'flex', alignItems: 'center', justifyContent: 'space-between', scrollbarWidth: 'none' }}>
             {NAV_ITEMS.map((item) => {
               const isActive = pathname === item.href
               return (
