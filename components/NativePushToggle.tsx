@@ -37,14 +37,14 @@ export default function NativePushToggle() {
       }
 
       // Turn ON — request permission then register
-      const { status } = await PushNotifications.checkPermissions()
+      const perm = await PushNotifications.checkPermissions()
 
-      if (status === 'denied') {
+      if (perm.receive === 'denied') {
         alert('Notifications are blocked. Go to iPhone Settings → Hockey Refresh → Notifications and turn them on.')
         return
       }
 
-      if (status !== 'granted') {
+      if (perm.receive !== 'granted') {
         const result = await PushNotifications.requestPermissions()
         if (result.receive !== 'granted') return
       }
