@@ -6,25 +6,24 @@ import { Sun, Moon, Play, BarChart2, Gamepad2, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { label: 'Netherlands', href: '/netherlands', flag: '🇳🇱' },
-  { label: 'England',     href: '/england',     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { label: 'Wales',       href: '/wales',       flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
-  { label: 'Australia',   href: '/australia',   flag: '🇦🇺' },
-  { label: 'Germany',     href: '/germany',     flag: '🇩🇪' },
-  { label: 'Belgium',     href: '/belgium',     flag: '🇧🇪' },
-  { label: 'Spain',       href: '/spain',       flag: '🇪🇸' },
-  { label: 'Argentina',   href: '/argentina',   flag: '🇦🇷' },
-  { label: 'Scotland',    href: '/scotland',    flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
-  { label: 'India',       href: '/india',       flag: '🇮🇳' },
-]
-
-const MORE_ITEMS = [
+  { label: 'Netherlands',   href: '/netherlands',   flag: '🇳🇱' },
+  { label: 'England',       href: '/england',       flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { label: 'Wales',         href: '/wales',         flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
   { label: 'Great Britain', href: '/great-britain', flag: '🇬🇧' },
   { label: 'Ireland',       href: '/ireland',       flag: '🇮🇪' },
+  { label: 'Australia',     href: '/australia',     flag: '🇦🇺' },
+  { label: 'Germany',       href: '/germany',       flag: '🇩🇪' },
+  { label: 'Belgium',       href: '/belgium',       flag: '🇧🇪' },
+  { label: 'Spain',         href: '/spain',         flag: '🇪🇸' },
+  { label: 'Argentina',     href: '/argentina',     flag: '🇦🇷' },
+  { label: 'Scotland',      href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { label: 'India',         href: '/india',         flag: '🇮🇳' },
   { label: 'New Zealand',   href: '/new-zealand',   flag: '🇳🇿' },
   { label: 'Uruguay',       href: '/uruguay',       flag: '🇺🇾' },
   { label: 'Canada',        href: '/canada',        flag: '🇨🇦' },
 ]
+
+const MORE_ITEMS: typeof NAV_ITEMS = []
 
 export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   const pathname = usePathname()
@@ -180,8 +179,8 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
             })}
           </div>
 
-          {/* More button — outside overflow container so dropdown is not clipped */}
-          <div
+          {/* More button — only shown on mobile (desktop shows all in nav) */}
+          <div style={{ display: isMobile ? undefined : 'none' }}><div
             style={{ position: 'relative', flexShrink: 0, borderLeft: '1px solid var(--border)', paddingLeft: 4 }}
             onMouseEnter={openMore}
             onMouseLeave={closeMore}
@@ -222,7 +221,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
                 ))}
               </div>
             )}
-          </div>
+          </div></div>
         </div>
       </div>
     </nav>
