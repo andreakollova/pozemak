@@ -10,6 +10,7 @@ import CookieBanner from '@/components/CookieBanner'
 import ScrollToTop from '@/components/ScrollToTop'
 import BottomNav from '@/components/BottomNav'
 import NativeFooter from '@/components/NativeFooter'
+import NativePushToggle from '@/components/NativePushToggle'
 import { Analytics } from '@vercel/analytics/react'
 import { initCapacitorPush } from '@/lib/capacitor-push'
 
@@ -93,9 +94,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={dark ? '/logo-dark.png' : '/logo-light.png'} alt="REFRESH" style={{ height: 28, width: 'auto', display: 'block' }} />
             </Link>
-            <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
-              {dark ? <Sun size={20} color="var(--text-secondary)" strokeWidth={1.8} /> : <Moon size={20} color="var(--text-secondary)" strokeWidth={1.8} />}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <NativePushToggle />
+              <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
+                {dark ? <Sun size={20} color="var(--text-secondary)" strokeWidth={1.8} /> : <Moon size={20} color="var(--text-secondary)" strokeWidth={1.8} />}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -18,11 +18,17 @@ export async function initCapacitorPush(siteUrl = 'https://www.hockeyrefresh.com
 
     // Send token to our backend
     PushNotifications.addListener('registration', async (token) => {
+      localStorage.setItem('push-token', token.value)
+      localStorage.setItem('push-enabled', '1')
       await fetch(`${siteUrl}/api/push/subscribe-native`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: token.value, platform: 'ios' }),
       }).catch(console.error)
+    })
+
+    PushNotifications.addListener('registrationError', (err) => {
+      console.error('APNs registration error:', JSON.stringify(err))
     })
 
     // Notification received while app is open — reload to show new content
