@@ -26,16 +26,20 @@ export default function ContactPage() {
     }
     setState('sending')
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('https://formspree.io/f/xwpogbzq', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          organisation: form.subject,
+          message: form.message,
+        }),
       })
       if (res.ok) {
         setState('ok')
       } else {
-        const data = await res.json()
-        setErrMsg(data.error || 'Something went wrong. Please try again.')
+        setErrMsg('Something went wrong. Please try again.')
         setState('err')
       }
     } catch {
