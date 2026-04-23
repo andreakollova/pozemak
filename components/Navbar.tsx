@@ -6,24 +6,24 @@ import { Sun, Moon, Play, BarChart2, Gamepad2, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { label: 'Netherlands',   href: '/netherlands',   flag: '🇳🇱' },
-  { label: 'Great Britain', href: '/great-britain', flag: '🇬🇧' },
-  { label: 'Australia',     href: '/australia',     flag: '🇦🇺' },
-  { label: 'Germany',       href: '/germany',       flag: '🇩🇪' },
-  { label: 'Belgium',       href: '/belgium',       flag: '🇧🇪' },
-  { label: 'Spain',         href: '/spain',         flag: '🇪🇸' },
-  { label: 'Argentina',     href: '/argentina',     flag: '🇦🇷' },
-  { label: 'Scotland',      href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
-  { label: 'India',         href: '/india',         flag: '🇮🇳' },
+  { label: 'Netherlands', href: '/netherlands', flag: '🇳🇱' },
+  { label: 'England',     href: '/england',     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { label: 'Wales',       href: '/wales',       flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
+  { label: 'Australia',   href: '/australia',   flag: '🇦🇺' },
+  { label: 'Germany',     href: '/germany',     flag: '🇩🇪' },
+  { label: 'Belgium',     href: '/belgium',     flag: '🇧🇪' },
+  { label: 'Spain',       href: '/spain',       flag: '🇪🇸' },
+  { label: 'Argentina',   href: '/argentina',   flag: '🇦🇷' },
+  { label: 'Scotland',    href: '/scotland',    flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { label: 'India',       href: '/india',       flag: '🇮🇳' },
 ]
 
 const MORE_ITEMS = [
-  { label: 'Ireland',     href: '/ireland',     flag: '🇮🇪' },
-  { label: 'England',     href: '/england',     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { label: 'Wales',       href: '/wales',       flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
-  { label: 'New Zealand', href: '/new-zealand', flag: '🇳🇿' },
-  { label: 'Uruguay',     href: '/uruguay',     flag: '🇺🇾' },
-  { label: 'Canada',      href: '/canada',      flag: '🇨🇦' },
+  { label: 'Great Britain', href: '/great-britain', flag: '🇬🇧' },
+  { label: 'Ireland',       href: '/ireland',       flag: '🇮🇪' },
+  { label: 'New Zealand',   href: '/new-zealand',   flag: '🇳🇿' },
+  { label: 'Uruguay',       href: '/uruguay',       flag: '🇺🇾' },
+  { label: 'Canada',        href: '/canada',        flag: '🇨🇦' },
 ]
 
 export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
@@ -142,35 +142,38 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
       {/* Category nav */}
       <div style={{ borderTop: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href
-            return (
-              <Link key={item.label} href={item.href}
-                style={{
-                  textDecoration: 'none',
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  padding: '9px 14px',
-                  fontSize: 11, fontWeight: isActive ? 800 : 600,
-                  letterSpacing: isActive ? 1.2 : 1,
-                  textTransform: 'uppercase',
-                  color: isActive ? 'var(--accent)' : 'var(--text-primary)',
-                  whiteSpace: 'nowrap',
-                  borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
-                  transition: 'color 0.15s, border-color 0.15s, font-weight 0.15s',
-                }}
-                onMouseEnter={(e: any) => { if (!isActive) { e.currentTarget.style.fontWeight = '800'; e.currentTarget.style.borderBottomColor = 'var(--border)' } }}
-                onMouseLeave={(e: any) => { if (!isActive) { e.currentTarget.style.fontWeight = '600'; e.currentTarget.style.borderBottomColor = 'transparent' } }}
-              >
-                <span style={{ fontSize: 13 }}>{item.flag}</span>
-                {item.label}
-              </Link>
-            )
-          })}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center' }}>
+          {/* Scrollable country links */}
+          <div style={{ flex: 1, overflowX: 'auto', overflowY: 'visible', display: 'flex', alignItems: 'center', scrollbarWidth: 'none' }}>
+            {NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link key={item.label} href={item.href}
+                  style={{
+                    textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    padding: '9px 14px',
+                    fontSize: 11, fontWeight: isActive ? 800 : 600,
+                    letterSpacing: isActive ? 1.2 : 1,
+                    textTransform: 'uppercase',
+                    color: isActive ? 'var(--accent)' : 'var(--text-primary)',
+                    whiteSpace: 'nowrap',
+                    borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+                    transition: 'color 0.15s, border-color 0.15s, font-weight 0.15s',
+                  }}
+                  onMouseEnter={(e: any) => { if (!isActive) { e.currentTarget.style.fontWeight = '800'; e.currentTarget.style.borderBottomColor = 'var(--border)' } }}
+                  onMouseLeave={(e: any) => { if (!isActive) { e.currentTarget.style.fontWeight = '600'; e.currentTarget.style.borderBottomColor = 'transparent' } }}
+                >
+                  <span style={{ fontSize: 13 }}>{item.flag}</span>
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
 
-          {/* More countries dropdown */}
+          {/* More button — outside overflow container so dropdown is not clipped */}
           <div
-            style={{ position: 'relative', flexShrink: 0, marginLeft: 'auto', paddingLeft: 8 }}
+            style={{ position: 'relative', flexShrink: 0, borderLeft: '1px solid var(--border)', paddingLeft: 4 }}
             onMouseEnter={openMore}
             onMouseLeave={closeMore}
           >
