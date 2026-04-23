@@ -8,6 +8,8 @@ import { usePathname } from 'next/navigation'
 const NAV_ITEMS = [
   { label: 'Netherlands', href: '/netherlands',   flag: '🇳🇱' },
   { label: 'England',     href: '/england',       flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { label: 'Argentina',   href: '/argentina',     flag: '🇦🇷' },
+  { label: 'India',       href: '/india',         flag: '🇮🇳' },
   { label: 'Wales',       href: '/wales',         flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
   { label: 'GB',          href: '/great-britain', flag: '🇬🇧' },
   { label: 'Ireland',     href: '/ireland',       flag: '🇮🇪' },
@@ -15,9 +17,7 @@ const NAV_ITEMS = [
   { label: 'Germany',     href: '/germany',       flag: '🇩🇪' },
   { label: 'Belgium',     href: '/belgium',       flag: '🇧🇪' },
   { label: 'Spain',       href: '/spain',         flag: '🇪🇸' },
-  { label: 'Argentina',   href: '/argentina',     flag: '🇦🇷' },
   { label: 'Scotland',    href: '/scotland',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
-  { label: 'India',       href: '/india',         flag: '🇮🇳' },
   { label: 'Uruguay',     href: '/uruguay',       flag: '🇺🇾' },
 ]
 
