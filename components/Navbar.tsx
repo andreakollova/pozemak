@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Sun, Moon, Play, BarChart2, Gamepad2, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -29,11 +29,20 @@ const MORE_ITEMS = [
 export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   const pathname = usePathname()
   const [moreOpen, setMoreOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const openMore  = () => { if (closeTimer.current) clearTimeout(closeTimer.current); setMoreOpen(true) }
   const closeMore = () => { closeTimer.current = setTimeout(() => setMoreOpen(false), 120) }
 
+  const dropdownItems = isMobile ? [...NAV_ITEMS, ...MORE_ITEMS] : MORE_ITEMS
   const moreActive = MORE_ITEMS.some(i => pathname === i.href)
 
   return (
@@ -200,7 +209,7 @@ export default function Navbar({ dark, onToggle }: { dark: boolean; onToggle: ()
 
             {moreOpen && (
               <div className="more-dropdown" onMouseEnter={openMore} onMouseLeave={closeMore}>
-                {MORE_ITEMS.map(item => (
+                {dropdownItems.map(item => (
                   <Link
                     key={item.label}
                     href={item.href}
