@@ -25,9 +25,24 @@ const SOURCES = [
   { flag: '🇪🇺', name: 'EuroHockey', url: 'https://www.eurohockey.org', country: 'Europe' },
 ]
 
+const TECH = [
+  { name: 'Next.js', desc: 'React framework for the web and app', url: 'https://nextjs.org' },
+  { name: 'Capacitor', desc: 'iOS native app wrapper', url: 'https://capacitorjs.com' },
+  { name: 'Supabase', desc: 'Database and storage', url: 'https://supabase.com' },
+  { name: 'Vercel', desc: 'Web hosting and deployment', url: 'https://vercel.com' },
+  { name: 'OpenAI GPT-4o', desc: 'AI-assisted article rewriting', url: 'https://openai.com' },
+  { name: 'Formspree', desc: 'Contact form handling', url: 'https://formspree.io' },
+]
+
 export default function CreditsPage() {
   return (
     <div style={{ maxWidth: 860, margin: '0 auto', padding: '48px 24px 100px' }}>
+      <style>{`
+        .cr-source-card { display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:6px; background:var(--bg-card); border:1px solid var(--border); text-decoration:none; transition:border-color .15s, background .15s; }
+        .cr-source-card:hover { border-color:var(--accent); background:var(--bg-card-2); }
+        .cr-tech-link { font-weight:800; color:var(--text-primary); text-decoration:none; transition:color .15s; }
+        .cr-tech-link:hover { color:var(--accent); }
+      `}</style>
 
       <div style={{ marginBottom: 48 }}>
         <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: 2.5, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 14 }}>Legal</p>
@@ -75,20 +90,7 @@ export default function CreditsPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
           {SOURCES.map(s => (
-            <a
-              key={s.name}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '14px 18px', borderRadius: 6,
-                background: 'var(--bg-card)', border: '1px solid var(--border)',
-                textDecoration: 'none', transition: 'border-color .15s, background .15s',
-              }}
-              onMouseEnter={(e: any) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--bg-card-2)' }}
-              onMouseLeave={(e: any) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-card)' }}
-            >
+            <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className="cr-source-card">
               <span style={{ fontSize: 24, lineHeight: 1, flexShrink: 0 }}>{s.flag}</span>
               <div>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3 }}>{s.name}</p>
@@ -106,19 +108,9 @@ export default function CreditsPage() {
           Technology
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-          {[
-            { name: 'Next.js', desc: 'React framework for the web and app', url: 'https://nextjs.org' },
-            { name: 'Capacitor', desc: 'iOS native app wrapper', url: 'https://capacitorjs.com' },
-            { name: 'Supabase', desc: 'Database and storage', url: 'https://supabase.com' },
-            { name: 'Vercel', desc: 'Web hosting and deployment', url: 'https://vercel.com' },
-            { name: 'OpenAI GPT-4o', desc: 'AI-assisted article rewriting', url: 'https://openai.com' },
-            { name: 'Formspree', desc: 'Contact form handling', url: 'https://formspree.io' },
-          ].map(t => (
+          {TECH.map(t => (
             <div key={t.name} style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <a href={t.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 800, color: 'var(--text-primary)', textDecoration: 'none', transition: 'color .15s' }}
-                onMouseEnter={(e: any) => e.currentTarget.style.color = 'var(--accent)'}
-                onMouseLeave={(e: any) => e.currentTarget.style.color = 'var(--text-primary)'}
-              >{t.name}</a>
+              <a href={t.url} target="_blank" rel="noopener noreferrer" className="cr-tech-link">{t.name}</a>
               <span style={{ color: 'var(--border)' }}>—</span>
               <span>{t.desc}</span>
             </div>
@@ -131,7 +123,6 @@ export default function CreditsPage() {
         For takedown requests, licensing enquiries, or any questions about this page, contact us at{' '}
         <a href="mailto:studio@drixton.com" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>studio@drixton.com</a>.
       </div>
-
     </div>
   )
 }
