@@ -35,7 +35,7 @@ export default function EnglandPage() {
 
   if (!articles.length) return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
-      <div style={{ fontSize: 48, marginBottom: 16 }}>🇬🇧</div>
+      <div style={{ fontSize: 48, marginBottom: 16 }}>🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
       <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>No articles yet</h2>
       <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>England Hockey articles will appear here once the scraper runs.</p>
     </div>
