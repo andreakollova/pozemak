@@ -128,7 +128,7 @@ export default function Footer() {
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
             >
-              <Star size={13} /> Get in touch <ArrowRight size={13} />
+              <Star size={13} /> Get Featured <ArrowRight size={13} />
             </Link>
           </div>
         </div>
