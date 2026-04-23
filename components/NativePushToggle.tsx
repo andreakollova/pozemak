@@ -5,7 +5,6 @@ import { Bell, BellOff } from 'lucide-react'
 
 const SITE_URL = 'https://www.hockeyrefresh.com'
 
-/** Access Capacitor plugin via native bridge — works in live-URL Capacitor apps */
 function getPush() {
   return (window as any)?.Capacitor?.Plugins?.PushNotifications ?? null
 }
@@ -23,37 +22,7 @@ export default function NativePushToggle() {
   function showToast(msg: string) {
     if (timer.current) clearTimeout(timer.current)
     setToast(msg)
-    timer.current = setTimeout(() => setToast(null), 4000)
-  }
-
-  async function registerAndStore(): Promise<string> {
-    const Push = getPush()
-    if (!Push) throw new Error('Push plugin not available')
-
-    return new Promise((resolve, reject) => {
-      let done = false
-
-      const onToken = (token: any) => {
-        if (done) return
-        done = true
-        resolve(token.value)
-      }
-      const onError = (err: any) => {
-        if (done) return
-        done = true
-        reject(new Error(JSON.stringify(err)))
-      }
-
-      Push.addListener('registration', onToken)
-      Push.addListener('registrationError', onError)
-      setTimeout(() => {
-        if (done) return
-        done = true
-        reject(new Error('Timeout — check APNs setup'))
-      }, 12000)
-
-      Push.register().catch(onError)
-    })
+    timer.current = setTimeout(() => setToast(null), 5000)
   }
 
   async function toggle() {
@@ -82,16 +51,16 @@ export default function NativePushToggle() {
 
       // ── TURN ON ───────────────────────────────────────────────────────
       if (!Push) {
-        showToast('Not available (open in app)')
+        showToast('Not available — open in app')
         return
       }
 
-      // Check / request permission
+      // 1. Check permission
       const permCheck = await Push.checkPermissions()
       const state: string = permCheck?.receive ?? 'prompt'
 
       if (state === 'denied') {
-        showToast('Go to iPhone Settings → Hockey Refresh → Notifications')
+        showToast('Go to Settings → Hockey Refresh → Notifications')
         return
       }
 
@@ -103,13 +72,47 @@ export default function NativePushToggle() {
         }
       }
 
-      // If initCapacitorPush already registered on app start, token is in localStorage
-      let token = localStorage.getItem('push-token')
-
-      if (!token) {
-        showToast('Registering…')
-        token = await registerAndStore()
+      // 2. If token already stored, reuse it
+      const existingToken = localStorage.getItem('push-token')
+      if (existingToken) {
+        await fetch(`${SITE_URL}/api/push/subscribe-native`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: existingToken, platform: 'ios' }),
+        })
+        localStorage.setItem('push-enabled', '1')
+        setEnabled(true)
+        showToast('Notifications on ✓')
+        return
       }
+
+      // 3. Register to get a fresh token
+      showToast('Registering…')
+      const token = await new Promise<string>((resolve, reject) => {
+        let done = false
+
+        const onToken = (t: any) => {
+          if (done) return
+          done = true
+          resolve(t.value)
+        }
+        const onError = (err: any) => {
+          if (done) return
+          done = true
+          reject(new Error(JSON.stringify(err)))
+        }
+
+        Push.addListener('registration', onToken)
+        Push.addListener('registrationError', onError)
+
+        setTimeout(() => {
+          if (done) return
+          done = true
+          reject(new Error('Timed out — check APNs / provisioning'))
+        }, 15000)
+
+        Push.register().catch(onError)
+      })
 
       await fetch(`${SITE_URL}/api/push/subscribe-native`, {
         method: 'POST',
@@ -133,16 +136,15 @@ export default function NativePushToggle() {
 
   return (
     <>
-      {/* Toast — fixed at top-center, above everything, outside header flow */}
       {toast && (
         <div style={{
-          position: 'fixed', top: 120, left: '50%', transform: 'translateX(-50%)',
+          position: 'fixed', top: 130, left: '50%', transform: 'translateX(-50%)',
           zIndex: 9999,
-          background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.15)',
-          borderRadius: 8, padding: '10px 18px',
+          background: '#111', border: '1px solid rgba(255,255,255,0.2)',
+          borderRadius: 10, padding: '12px 20px',
           fontSize: 13, fontWeight: 700, color: '#fff',
           whiteSpace: 'nowrap',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
           pointerEvents: 'none',
         }}>
           {toast}
@@ -157,7 +159,7 @@ export default function NativePushToggle() {
           cursor: busy ? 'default' : 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           minWidth: 44, minHeight: 44,
-          opacity: busy ? 0.35 : 1,
+          opacity: busy ? 0.4 : 1,
           transition: 'opacity .15s',
         }}
         aria-label={enabled ? 'Disable notifications' : 'Enable notifications'}
