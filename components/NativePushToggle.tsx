@@ -87,9 +87,8 @@ export default function NativePushToggle() {
       }
 
       // 3. Register to get a fresh token
-      showToast('Registering…')
+      showToast('Step 1: setting up listeners…')
 
-      // Must await addListener (Capacitor 5+ is async) before calling register()
       let resolveToken!: (v: string) => void
       let rejectToken!: (e: Error) => void
       const tokenPromise = new Promise<string>((res, rej) => {
@@ -97,14 +96,15 @@ export default function NativePushToggle() {
         rejectToken  = rej
       })
 
-      await Push.addListener('registration',      (t: any) => resolveToken(t.value))
-      await Push.addListener('registrationError', (e: any) => rejectToken(new Error(JSON.stringify(e))))
+      await Push.addListener('registration',      (t: any) => { showToast('Step 3: token OK!'); resolveToken(t.value) })
+      await Push.addListener('registrationError', (e: any) => { showToast('Step 3 ERR: ' + JSON.stringify(e)); rejectToken(new Error(JSON.stringify(e))) })
 
       const timeoutId = setTimeout(() => {
-        rejectToken(new Error('Timed out — check APNs / provisioning'))
+        rejectToken(new Error('Timed out — no APNs response'))
       }, 15000)
 
-      await Push.register().catch((e: any) => rejectToken(e))
+      showToast('Step 2: calling register…')
+      await Push.register().catch((e: any) => { showToast('register ERR: ' + String(e)); rejectToken(e) })
       const token = await tokenPromise
       clearTimeout(timeoutId)
 
