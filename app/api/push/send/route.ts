@@ -6,8 +6,10 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin'
 function getApnProvider(): apn.Provider | null {
   const keyId = process.env.APNS_KEY_ID
   const teamId = process.env.APNS_TEAM_ID
-  const key = process.env.APNS_PRIVATE_KEY // .p8 content
-  if (!keyId || !teamId || !key) return null
+  const raw = process.env.APNS_PRIVATE_KEY
+  if (!keyId || !teamId || !raw) return null
+  // Vercel stores multiline env vars with literal \n — restore real newlines
+  const key = raw.replace(/\\n/g, '\n')
   return new apn.Provider({
     token: { key, keyId, teamId },
     production: process.env.NODE_ENV === 'production',
@@ -54,7 +56,10 @@ export async function POST(req: NextRequest) {
       note.topic = bundleId
       const result = await apnProvider.send(note, sub.token)
       if (result.sent.length) sent++
-      if (result.failed.length) dead.push(row.endpoint)
+      if (result.failed.length) {
+        console.error('APNs failed:', JSON.stringify(result.failed))
+        dead.push(row.endpoint)
+      }
       return
     }
 
@@ -76,5 +81,5 @@ export async function POST(req: NextRequest) {
     await db.from('push_subscriptions').delete().in('endpoint', dead)
   }
 
-  return NextResponse.json({ sent })
+  return NextResponse.json({ sent, total: subs.length, dead: dead.length })
 }
