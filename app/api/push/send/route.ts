@@ -42,6 +42,12 @@ export async function POST(req: NextRequest) {
     // Native APNs token
     if (sub.type === 'apns') {
       if (!apnProvider) return
+
+      // Check daily frequency limit
+      const today = new Date().toISOString().slice(0, 10)
+      const sentToday = sub.lastSentDate === today ? (sub.sentToday ?? 0) : 0
+      if (sub.maxPerDay !== null && sub.maxPerDay !== undefined && sentToday >= sub.maxPerDay) return
+
       const note = new apn.Notification()
       note.expiry = Math.floor(Date.now() / 1000) + 3600
       note.badge = 1
@@ -50,7 +56,14 @@ export async function POST(req: NextRequest) {
       note.payload = { url }
       note.topic = bundleId
       const result = await apnProvider.send(note, sub.token)
-      if (result.sent.length) sent++
+      if (result.sent.length) {
+        sent++
+        // Update sent count in DB
+        const updatedSub = { ...sub, sentToday: sentToday + 1, lastSentDate: today }
+        await db.from('push_subscriptions').update({
+          subscription: JSON.stringify(updatedSub),
+        }).eq('endpoint', row.endpoint)
+      }
       if (result.failed.length) {
         console.error('APNs failed:', JSON.stringify(result.failed))
         dead.push(row.endpoint)
