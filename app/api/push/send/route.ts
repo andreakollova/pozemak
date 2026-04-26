@@ -17,11 +17,6 @@ function getApnProvider(): apn.Provider | null {
 }
 
 export async function POST(req: NextRequest) {
-  webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT!,
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    process.env.VAPID_PRIVATE_KEY!,
-  )
   // Require internal API key
   const apiKey = req.headers.get('x-api-key')
   if (apiKey !== process.env.PUBLISH_API_KEY) {
@@ -65,6 +60,11 @@ export async function POST(req: NextRequest) {
 
     // Web push
     try {
+      webpush.setVapidDetails(
+        process.env.VAPID_SUBJECT!,
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+        process.env.VAPID_PRIVATE_KEY!,
+      )
       await webpush.sendNotification(sub, payload)
       sent++
     } catch (err: any) {
