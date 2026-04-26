@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Bell, BellOff, X } from 'lucide-react'
+import { Bell, BellOff, X, Check } from 'lucide-react'
 
 const SITE_URL = 'https://www.hockeyrefresh.com'
 
@@ -116,7 +116,7 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
   if (frequency === null) return null
 
   const isOn = frequency !== 'off'
-  const bellColor = isOn ? (dark ? 'var(--green)' : '#003ad0') : 'var(--text-secondary)'
+  const bellColor = 'var(--text-secondary)'
 
   return (
     <>
@@ -150,7 +150,7 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
             position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1001,
             background: 'var(--navbar-bg)',
             borderRadius: '20px 20px 0 0',
-            padding: 'max(24px, env(safe-area-inset-bottom)) 0',
+            paddingBottom: 'calc(90px + env(safe-area-inset-bottom))',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.3)',
           }}>
             {/* Handle */}
@@ -237,10 +237,21 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
         }}
         aria-label="Notification settings"
       >
-        {isOn
-          ? <Bell    size={20} color={bellColor} strokeWidth={1.8} fill={bellColor} />
-          : <BellOff size={20} color={bellColor} strokeWidth={1.8} />
-        }
+        {isOn ? (
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Bell size={20} color={bellColor} strokeWidth={1.8} />
+            <div style={{
+              position: 'absolute', bottom: -3, right: -4,
+              background: 'var(--navbar-bg)',
+              borderRadius: '50%', width: 12, height: 12,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Check size={8} color={bellColor} strokeWidth={3} />
+            </div>
+          </div>
+        ) : (
+          <BellOff size={20} color={bellColor} strokeWidth={1.8} />
+        )}
       </button>
     </>
   )
