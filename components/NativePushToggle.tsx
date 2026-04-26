@@ -6,10 +6,10 @@ import { Bell, BellOff, X, Check } from 'lucide-react'
 const SITE_URL = 'https://www.hockeyrefresh.com'
 
 const FREQ_OPTIONS = [
-  { value: 'off', label: 'Off',        desc: 'No notifications' },
-  { value: '1',   label: '1 per day',  desc: 'Max 1 notification daily' },
-  { value: '3',   label: '3 per day',  desc: 'Max 3 notifications daily' },
-  { value: 'all', label: 'All',        desc: 'Every new article' },
+  { value: 'all', label: 'All',        desc: 'Every new article',          recommended: true  },
+  { value: '3',   label: '3 per day',  desc: 'Max 3 notifications daily',  recommended: false },
+  { value: '1',   label: '1 per day',  desc: 'Max 1 notification daily',   recommended: false },
+  { value: 'off', label: 'Off',        desc: 'No notifications',           recommended: false },
 ] as const
 
 type Freq = 'off' | '1' | '3' | 'all'
@@ -182,7 +182,7 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
             </div>
 
             {/* Options */}
-            {FREQ_OPTIONS.map(({ value, label, desc }) => {
+            {FREQ_OPTIONS.map(({ value, label, desc, recommended }) => {
               const selected = frequency === value
               const accentColor = dark ? 'var(--green)' : '#003ad0'
               return (
@@ -198,8 +198,19 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: selected ? accentColor : 'var(--text-primary)' }}>
-                      {label}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 15, fontWeight: 600, color: selected ? accentColor : 'var(--text-primary)' }}>
+                        {label}
+                      </span>
+                      {recommended && (
+                        <span style={{
+                          fontSize: 10, fontWeight: 700, color: accentColor,
+                          border: `1px solid ${accentColor}`, borderRadius: 4,
+                          padding: '1px 5px', letterSpacing: 0.3,
+                        }}>
+                          RECOMMENDED
+                        </span>
+                      )}
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
                       {desc}
