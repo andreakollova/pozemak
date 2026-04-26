@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Globe, Sun, Moon } from 'lucide-react'
+import { Sun, Moon } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Footer from '@/components/Footer'
@@ -87,19 +87,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             <AnnouncementBar />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--navbar-bg)', borderBottom: '1px solid var(--border)' }}>
-            <Link href="/countries" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
-              <Globe size={22} color="var(--text-secondary)" strokeWidth={1.8} />
-            </Link>
+            <NativePushToggle dark={dark} />
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={dark ? '/logo-dark.png' : '/logo-light.png'} alt="REFRESH" style={{ height: 28, width: 'auto', display: 'block' }} />
             </Link>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <NativePushToggle />
-              <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
-                {dark ? <Sun size={20} color="var(--text-secondary)" strokeWidth={1.8} /> : <Moon size={20} color="var(--text-secondary)" strokeWidth={1.8} />}
-              </button>
-            </div>
+            <button onClick={toggle} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 44, minHeight: 44 }}>
+              {dark ? <Sun size={20} color="var(--text-secondary)" strokeWidth={1.8} /> : <Moon size={20} color="var(--text-secondary)" strokeWidth={1.8} />}
+            </button>
           </div>
         </div>
       )}

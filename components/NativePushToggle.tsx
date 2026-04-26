@@ -9,7 +9,7 @@ function getPush() {
   return (window as any)?.Capacitor?.Plugins?.PushNotifications ?? null
 }
 
-export default function NativePushToggle() {
+export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
   const [enabled, setEnabled] = useState<boolean | null>(null)
   const [toast, setToast]     = useState<string | null>(null)
   const [busy, setBusy]       = useState(false)
@@ -159,7 +159,7 @@ export default function NativePushToggle() {
         aria-label={enabled ? 'Disable notifications' : 'Enable notifications'}
       >
         {enabled
-          ? <Bell    size={20} color="var(--green)"          strokeWidth={1.8} fill="var(--green)" />
+          ? <Bell size={20} color={dark ? 'var(--green)' : '#003ad0'} strokeWidth={1.8} fill={dark ? 'var(--green)' : '#003ad0'} />
           : <BellOff size={20} color="var(--text-secondary)" strokeWidth={1.8} />
         }
       </button>
