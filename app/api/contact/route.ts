@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
+function esc(s: string) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
 export async function POST(req: NextRequest) {
   const { name, email, subject, message } = await req.json()
 
@@ -27,11 +31,11 @@ export async function POST(req: NextRequest) {
         <div style="font-family:sans-serif;max-width:600px">
           <h2 style="color:#003ad0">New Report – Hockey Refresh</h2>
           <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold;width:100px">Name</td><td style="padding:8px">${name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px"><a href="mailto:${email}">${email}</a></td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Subject</td><td style="padding:8px">${subject}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold;width:100px">Name</td><td style="padding:8px">${esc(name)}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
+            <tr><td style="padding:8px;font-weight:bold">Subject</td><td style="padding:8px">${esc(subject||'')}</td></tr>
           </table>
-          <div style="margin-top:16px;padding:16px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap">${message}</div>
+          <div style="margin-top:16px;padding:16px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap">${esc(message)}</div>
         </div>
       `,
     })
