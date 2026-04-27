@@ -27,6 +27,13 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
 
   useEffect(() => {
     setFrequency((localStorage.getItem('push-frequency') as Freq) ?? 'off')
+
+    const pending = localStorage.getItem('push-pending-freq') as Freq | null
+    if (pending) {
+      localStorage.removeItem('push-pending-freq')
+      handleSelect(pending)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function showToast(msg: string) {
@@ -86,8 +93,13 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
         return
       }
       if (state !== 'granted') {
+        localStorage.setItem('push-pending-freq', value)
         const req = await Push.requestPermissions()
-        if (req?.receive !== 'granted') { showToast('Permission not granted'); return }
+        if (req?.receive !== 'granted') {
+          localStorage.removeItem('push-pending-freq')
+          showToast('Permission not granted')
+          return
+        }
       }
 
       const token = await getToken(Push)
@@ -99,6 +111,7 @@ export default function NativePushToggle({ dark = false }: { dark?: boolean }) {
         body: JSON.stringify({ token, platform: 'ios', maxPerDay }),
       })
 
+      localStorage.removeItem('push-pending-freq')
       localStorage.setItem('push-token', token)
       localStorage.setItem('push-frequency', value)
       setFrequency(value)
