@@ -55,8 +55,9 @@ export default function ArticlePage() {
       .from('articles')
       .select('*')
       .ilike('url', `%/${slug}`)
-      .single()
-      .then(({ data }) => { setArticle(data); setLoading(false) })
+      .order('scraped_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => { setArticle(data?.[0] ?? null); setLoading(false) })
   }, [slug])
 
   useEffect(() => {
